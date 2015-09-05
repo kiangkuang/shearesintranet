@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ccatype extends CI_Controller {
+class Ccatype extends MY_Controller {
 
     public function __construct()
     {

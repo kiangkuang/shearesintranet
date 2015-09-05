@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Error extends CI_Controller {
+class Error extends MY_Controller {
 
     public function __construct()
     {
@@ -13,6 +13,6 @@ class Error extends CI_Controller {
 
     public function index()
     {
-        $this->load->view('404');
+        $this->load->view('errors/html/error_404');
     }
 }

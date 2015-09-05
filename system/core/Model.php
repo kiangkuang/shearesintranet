@@ -1,122 +1,80 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP
  *
- * @package        CodeIgniter
- * @author        EllisLab Dev Team
- * @copyright        Copyright (c) 2008 - 2014, EllisLab, Inc.
- * @copyright        Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
- * @license        http://codeigniter.com/user_guide/license.html
- * @link        http://codeigniter.com
- * @since        Version 1.0
+ * This content is released under the MIT License (MIT)
+ *
+ * Copyright (c) 2014 - 2015, British Columbia Institute of Technology
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package	CodeIgniter
+ * @author	EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (http://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	http://codeigniter.com
+ * @since	Version 1.0.0
  * @filesource
  */
-
-// ------------------------------------------------------------------------
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * CodeIgniter Model Class
+ * Model Class
  *
- * @package        CodeIgniter
- * @subpackage    Libraries
- * @category    Libraries
- * @author        EllisLab Dev Team
- * @link        http://codeigniter.com/user_guide/libraries/config.html
+ * @package		CodeIgniter
+ * @subpackage	Libraries
+ * @category	Libraries
+ * @author		EllisLab Dev Team
+ * @link		http://codeigniter.com/user_guide/libraries/config.html
  */
 class CI_Model {
 
-    /**
-     * Constructor
-     *
-     * @access public
-     */
-    function __construct()
-    {
-        log_message('debug', "Model Class Initialized");
-    }
+	/**
+	 * Class constructor
+	 *
+	 * @return	void
+	 */
+	public function __construct()
+	{
+		log_message('info', 'Model Class Initialized');
+	}
 
-    /**
-     * __get
-     *
-     * Allows models to access CI's loaded classes using the same
-     * syntax as controllers.
-     *
-     * @param    string
-     * @access private
-     */
-    function __get($key)
-    {
-        $CI =& get_instance();
-        return $CI->$key;
-    }
+	// --------------------------------------------------------------------
 
-    function getAll()
-    {
-        $query = $this->db->get($this->db_name);
+	/**
+	 * __get magic
+	 *
+	 * Allows models to access CI's loaded classes using the same
+	 * syntax as controllers.
+	 *
+	 * @param	string	$key
+	 */
+	public function __get($key)
+	{
+		// Debugging note:
+		//	If you're here because you're getting an error message
+		//	saying 'Undefined Property: system/core/Model.php', it's
+		//	most likely a typo in your model code.
+		return get_instance()->$key;
+	}
 
-        if ($query->num_rows() > 0) {
-            return $query->result();
-        }
-
-        return false;
-    }
-
-    function getById($id)
-    {
-        $query = $this->db->get_where($this->db_name, ['id' => $id]);
-
-        if ($query->num_rows() > 0) {
-            return $query->first_row();
-        }
-
-        return false;
-    }
-
-    function getByShortname($shortname)
-    {
-        $query = $this->db->get_where($this->db_name, ['shortname' => $shortname]);
-
-        if ($query->num_rows() > 0) {
-            return $query->first_row();
-        }
-
-        return false;
-    }
-
-    function insert($data)
-    {
-        return $this->db->insert($this->db_name , $data);
-    }
-
-    function insertBatch($data)
-    {
-        return $this->db->insert_batch($this->db_name , $data);
-    }
-
-    function update($data)
-    {
-        $this->db->where('id', $data['id']);
-        return $this->db->update($this->db_name, $data);
-    }
-
-    function updateBatch($data)
-    {
-        $this->db->trans_start();
-        $this->db->update_batch($this->db_name, $data, 'id'); 
-        $this->db->trans_complete();
-        return $this->db->trans_status(); 
-    }
-
-    function deleteById($id)
-    {
-        $this->db->where('id', $id);
-        return $this->db->delete($this->db_name);
-    }
-    
 }
-// END Model Class
-
-/* End of file Model.php */
-/* Location: ./system/core/Model.php */

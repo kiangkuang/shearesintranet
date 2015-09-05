@@ -1,6 +1,6 @@
 <?php
 
-class Memberships_model extends CI_Model {
+class Memberships_model extends MY_Model {
 
     public function __construct()
     {

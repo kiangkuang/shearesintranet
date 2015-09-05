@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Account extends CI_Controller {
+class Account extends MY_Controller {
 
     public function __construct()
     {
@@ -30,9 +30,7 @@ class Account extends CI_Controller {
 
         if ($account) {
             $this->isLoggedIn = true;
-            $this->session->set_userdata([
-                'account'=>$account,
-            ]);
+            $this->session->set_userdata('account', $account);
             redirect('/');
         } else {
             $this->session->set_flashdata('error', 'Incorrect login or password.');
