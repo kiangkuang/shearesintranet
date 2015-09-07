@@ -13,6 +13,18 @@ class MY_Model extends CI_Model {
         return false;
     }
 
+    public function getAllOrderedByName()
+    {
+        $this->db->order_by('name');
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
+
     public function getById($id)
     {
         $query = $this->db->get_where($this->db_name, ['id' => $id]);

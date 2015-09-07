@@ -18,11 +18,24 @@ class Membership extends MY_Controller {
             redirect('/');
         }
 
-        foreach ($this->input->post('account_ids') as $account_id) {
-            $input[] = [
-                'cca_id'=>$this->input->post('cca_id'),
-                'account_id'=>$account_id,
-            ];
+        if ($this->input->post('account_ids')) {
+            foreach ($this->input->post('account_ids') as $account_id) {
+                $input[] = [
+                    'cca_id' => $this->input->post('cca_id'),
+                    'account_id' => $account_id,
+                    'acad_year' => ACAD_YEAR, 
+                ];
+            }
+        }
+
+        if ($this->input->post('cca_ids')) {
+            foreach ($this->input->post('cca_ids') as $cca_id) {
+                $input[] = [
+                    'account_id' => $this->input->post('account_id'),
+                    'cca_id' => $cca_id,
+                    'acad_year' => ACAD_YEAR, 
+                ];
+            }
         }
 
         $result = $this->memberships_model->insertBatch($input);

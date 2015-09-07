@@ -41,9 +41,6 @@ class Ccaclassification extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        if ($id === false) {
-            $data['subSubMenu'] = 'addCcaclassification';
-        }
         $this->load->view('ccaclassification/edit',$data);
     }
 

@@ -41,9 +41,6 @@ class Ccatype extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        if ($id === false) {
-            $data['subSubMenu'] = 'addCcatype';
-        }
         $this->load->view('ccatype/edit',$data);
     }
 

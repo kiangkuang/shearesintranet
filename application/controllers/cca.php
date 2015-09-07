@@ -52,21 +52,21 @@ class Cca extends MY_Controller {
         if ($id) {
             $data['cca'] = $this->ccas_model->getById($id);
             
-            $memberIds = [];
+            $memberList = [];
             $memberships = $this->memberships_model->getByCcaId($id);
             if ($memberships) {
                 foreach ($memberships as &$membership) {
                     $membership->account = $this->accounts_model->getById($membership->account_id);
-                    $memberIds[] = $membership->account_id;
+                    $memberList[] = $membership->account_id;
                 }
             }
             $data['memberships'] = $memberships;
 
-            $accounts = $this->accounts_model->getAll();
+            $accounts = $this->accounts_model->getAllOrderedByName();
             // remove existing members from array
             if ($accounts) {
                 foreach ($accounts as $key => $account) {
-                    if (in_array($account->id, $memberIds) || $account->is_admin === '1') {
+                    if (in_array($account->id, $memberList) || $account->is_admin === '1') {
                         unset($accounts[$key]);
                     }
                 }
@@ -79,9 +79,6 @@ class Cca extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        if ($id === false) {
-            $data['subSubMenu'] = 'addCca';
-        }
         $this->load->view('cca/edit',$data);
     }
 

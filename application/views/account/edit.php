@@ -18,9 +18,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            CCA
+            Account
             <small>
-              <?php if (isset($cca)): ?>
+              <?php if (isset($account)): ?>
                 Edit
               <?php else: ?>
                 Add
@@ -29,9 +29,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </h1>
           <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-            <li><a href="/cca/view">CCA</a></li>
+            <li><a href="/cca/view">Account</a></li>
             <li class="active">
-              <?php if (isset($cca)): ?>
+              <?php if (isset($account)): ?>
                 Edit
               <?php else: ?>
                 Add
@@ -48,84 +48,108 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">
-                    <?php if (isset($cca)): ?>
+                    <?php if (isset($account)): ?>
                       Edit Information
                     <?php else: ?>
-                      Add new CCA
+                      Add new Account
                     <?php endif ?>
                   </h3>
                 </div><!-- /.box-header -->
 
-                <form role="form" action="/cca/update" method="post">
+                <form role="form" action="/account/update" method="post">
                   <div class="box-body">
                     <div class="row">
-                      <?php if (isset($cca)): ?>
-                        <input type="hidden" name="id" value="<?= $cca->id ?>">
+                      <?php if (isset($account)): ?>
+                        <input type="hidden" name="id" value="<?= $account->id ?>">
                       <?php endif ?>
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <!-- text input -->
                         <div class="form-group">
                           <label>Name</label>
-                          <input type="text" class="form-control" name="name" placeholder="Name" value="<?= (isset($cca))? $cca->name : '' ?>">
+                          <input type="text" class="form-control" name="name" placeholder="Name" value="<?= (isset($account))? $account->name : '' ?>">
                         </div>
                       </div>
 
                       <div class="col-md-6">
-                        <!-- select -->
+                        <!-- text input -->
                         <div class="form-group">
-                          <label>Type</label>
-                          <select class="form-control" name="type">
-                            <?php foreach ($types as $type): ?>
-                              <option value="<?= $type->id ?>" <?= (isset($cca) && $cca->type == $type->id)? 'selected' : '' ?>><?= $type->name ?></option>
-                            <?php endforeach ?>
-                          </select>
+                          <label>Username</label>
+                          <input type="text" class="form-control" name="user" placeholder="Username" value="<?= (isset($account))? $account->user : '' ?>">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <!-- text input -->
+                        <div class="form-group">
+                          <label>Room</label>
+                          <input type="text" class="form-control" name="room" placeholder="Room" value="<?= (isset($account))? $account->room : '' ?>">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <!-- text input -->
+                        <div class="form-group">
+                          <label>Email</label>
+                          <input type="email" class="form-control" name="email" placeholder="Email" value="<?= (isset($account))? $account->email : '' ?>">
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <!-- text input -->
+                        <div class="form-group">
+                          <label>Contact</label>
+                          <input type="text" class="form-control" name="contact" placeholder="Contact" value="<?= (isset($account))? $account->contact : '' ?>">
                         </div>
                       </div>
 
                       <div class="col-md-6">
-                        <!-- select -->
+                        <!-- text input -->
                         <div class="form-group">
-                          <label>Classification</label>
-                          <select class="form-control" name="classification">
-                            <?php foreach ($classifications as $classification): ?>
-                              <option value="<?= $classification->id ?>" <?= (isset($cca) && $cca->classification == $classification->id)? 'selected' : '' ?>><?= $classification->name ?></option>
-                            <?php endforeach ?>
-                          </select>
+                          <label>Password</label>
+                          <input type="password" class="form-control" name="password" placeholder="<?= (isset($account))? 'Leave blank if not changing' : 'Password' ?>">
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <!-- text input -->
+                        <div class="form-group">
+                          <label>Confirm Password</label>
+                          <input type="password" class="form-control" name="password2" placeholder="<?= (isset($account))? 'Leave blank if not changing' : 'Confirm Password' ?>">
                         </div>
                       </div>
                     </div>
                   </div><!-- /.box-body -->
                   <div class="box-footer">
                     <button class="btn btn-success" type="submit">
-                      <i class="fa fa-save"></i> <?= (isset($cca))? 'Save' : 'Add' ?>
+                      <i class="fa fa-save"></i> <?= (isset($account))? 'Save' : 'Add' ?>
                     </button>
-                    <a class="btn btn-default" href="/cca/view">
+                    <a class="btn btn-default" href="/account/view">
                       <i class="fa fa-undo"></i> Back
                     </a>
                   </div>
                 </form>
               </div><!-- /.box -->
 
-              <?php if (isset($cca)): ?>
+              <?php if (isset($account)): ?>
                 <div class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">
-                      Add Members
+                      Add CCAs
                     </h3>
                   </div><!-- /.box-header -->
 
                   <form role="form" action="/membership/addMembership" method="post">
                     <div class="box-body">
                       <div class="row">
-                        <?php if (isset($cca)): ?>
-                          <input type="hidden" name="cca_id" value="<?= $cca->id ?>">
+                        <?php if (isset($account)): ?>
+                          <input type="hidden" name="account_id" value="<?= $account->id ?>">
                         <?php endif ?>
                         <div class="col-md-12">
                           <div class="form-group">
-                            <label>Names</label>
-                            <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="account_ids[]">
-                              <?php foreach ($accounts as $account): ?>
-                                <option value="<?= $account->id ?>"><?= $account->name ?></option>
+                            <label>CCA Names</label>
+                            <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="cca_ids[]">
+                              <?php foreach ($ccas as $cca): ?>
+                                <option value="<?= $cca->id ?>"><?= $cca->name ?></option>
                               <?php endforeach ?>
                             </select>
                           </div><!-- /.form-group -->
@@ -141,7 +165,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div><!-- /.box -->
               <?php endif; ?>
 
-              <?php if (isset($cca)): ?>
+              <?php if (isset($account)): ?>
                 <div class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">
@@ -149,12 +173,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </h3>
                   </div><!-- /.box-header -->
                   <form role="form" action="/membership/updateMemberships" method="post">
-                    <input type="hidden" name="cca_id" value="<?= $cca->id ?>">
+                    <input type="hidden" name="cca_id" value="<?= $account->id ?>">
                     <div class="box-body">
                       <table class="table table-bordered table-striped data-table">
                         <thead>
                           <tr>
-                            <th>Member</th>
+                            <th>CCA</th>
                             <th>Role</th>
                             <th>Points</th>
                             <th style="width: 50px;"></th>
@@ -165,7 +189,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <?php foreach ($memberships as $membership): ?>
                               <tr>
                                 <td>
-                                  <?= $membership->account->name ?>
+                                  <?= $membership->cca->name ?>
                                   <input type="hidden" name="memberships[<?= $membership->id ?>][id]" value="<?= $membership->id ?>">
                                 </td>
                                 <td>
@@ -185,7 +209,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </tbody>
                         <tfoot>
                           <tr>
-                            <th>Member</th>
+                            <th>CCA</th>
                             <th>Role</th>
                             <th>Points</th>
                             <th></th>

@@ -37,7 +37,6 @@
                     <a href="#"><i class="fa fa-user"></i> <span>Account</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                       <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'viewAccount'): ?>active<?php endif ?>"><a href="/account/view"><i class="fa fa-circle-o"></i> View all Accounts</a></li>
-                      <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'addAccount'): ?>active<?php endif ?>"><a href="/account/edit"><i class="fa fa-circle-o"></i> Add new Account</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -47,13 +46,8 @@
                     <a href="#"><i class="fa fa-soccer-ball-o"></i> <span>CCA</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                       <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'viewCca'): ?>active<?php endif ?>"><a href="/cca/view"><i class="fa fa-circle-o"></i> View all CCAs</a></li>
-                      <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'addCca'): ?>active<?php endif ?>"><a href="/cca/edit"><i class="fa fa-circle-o"></i> Add new CCA</a></li>
-                    
                       <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'viewCcatype'): ?>active<?php endif ?>"><a href="/ccatype/view"><i class="fa fa-circle-o"></i> View all CCA Types</a></li>
-                      <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'addCcatype'): ?>active<?php endif ?>"><a href="/ccatype/edit"><i class="fa fa-circle-o"></i> Add new CCA Type</a></li>
-                    
                       <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'viewCcaclassification'): ?>active<?php endif ?>"><a href="/ccaclassification/view"><i class="fa fa-circle-o"></i> View all CCA Classifications</a></li>
-                      <li class="<?php if (isset($subSubMenu) && $subSubMenu == 'addCcaclassification'): ?>active<?php endif ?>"><a href="/ccaclassification/edit"><i class="fa fa-circle-o"></i> Add new CCA Classification</a></li>
                     </ul>
                   </li>
                 </ul>
