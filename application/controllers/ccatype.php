@@ -37,6 +37,10 @@ class Ccatype extends MY_Controller {
         if ($id) {
             // editing existing cca
             $data['ccatype'] = $this->ccatypes_model->getById($id);
+            if ($data['ccatype'] === false) {
+                $this->session->set_flashdata('error', 'CCA Type not found!');
+                redirect('/ccatype/view');
+            }
         }
 
         $data['mainMenu'] = 'admin';
@@ -58,7 +62,7 @@ class Ccatype extends MY_Controller {
             $result = $this->ccatypes_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Type successfully updated!');
-                redirect('/ccatype/view/'.$input['name']);
+                redirect('/ccatype/edit/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccatype/edit/'.$input['id']);
@@ -68,7 +72,7 @@ class Ccatype extends MY_Controller {
             $result = $this->ccatypes_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Type successfully created!');
-                redirect('/ccatype/view/'.$input['name']);
+                redirect('/ccatype/edit/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccatype/edit');

@@ -74,6 +74,10 @@ class Account extends MY_Controller {
         $data = [];
         if ($id) {
             $data['account'] = $this->accounts_model->getById($id);
+            if ($data['account'] === false) {
+                $this->session->set_flashdata('error', 'Account not found!');
+                redirect('/account/view');
+            }
             
             $joinedCCAs = [];
             $memberships = $this->memberships_model->getByAccountId($id);
@@ -130,7 +134,7 @@ class Account extends MY_Controller {
             $result = $this->accounts_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
-                redirect('/account/view/'.$input['name']);
+                redirect('/account/edit/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/account/edit/'.$input['id']);
@@ -140,7 +144,7 @@ class Account extends MY_Controller {
             if ($input['password'] !== $input['password2']) {
                 $this->session->set_flashdata('error', 'The passwords do not match!');
                 redirect('/account/edit/');
-            } 
+            }
 
             unset($input['password2']);
             $input['key'] = time();
@@ -150,7 +154,7 @@ class Account extends MY_Controller {
             $result = $this->accounts_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully created!');
-                redirect('/account/view/'.$input['name']);
+                redirect('/account/edit/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/account/edit');

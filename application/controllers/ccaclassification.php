@@ -37,6 +37,10 @@ class Ccaclassification extends MY_Controller {
         if ($id) {
             // editing existing cca
             $data['ccaclassification'] = $this->ccaclassifications_model->getById($id);
+            if ($data['ccaclassification'] === false) {
+                $this->session->set_flashdata('error', 'CCA Classification not found!');
+                redirect('/ccaclassification/view');
+            }
         }
 
         $data['mainMenu'] = 'admin';
@@ -58,7 +62,7 @@ class Ccaclassification extends MY_Controller {
             $result = $this->ccaclassifications_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully updated!');
-                redirect('/ccaclassification/view/'.$input['name']);
+                redirect('/ccaclassification/edit/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccaclassification/edit/'.$input['id']);
@@ -68,7 +72,7 @@ class Ccaclassification extends MY_Controller {
             $result = $this->ccaclassifications_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully created!');
-                redirect('/ccaclassification/view/'.$input['name']);
+                redirect('/ccaclassification/edit/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccaclassification/edit');

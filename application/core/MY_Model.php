@@ -49,7 +49,8 @@ class MY_Model extends CI_Model {
 
     public function insert($data)
     {
-        return $this->db->insert($this->db_name , $data);
+        $this->db->insert($this->db_name , $data);
+        return $this->db->insert_id();
     }
 
     public function insertBatch($data)

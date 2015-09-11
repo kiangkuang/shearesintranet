@@ -17,8 +17,14 @@ class Membership extends MY_Controller {
         if (!$this->input->post()) {
             redirect('/');
         }
+        if ($this->input->post('cca_id')) {
+            $type = 'cca';
+        } elseif ($this->input->post('account_id')) {
+            $type = 'account';
+        }
 
-        if ($this->input->post('account_ids')) {
+        if ($type === 'cca') {
+            // cca adding members
             foreach ($this->input->post('account_ids') as $account_id) {
                 $input[] = [
                     'cca_id' => $this->input->post('cca_id'),
@@ -28,7 +34,8 @@ class Membership extends MY_Controller {
             }
         }
 
-        if ($this->input->post('cca_ids')) {
+        if ($type === 'account') {
+            // accounts joining ccas
             foreach ($this->input->post('cca_ids') as $cca_id) {
                 $input[] = [
                     'account_id' => $this->input->post('account_id'),
@@ -40,12 +47,15 @@ class Membership extends MY_Controller {
 
         $result = $this->memberships_model->insertBatch($input);
         if ($result) {
-            $this->session->set_flashdata('success', count($input).' members successfully added!');
+            $this->session->set_flashdata('success', count($input).' membership successfully added!');
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');
         }
-        redirect('/cca/edit/'.$this->input->post('cca_id'));
-
+        if ($type === 'cca') {
+            redirect('/cca/edit/'.$this->input->post('cca_id'));
+        } elseif ($type === 'account') {
+            redirect('/account/edit/'.$this->input->post('account_id'));
+        }
     }
 
     public function updateMemberships()
@@ -75,7 +85,7 @@ class Membership extends MY_Controller {
         $membership = $this->memberships_model->getById($id);
         $result = $this->memberships_model->deleteById($id);
         if ($result) {
-            $this->session->set_flashdata('success', 'Member successfully deleted!');
+            $this->session->set_flashdata('success', 'Membership successfully deleted!');
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');
         }

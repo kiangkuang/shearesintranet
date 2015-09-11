@@ -51,6 +51,11 @@ class Cca extends MY_Controller {
         $data = [];
         if ($id) {
             $data['cca'] = $this->ccas_model->getById($id);
+
+            if ($data['cca'] === false) {
+                $this->session->set_flashdata('error', 'CCA not found!');
+                redirect('/cca/view');
+            }
             
             $memberList = [];
             $memberships = $this->memberships_model->getByCcaId($id);
@@ -96,7 +101,7 @@ class Cca extends MY_Controller {
             $result = $this->ccas_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully updated!');
-                redirect('/cca/view/'.$input['name']);
+                redirect('/cca/edit/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/cca/edit/'.$input['id']);
@@ -106,7 +111,7 @@ class Cca extends MY_Controller {
             $result = $this->ccas_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully created!');
-                redirect('/cca/view/'.$input['name']);
+                redirect('/cca/edit/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/cca/edit');
