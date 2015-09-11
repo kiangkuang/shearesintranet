@@ -8,6 +8,7 @@ class Account extends MY_Controller {
         $this->load->model('accounts_model');
         $this->load->model('ccas_model');
         $this->load->model('memberships_model');
+        $this->load->library('cca_library');
     }
 
     public function login()
@@ -55,7 +56,18 @@ class Account extends MY_Controller {
         $data = [];
         $accounts = $this->accounts_model->getByAcadYear();
         foreach ($accounts as &$account) {
+            // total points
             $account->points = $this->memberships_model->getTotalPointsByAccountId($account->id);
+
+            // ccas list
+            $memberships = $this->cca_library->appendCca($this->memberships_model->getByAccountId($account->id));
+            $ccas = [];
+            if ($memberships) {
+                foreach ($memberships as $membership) {
+                    $ccas[] = $membership->cca->name . ' <span class="pull-right">[' . $membership->points .']</span>';
+                }
+            }
+            $account->ccas = implode('<br>', $ccas);
         }
         $data['accounts'] = $accounts;
 

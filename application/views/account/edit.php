@@ -173,7 +173,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </h3>
                   </div><!-- /.box-header -->
                   <form role="form" action="/membership/updateMemberships" method="post">
-                    <input type="hidden" name="cca_id" value="<?= $account->id ?>">
+                    <input type="hidden" name="account_id" value="<?= $account->id ?>">
                     <div class="box-body">
                       <table class="table table-bordered table-striped data-table">
                         <thead>

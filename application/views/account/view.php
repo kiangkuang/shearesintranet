@@ -48,6 +48,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <th>Room</th>
                         <th>Email</th>
                         <th>Contact</th>
+                        <th>CCAs</th>
                         <th>Total Points</th>
                         <th style="width: 110px;"></th>
                       </tr>
@@ -59,6 +60,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <td><?= $account->room ?></td>
                           <td><?= $account->email ?></td>
                           <td><?= $account->contact ?></td>
+                          <td><?= $account->ccas ?></td>
                           <td><?= $account->points ?></td>
                           <th class="text-center">
                             <a href="/account/edit/<?= $account->id ?>" class="btn btn-sm btn-default">
@@ -77,6 +79,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <th>Room</th>
                         <th>Email</th>
                         <th>Contact</th>
+                        <th>CCAs</th>
                         <th>Total Points</th>
                         <th></th>
                       </tr>
