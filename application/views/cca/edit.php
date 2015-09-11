@@ -75,7 +75,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="form-group">
                           <label>Type</label>
                           <select class="form-control" name="type">
-                            <option>Type</option>
                             <?php foreach ($types as $type): ?>
                               <option value="<?= $type->id ?>" <?= (isset($cca) && $cca->type == $type->id)? 'selected' : '' ?>><?= $type->name ?></option>
                             <?php endforeach ?>
@@ -88,7 +87,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="form-group">
                           <label>Classification</label>
                           <select class="form-control" name="classification">
-                            <option>Classification</option>
                             <?php foreach ($classifications as $classification): ?>
                               <option value="<?= $classification->id ?>" <?= (isset($cca) && $cca->classification == $classification->id)? 'selected' : '' ?>><?= $classification->name ?></option>
                             <?php endforeach ?>

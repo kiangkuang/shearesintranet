@@ -1,6 +1,6 @@
 <?php
 
-class Ccaclassifications_model extends CI_Model {
+class Ccaclassifications_model extends MY_Model {
 
     public function __construct()
     {

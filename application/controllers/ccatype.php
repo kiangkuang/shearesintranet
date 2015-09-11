@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ccatype extends CI_Controller {
+class Ccatype extends MY_Controller {
 
     public function __construct()
     {
@@ -37,13 +37,14 @@ class Ccatype extends CI_Controller {
         if ($id) {
             // editing existing cca
             $data['ccatype'] = $this->ccatypes_model->getById($id);
+            if ($data['ccatype'] === false) {
+                $this->session->set_flashdata('error', 'CCA Type not found!');
+                redirect('/ccatype/view');
+            }
         }
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        if ($id === false) {
-            $data['subSubMenu'] = 'addCcatype';
-        }
         $this->load->view('ccatype/edit',$data);
     }
 
@@ -61,7 +62,7 @@ class Ccatype extends CI_Controller {
             $result = $this->ccatypes_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Type successfully updated!');
-                redirect('/ccatype/view/'.$input['name']);
+                redirect('/ccatype/edit/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccatype/edit/'.$input['id']);
@@ -71,7 +72,7 @@ class Ccatype extends CI_Controller {
             $result = $this->ccatypes_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Type successfully created!');
-                redirect('/ccatype/view/'.$input['name']);
+                redirect('/ccatype/edit/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccatype/edit');

@@ -36,6 +36,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="box box-primary">
                 <div class="box-header">
                   <h3 class="box-title">CCA Type</h3>
+                  <div class="box-tools pull-right">
+                    <a href="/ccatype/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+                  </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <table class="table table-bordered table-striped data-table">

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Cca extends CI_Controller {
+class Cca extends MY_Controller {
 
     public function __construct()
     {
@@ -51,22 +51,27 @@ class Cca extends CI_Controller {
         $data = [];
         if ($id) {
             $data['cca'] = $this->ccas_model->getById($id);
+
+            if ($data['cca'] === false) {
+                $this->session->set_flashdata('error', 'CCA not found!');
+                redirect('/cca/view');
+            }
             
-            $memberIds = [];
+            $memberList = [];
             $memberships = $this->memberships_model->getByCcaId($id);
             if ($memberships) {
                 foreach ($memberships as &$membership) {
                     $membership->account = $this->accounts_model->getById($membership->account_id);
-                    $memberIds[] = $membership->account_id;
+                    $memberList[] = $membership->account_id;
                 }
             }
             $data['memberships'] = $memberships;
 
-            $accounts = $this->accounts_model->getAll();
+            $accounts = $this->accounts_model->getAllOrderedByName();
             // remove existing members from array
             if ($accounts) {
                 foreach ($accounts as $key => $account) {
-                    if (in_array($account->id, $memberIds) || $account->is_admin === '1') {
+                    if (in_array($account->id, $memberList) || $account->is_admin === '1') {
                         unset($accounts[$key]);
                     }
                 }
@@ -79,9 +84,6 @@ class Cca extends CI_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        if ($id === false) {
-            $data['subSubMenu'] = 'addCca';
-        }
         $this->load->view('cca/edit',$data);
     }
 
@@ -99,7 +101,7 @@ class Cca extends CI_Controller {
             $result = $this->ccas_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully updated!');
-                redirect('/cca/view/'.$input['name']);
+                redirect('/cca/edit/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/cca/edit/'.$input['id']);
@@ -109,7 +111,7 @@ class Cca extends CI_Controller {
             $result = $this->ccas_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully created!');
-                redirect('/cca/view/'.$input['name']);
+                redirect('/cca/edit/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/cca/edit');

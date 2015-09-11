@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Ccaclassification extends CI_Controller {
+class Ccaclassification extends MY_Controller {
 
     public function __construct()
     {
@@ -37,13 +37,14 @@ class Ccaclassification extends CI_Controller {
         if ($id) {
             // editing existing cca
             $data['ccaclassification'] = $this->ccaclassifications_model->getById($id);
+            if ($data['ccaclassification'] === false) {
+                $this->session->set_flashdata('error', 'CCA Classification not found!');
+                redirect('/ccaclassification/view');
+            }
         }
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        if ($id === false) {
-            $data['subSubMenu'] = 'addCcaclassification';
-        }
         $this->load->view('ccaclassification/edit',$data);
     }
 
@@ -61,7 +62,7 @@ class Ccaclassification extends CI_Controller {
             $result = $this->ccaclassifications_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully updated!');
-                redirect('/ccaclassification/view/'.$input['name']);
+                redirect('/ccaclassification/edit/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccaclassification/edit/'.$input['id']);
@@ -71,7 +72,7 @@ class Ccaclassification extends CI_Controller {
             $result = $this->ccaclassifications_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully created!');
-                redirect('/ccaclassification/view/'.$input['name']);
+                redirect('/ccaclassification/edit/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/ccaclassification/edit');
