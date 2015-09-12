@@ -56,7 +56,7 @@ class Cca extends MY_Controller {
                 $this->session->set_flashdata('error', 'CCA not found!');
                 redirect('/cca/view');
             }
-            
+
             $memberList = [];
             $memberships = $this->memberships_model->getByCcaId($id);
             if ($memberships) {

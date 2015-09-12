@@ -13,10 +13,27 @@ class Cca_library
         if ($array === false) {
             return false;
         }
-        
+
         foreach ($array as &$object) {
             $object->cca = $this->CI->ccas_model->getById($object->cca_id);
         }
         return $array;
+    }
+
+    public function getUnjoinedCcas($memberships)
+    {
+        $joinedCcaIds = pluck($memberships, 'cca_id');
+        $ccas = $this->CI->ccas_model->getAllOrderedByName();
+
+        // remove joined CCAs from array
+        if ($ccas) {
+            foreach ($ccas as $key => $cca) {
+                if (in_array($cca->id, $joinedCcaIds)) {
+                    unset($ccas[$key]);
+                }
+            }
+        }
+
+        return $ccas;
     }
 }

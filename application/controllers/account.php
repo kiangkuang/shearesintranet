@@ -8,7 +8,9 @@ class Account extends MY_Controller {
         $this->load->model('accounts_model');
         $this->load->model('ccas_model');
         $this->load->model('memberships_model');
+        $this->load->library('account_library');
         $this->load->library('cca_library');
+        $this->load->library('membership_library');
     }
 
     public function login()
@@ -54,21 +56,10 @@ class Account extends MY_Controller {
         }
 
         $data = [];
-        $accounts = $this->accounts_model->getByAcadYear();
-        foreach ($accounts as &$account) {
-            // total points
-            $account->points = $this->memberships_model->getTotalPointsByAccountId($account->id);
 
-            // ccas list
-            $memberships = $this->cca_library->appendCca($this->memberships_model->getByAccountId($account->id));
-            $ccas = [];
-            if ($memberships) {
-                foreach ($memberships as $membership) {
-                    $ccas[] = $membership->cca->name . ' <span class="pull-right">[' . $membership->points .']</span>';
-                }
-            }
-            $account->ccas = implode('<br>', $ccas);
-        }
+        $accounts = $this->accounts_model->getByAcadYear();
+        $accounts = $this->account_library->appendTotalPoints($accounts);
+        $accounts = $this->account_library->appendMembershipSummary($accounts);
         $data['accounts'] = $accounts;
 
         $data['mainMenu'] = 'admin';
@@ -90,27 +81,12 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');
             }
-            
-            $joinedCCAs = [];
+
             $memberships = $this->memberships_model->getByAccountId($id);
-            if ($memberships) {
-                foreach ($memberships as &$membership) {
-                    $membership->cca = $this->ccas_model->getById($membership->cca_id);
-                    $joinedCCAs[] = $membership->cca_id;
-                }
-            }
+            $memberships = $this->cca_library->appendCca($memberships);
             $data['memberships'] = $memberships;
 
-            $ccas = $this->ccas_model->getAllOrderedByName();
-            // remove joined CCAs from array
-            if ($ccas) {
-                foreach ($ccas as $key => $cca) {
-                    if (in_array($cca->id, $joinedCCAs)) {
-                        unset($ccas[$key]);
-                    }
-                }
-            }
-            $data['ccas'] = $ccas;
+            $data['ccas'] = $this->cca_library->getUnjoinedCcas($memberships);
         }
 
         $data['mainMenu'] = 'admin';

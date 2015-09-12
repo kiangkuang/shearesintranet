@@ -61,7 +61,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <td><?= $account->email ?></td>
                           <td><?= $account->contact ?></td>
                           <td><?= $account->ccas ?></td>
-                          <td><?= $account->points ?></td>
+                          <td><?= $account->totalPoints ?></td>
                           <th class="text-center">
                             <a href="/account/edit/<?= $account->id ?>" class="btn btn-sm btn-default">
                               <i class="fa fa-edit"></i> Edit
