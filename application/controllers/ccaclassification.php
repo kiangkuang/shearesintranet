@@ -7,7 +7,7 @@ class Ccaclassification extends MY_Controller {
         parent::__construct();
 
         if (!$this->isLoggedIn) {
-            redirect('/');
+            redirect('/login');
         }
         $this->load->model('ccaclassifications_model');
     }

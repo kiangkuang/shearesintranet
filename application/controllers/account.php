@@ -153,7 +153,7 @@ class Account extends MY_Controller {
     public function changePassword()
     {
         if (!$this->isLoggedIn) {
-            redirect('/');
+            redirect('/login');
         }
 
         if ($this->input->post()) {

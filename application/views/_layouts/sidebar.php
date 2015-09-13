@@ -24,8 +24,9 @@
             <li class="treeview <?php if (isset($mainMenu) && $mainMenu == 'account'): ?>active<?php endif ?>">
               <a href="#"><i class="fa fa-user"></i> <span>My Account</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li class="<?php if (isset($subMenu) && $subMenu == 'profile'): ?>active<?php endif ?>"><a href="/account/profile"><i class="fa fa-circle-o"></i> View Profile</a></li>
+                <li class="<?php if (isset($subMenu) && $subMenu == 'profile'): ?>active<?php endif ?>"><a href="#"><i class="fa fa-circle-o"></i> View Profile</a></li>
                 <li class="<?php if (isset($subMenu) && $subMenu == 'changePassword'): ?>active<?php endif ?>"><a href="/changepassword"><i class="fa fa-circle-o"></i> Change Password</a></li>
+                <li><a href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a></li>
               </ul>
             </li>
             <?php if ($this->account->is_admin): ?>

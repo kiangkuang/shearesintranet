@@ -7,7 +7,7 @@ class Membership extends MY_Controller {
         parent::__construct();
 
         if (!$this->isLoggedIn) {
-            redirect('/');
+            redirect('/login');
         }
         $this->load->model('memberships_model');
     }
