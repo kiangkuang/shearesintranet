@@ -61,9 +61,9 @@ class Account_library
 
         // remove joined CCAs from array
         if ($ccas) {
-            foreach ($ccas as $key => $cca) {
+            foreach ($ccas as $i => $cca) {
                 if (in_array($cca->id, $joinedCcaIds)) {
-                    unset($ccas[$key]);
+                    unset($ccas[$i]);
                 }
             }
         }
