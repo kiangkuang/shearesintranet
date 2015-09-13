@@ -33,7 +33,8 @@ class Account extends MY_Controller {
         $account = $this->accounts_model->authenticate($data['user'], $data['password']);
 
         if ($account) {
-            $this->isLoggedIn = true;
+            unset($account->password);
+            unset($account->key);
             $this->session->set_userdata('account', $account);
             redirect('/');
         } else {

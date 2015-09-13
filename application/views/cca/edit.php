@@ -165,7 +165,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <?php foreach ($memberships as $membership): ?>
                               <tr>
                                 <td>
-                                  <?= $membership->account->name ?>
+                                  <a href="/account/edit/<?= $membership->account->id ?>"><?= $membership->account->name ?></a>
                                   <input type="hidden" name="memberships[<?= $membership->id ?>][id]" value="<?= $membership->id ?>">
                                 </td>
                                 <td>
