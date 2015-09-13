@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </h1>
           <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-            <li><a href="/cca/view">Account</a></li>
+            <li><a href="/account/view">Account</a></li>
             <li class="active">
               <?php if (isset($account)): ?>
                 Edit

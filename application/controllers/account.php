@@ -33,9 +33,7 @@ class Account extends MY_Controller {
         $account = $this->accounts_model->authenticate($data['user'], $data['password']);
 
         if ($account) {
-            unset($account->password);
-            unset($account->key);
-            $this->session->set_userdata('account', $account);
+            $this->session->set_userdata('accountId', $account->id);
             redirect('/');
         } else {
             $this->session->set_flashdata('error', 'Incorrect login or password.');
@@ -117,6 +115,7 @@ class Account extends MY_Controller {
                 unset($input['password2']);
                 $input['key'] = time();
                 $input['password'] = sha1($input['password'].$input['key']);
+                $input['is_first_login'] = 1;
             }
 
             $result = $this->accounts_model->update($input);
@@ -137,6 +136,7 @@ class Account extends MY_Controller {
             unset($input['password2']);
             $input['key'] = time();
             $input['password'] = sha1($input['password'].$input['key']);
+            $input['is_first_login'] = 1;
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
@@ -148,6 +148,47 @@ class Account extends MY_Controller {
                 redirect('/account/edit');
             }
         }
+    }
+
+    public function changePassword()
+    {
+        if (!$this->isLoggedIn) {
+            redirect('/');
+        }
+
+        if ($this->input->post()) {
+            $input = $this->input->post();
+
+            if (sha1($input['currentPassword'].$this->account->key) !== $this->account->password) {
+                $this->session->set_flashdata('error', 'Incorrect password!');
+                redirect('/changepassword');
+            } elseif ($input['password'] !== $input['password2']) {
+                $this->session->set_flashdata('error', 'Passwords do not match!');
+                redirect('/changepassword');
+            } else {
+                unset($input['currentPassword']);
+                unset($input['password2']);
+                $input['id'] = $this->account->id;
+                $input['key'] = time();
+                $input['password'] = sha1($input['password'].$input['key']);
+                $input['is_first_login'] = 0;
+
+                $result = $this->accounts_model->update($input);
+                if ($result) {
+                    $this->session->set_flashdata('success', 'Password successfully changed!');
+                    redirect('/');
+                } else {
+                    $this->session->set_flashdata('error', 'An error has occured!');
+                    redirect('/changepassword');
+                }
+            }
+        }
+
+        $data = [];
+
+        $data['mainMenu'] = 'account';
+        $data['subMenu'] = 'changePassword';
+        $this->load->view('account/changePassword', $data);
     }
 
     public function delete($id = false)

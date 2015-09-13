@@ -43,7 +43,8 @@ class Account_library
             if ($memberships) {
                 foreach ($memberships as $membership) {
                     $membershipSummary[] = (object) [
-                        'name' => $membership->cca->name,
+                        'cca_id' => $membership->cca->id,
+                        'cca_name' => $membership->cca->name,
                         'points' => $membership->points,
                     ];
                 }

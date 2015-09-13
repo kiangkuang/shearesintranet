@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <td><?= $account->contact ?></td>
                           <td>
                             <?php foreach ($account->membershipSummary as $membership): ?>
-                              <?= $membership->name ?>
+                              <a href="/cca/edit/<?= $membership->cca_id ?>"><?= $membership->cca_name ?></a>
                               <span class="pull-right"><?= $membership->points ?></span>
                               <br>
                             <?php endforeach ?>
