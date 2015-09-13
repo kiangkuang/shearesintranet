@@ -17,6 +17,24 @@ class Cca extends MY_Controller {
         $this->load->library('cca_library');
     }
 
+    public function index()
+    {
+        if ($this->account->is_first_login){
+            redirect('/changepassword');
+        }
+
+        $data = [];
+
+        $memberships = $this->memberships_model->getByAccountId($this->account->id);
+        $memberships = $this->cca_library->appendCCA($memberships);
+        $data['memberships'] = $memberships;
+
+        $data['totalPoints'] = $this->membership_library->getTotalPointsByAccountId($this->account->id);
+
+        $data['mainMenu'] = 'cca';
+        $this->load->view('cca/index',$data);
+    }
+
     public function view($search = false)
     {
         if (!$this->account->is_admin) {

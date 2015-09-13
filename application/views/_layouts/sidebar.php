@@ -29,7 +29,7 @@
               </ul>
             </li>
             <?php if ($this->account->is_admin): ?>
-              <li class="treeview <?php if (isset($mainMenu) && $mainMenu == 'admin'): ?>active<?php endif ?>">
+              <li class="treeview <?php //if (isset($mainMenu) && $mainMenu == 'admin'): ?>active<?php //endif ?>">
                 <a href="#"><i class="fa fa-gear"></i> <span>Admin</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li class="<?php if (isset($subMenu) && $subMenu == 'account'): ?>active<?php endif ?>">

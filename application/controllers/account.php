@@ -198,7 +198,8 @@ class Account extends MY_Controller {
         }
 
         $result = $this->accounts_model->deleteById($id);
-        if ($result) {
+        $result2 = $this->memberships_model->deleteByAccountId($id);
+        if ($result && $result2) {
             $this->session->set_flashdata('success', 'Account successfully deleted!');
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');

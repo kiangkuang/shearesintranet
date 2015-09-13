@@ -35,4 +35,10 @@ class Memberships_model extends MY_Model {
         return false;
     }
 
+    public function deleteByAccountId($account_id)
+    {
+        $this->db->where('account_id', $account_id);
+        return $this->db->delete($this->db_name);
+    }
+
 }
