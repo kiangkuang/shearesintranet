@@ -5,7 +5,10 @@ class Cca_library
     public function __construct()
     {
         $this->CI = & get_instance();
+        $this->CI->load->model('accounts_model');
         $this->CI->load->model('ccas_model');
+        $this->CI->load->model('ccatypes_model');
+        $this->CI->load->model('ccaclassifications_model');
     }
 
     public function appendCca($array)
@@ -20,20 +23,44 @@ class Cca_library
         return $array;
     }
 
-    public function getUnjoinedCcas($memberships)
+    public function appendTypeObject($array)
     {
-        $joinedCcaIds = pluck($memberships, 'cca_id');
-        $ccas = $this->CI->ccas_model->getAllOrderedByName();
+        if ($array === false) {
+            return false;
+        }
 
-        // remove joined CCAs from array
-        if ($ccas) {
-            foreach ($ccas as $key => $cca) {
-                if (in_array($cca->id, $joinedCcaIds)) {
-                    unset($ccas[$key]);
+        foreach ($array as &$object) {
+            $object->typeObject = $this->CI->ccatypes_model->getById($object->type);
+        }
+        return $array;
+    }
+
+    public function appendClassificationObject($array)
+    {
+        if ($array === false) {
+            return false;
+        }
+
+        foreach ($array as &$object) {
+            $object->classificationObject = $this->CI->ccaclassifications_model->getById($object->classification);
+        }
+        return $array;
+    }
+
+    public function getUnjoinedAccounts($memberships)
+    {
+        $joinedAccountIds = pluck($memberships, 'account_id');
+        $accounts = $this->CI->accounts_model->getAllOrderedByName();
+
+        // remove joined accounts from array
+        if ($accounts) {
+            foreach ($accounts as $i => $account) {
+                if (in_array($account->id, $joinedAccountIds) || $account->is_admin === '1') {
+                    unset($accounts[$i]);
                 }
             }
         }
 
-        return $ccas;
+        return $accounts;
     }
 }

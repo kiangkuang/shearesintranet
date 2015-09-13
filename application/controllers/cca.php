@@ -9,11 +9,12 @@ class Cca extends MY_Controller {
         if (!$this->isLoggedIn) {
             redirect('/');
         }
-        $this->load->model('accounts_model');
         $this->load->model('ccas_model');
         $this->load->model('ccatypes_model');
         $this->load->model('ccaclassifications_model');
         $this->load->model('memberships_model');
+        $this->load->library('account_library');
+        $this->load->library('cca_library');
     }
 
     public function view($search = false)
@@ -23,12 +24,10 @@ class Cca extends MY_Controller {
         }
 
         $data = [];
-        $ccas = $this->ccas_model->getAll();
 
-        foreach ($ccas as &$cca) {
-            $cca->typeObject = $this->ccatypes_model->getById($cca->type);
-            $cca->classificationObject = $this->ccaclassifications_model->getById($cca->classification);
-        }
+        $ccas = $this->ccas_model->getAll();
+        $ccas = $this->cca_library->appendTypeObject($ccas);
+        $ccas = $this->cca_library->appendClassificationObject($ccas);
         $data['ccas'] = $ccas;
 
         if ($this->input->get('search')) {
@@ -57,26 +56,11 @@ class Cca extends MY_Controller {
                 redirect('/cca/view');
             }
 
-            $memberList = [];
             $memberships = $this->memberships_model->getByCcaId($id);
-            if ($memberships) {
-                foreach ($memberships as &$membership) {
-                    $membership->account = $this->accounts_model->getById($membership->account_id);
-                    $memberList[] = $membership->account_id;
-                }
-            }
+            $memberships = $this->account_library->appendAccount($memberships);
             $data['memberships'] = $memberships;
 
-            $accounts = $this->accounts_model->getAllOrderedByName();
-            // remove existing members from array
-            if ($accounts) {
-                foreach ($accounts as $key => $account) {
-                    if (in_array($account->id, $memberList) || $account->is_admin === '1') {
-                        unset($accounts[$key]);
-                    }
-                }
-            }
-            $data['accounts'] = $accounts;
+            $data['accounts'] = $this->cca_library->getUnjoinedAccounts($memberships);
         }
 
         $data['types'] = $this->ccatypes_model->getAll();

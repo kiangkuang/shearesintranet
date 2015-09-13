@@ -60,7 +60,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <td><?= $account->room ?></td>
                           <td><?= $account->email ?></td>
                           <td><?= $account->contact ?></td>
-                          <td><?= $account->ccas ?></td>
+                          <td>
+                            <?php foreach ($account->membershipSummary as $membership): ?>
+                              <?= $membership->name ?>
+                              <span class="pull-right"><?= $membership->points ?></span>
+                              <br>
+                            <?php endforeach ?>
+                          </td>
                           <td><?= $account->totalPoints ?></td>
                           <th class="text-center">
                             <a href="/account/edit/<?= $account->id ?>" class="btn btn-sm btn-default">

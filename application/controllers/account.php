@@ -6,7 +6,6 @@ class Account extends MY_Controller {
     {
         parent::__construct();
         $this->load->model('accounts_model');
-        $this->load->model('ccas_model');
         $this->load->model('memberships_model');
         $this->load->library('account_library');
         $this->load->library('cca_library');
@@ -86,7 +85,7 @@ class Account extends MY_Controller {
             $memberships = $this->cca_library->appendCca($memberships);
             $data['memberships'] = $memberships;
 
-            $data['ccas'] = $this->cca_library->getUnjoinedCcas($memberships);
+            $data['ccas'] = $this->account_library->getUnjoinedCcas($memberships);
         }
 
         $data['mainMenu'] = 'admin';
