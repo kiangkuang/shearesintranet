@@ -11,9 +11,9 @@ class Ccas_model extends MY_Model {
     
     public function getAllJoinTypeNameJoinClassificationName()
     {
-        $this->db->select('ccas.*, ccatypes.name AS type, ccaclassifications.name AS classification');
-        $this->db->join('ccatypes', 'ccas.type = ccatypes.id');
-        $this->db->join('ccaclassifications', 'ccas.classification = ccaclassifications.id');
+        $this->db->select('ccas.*, ccatypes.name AS type_name, ccaclassifications.name AS classification_name');
+        $this->db->join('ccatypes', 'ccas.type_id = ccatypes.id');
+        $this->db->join('ccaclassifications', 'ccas.classification_id = ccaclassifications.id');
 
         $query = $this->db->get($this->db_name);
 
@@ -23,7 +23,7 @@ class Ccas_model extends MY_Model {
 
         return false;
     }
-    
+
     public function getByType($type)
     {
         $this->db->where('type', $type);

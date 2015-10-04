@@ -58,8 +58,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <?php foreach ($ccas as $cca): ?>
                         <tr>
                           <td><?= $cca->name ?></td>
-                          <td><a href="/cca/view/<?= rawurlencode($cca->type) ?>"><?= $cca->type ?></a></td>
-                          <td><a href="/cca/view/<?= rawurlencode($cca->classification) ?>"><?= $cca->classification ?></a></td>
+                          <td><a href="/cca/view/<?= rawurlencode($cca->type_name) ?>"><?= $cca->type_name ?></a></td>
+                          <td><a href="/cca/view/<?= rawurlencode($cca->classification_name) ?>"><?= $cca->classification_name ?></a></td>
                           <th class="text-center">
                             <a href="/cca/edit/<?= $cca->id ?>" class="btn btn-sm btn-default">
                               <i class="fa fa-edit"></i> Edit
