@@ -189,7 +189,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <?php foreach ($memberships as $membership): ?>
                               <tr>
                                 <td>
-                                  <a href="/cca/edit/<?= $membership->cca->id ?>"><?= $membership->cca->name ?></a>
+                                  <a href="/cca/edit/<?= $membership->cca_id ?>"><?= $membership->cca_name ?></a>
                                   <input type="hidden" name="memberships[<?= $membership->id ?>][id]" value="<?= $membership->id ?>">
                                 </td>
                                 <td>

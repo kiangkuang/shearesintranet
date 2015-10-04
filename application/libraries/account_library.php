@@ -32,24 +32,10 @@ class Account_library
         return $accounts;
     }
 
-    public function appendMembershipSummary($accounts)
+    public function appendMemberships($accounts)
     {
         foreach ($accounts as &$account) {
-            // ccas list
-            $memberships = $this->CI->memberships_model->getByAccountId($account->id);
-            $memberships = $this->CI->cca_library->appendCca($memberships);
-
-            $membershipSummary = [];
-            if ($memberships) {
-                foreach ($memberships as $membership) {
-                    $membershipSummary[] = (object) [
-                        'cca_id' => $membership->cca->id,
-                        'cca_name' => $membership->cca->name,
-                        'points' => $membership->points,
-                    ];
-                }
-            }
-            $account->membershipSummary = $membershipSummary;
+            $account->memberships = $this->CI->memberships_model->getByAccountIdJoinCcaName($account->id);
         }
 
         return $accounts;

@@ -13,7 +13,6 @@ class Cca extends MY_Controller {
         $this->load->model('ccatypes_model');
         $this->load->model('ccaclassifications_model');
         $this->load->model('memberships_model');
-        $this->load->library('account_library');
         $this->load->library('cca_library');
     }
 
@@ -25,7 +24,7 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcas($this->account->id);
+        $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
         $data['totalPoints'] = $this->memberships_model->getTotalPointsByAccountId($this->account->id);
 
         $data['mainMenu'] = 'cca';
@@ -68,9 +67,7 @@ class Cca extends MY_Controller {
                 redirect('/cca/view');
             }
 
-            $memberships = $this->memberships_model->getByCcaId($id);
-            $memberships = $this->account_library->appendAccount($memberships);
-            $data['memberships'] = $memberships;
+            $data['memberships'] = $this->memberships_model->getByCcaIdJoinAccountName($id);
 
             $data['accounts'] = $this->cca_library->getUnjoinedAccounts($memberships);
         }

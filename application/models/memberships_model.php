@@ -21,6 +21,21 @@ class Memberships_model extends MY_Model {
 
         return false;
     }
+
+    public function getByCcaIdJoinAccountName($cca_id)
+    {
+        $this->db->select('memberships.*, accounts.name as account_name');
+        $this->db->where('cca_id', $cca_id);
+        $this->db->join('accounts', 'memberships.account_id = accounts.id');
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
     
     public function getByAccountId($account_id)
     {
@@ -35,7 +50,7 @@ class Memberships_model extends MY_Model {
         return false;
     }
     
-    public function getByAccountIdJoinCcas($account_id)
+    public function getByAccountIdJoinCcaName($account_id)
     {
         $this->db->select('memberships.*, ccas.name as cca_name');
         $this->db->where('account_id', $account_id);
