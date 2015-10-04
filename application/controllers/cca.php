@@ -17,7 +17,7 @@ class Cca extends MY_Controller {
         $this->load->library('cca_library');
     }
 
-    public function index()
+    public function userCca()
     {
         if ($this->account->is_first_login){
             redirect('/changepassword');
@@ -25,14 +25,11 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $memberships = $this->memberships_model->getByAccountId($this->account->id);
-        $memberships = $this->cca_library->appendCCA($memberships);
-        $data['memberships'] = $memberships;
-
-        $data['totalPoints'] = $this->membership_library->getTotalPointsByAccountId($this->account->id);
+        $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcas($this->account->id);
+        $data['totalPoints'] = $this->memberships_model->getTotalPointsByAccountId($this->account->id);
 
         $data['mainMenu'] = 'cca';
-        $this->load->view('cca/index',$data);
+        $this->load->view('cca/userCca',$data);
     }
 
     public function view($search = false)
@@ -43,8 +40,7 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $ccas = $this->ccas_model->getAllJoinTypeNameJoinClassificationName();
-        $data['ccas'] = $ccas;
+        $data['ccas'] = $this->ccas_model->getAllJoinTypeNameJoinClassificationName();
 
         if ($this->input->get('search')) {
             $search = $this->input->get('search');

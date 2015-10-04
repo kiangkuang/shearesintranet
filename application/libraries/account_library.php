@@ -7,8 +7,8 @@ class Account_library
         $this->CI = & get_instance();
         $this->CI->load->model('accounts_model');
         $this->CI->load->model('ccas_model');
+        $this->CI->load->model('memberships_model');
         $this->CI->load->library('cca_library');
-        $this->CI->load->library('membership_library');
     }
 
     public function appendAccount($array)
@@ -26,7 +26,7 @@ class Account_library
     public function appendTotalPoints($accounts)
     {
         foreach ($accounts as &$account) {
-            $account->totalPoints = $this->CI->membership_library->getTotalPointsByAccountId($account->id);
+            $account->totalPoints = $this->CI->memberships_model->getTotalPointsByAccountId($account->id);
         }
 
         return $accounts;

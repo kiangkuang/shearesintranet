@@ -9,7 +9,6 @@ class Account extends MY_Controller {
         $this->load->model('memberships_model');
         $this->load->library('account_library');
         $this->load->library('cca_library');
-        $this->load->library('membership_library');
     }
 
     public function login()

@@ -67,7 +67,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               <br>
                             <?php endforeach ?>
                           </td>
-                          <td><span class="pull-right"><?= $account->totalPoints ?></span></td>
+                          <td><span class="pull-right"><?= $account->totalPoints->points ?></span></td>
                           <th class="text-center">
                             <a href="/account/edit/<?= $account->id ?>" class="btn btn-sm btn-default">
                               <i class="fa fa-edit"></i> Edit
