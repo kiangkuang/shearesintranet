@@ -43,9 +43,7 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $ccas = $this->ccas_model->getAll();
-        $ccas = $this->cca_library->appendTypeObject($ccas);
-        $ccas = $this->cca_library->appendClassificationObject($ccas);
+        $ccas = $this->ccas_model->getAllJoinTypeNameJoinClassificationName();
         $data['ccas'] = $ccas;
 
         if ($this->input->get('search')) {
