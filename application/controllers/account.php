@@ -6,8 +6,10 @@ class Account extends MY_Controller {
     {
         parent::__construct();
         $this->load->model('accounts_model');
-        $this->load->model('ccas_model');
         $this->load->model('memberships_model');
+        $this->load->library('account_library');
+        $this->load->library('cca_library');
+        $this->load->library('membership_library');
     }
 
     public function login()
@@ -31,8 +33,7 @@ class Account extends MY_Controller {
         $account = $this->accounts_model->authenticate($data['user'], $data['password']);
 
         if ($account) {
-            $this->isLoggedIn = true;
-            $this->session->set_userdata('account', $account);
+            $this->session->set_userdata('accountId', $account->id);
             redirect('/');
         } else {
             $this->session->set_flashdata('error', 'Incorrect login or password.');
@@ -53,10 +54,10 @@ class Account extends MY_Controller {
         }
 
         $data = [];
+
         $accounts = $this->accounts_model->getByAcadYear();
-        foreach ($accounts as &$account) {
-            $account->points = $this->memberships_model->getTotalPointsByAccountId($account->id);
-        }
+        $accounts = $this->account_library->appendTotalPoints($accounts);
+        $accounts = $this->account_library->appendMembershipSummary($accounts);
         $data['accounts'] = $accounts;
 
         $data['mainMenu'] = 'admin';
@@ -78,27 +79,12 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');
             }
-            
-            $joinedCCAs = [];
+
             $memberships = $this->memberships_model->getByAccountId($id);
-            if ($memberships) {
-                foreach ($memberships as &$membership) {
-                    $membership->cca = $this->ccas_model->getById($membership->cca_id);
-                    $joinedCCAs[] = $membership->cca_id;
-                }
-            }
+            $memberships = $this->cca_library->appendCca($memberships);
             $data['memberships'] = $memberships;
 
-            $ccas = $this->ccas_model->getAllOrderedByName();
-            // remove joined CCAs from array
-            if ($ccas) {
-                foreach ($ccas as $key => $cca) {
-                    if (in_array($cca->id, $joinedCCAs)) {
-                        unset($ccas[$key]);
-                    }
-                }
-            }
-            $data['ccas'] = $ccas;
+            $data['ccas'] = $this->account_library->getUnjoinedCcas($memberships);
         }
 
         $data['mainMenu'] = 'admin';
@@ -129,6 +115,7 @@ class Account extends MY_Controller {
                 unset($input['password2']);
                 $input['key'] = time();
                 $input['password'] = sha1($input['password'].$input['key']);
+                $input['is_first_login'] = 1;
             }
 
             $result = $this->accounts_model->update($input);
@@ -149,6 +136,7 @@ class Account extends MY_Controller {
             unset($input['password2']);
             $input['key'] = time();
             $input['password'] = sha1($input['password'].$input['key']);
+            $input['is_first_login'] = 1;
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
@@ -162,6 +150,47 @@ class Account extends MY_Controller {
         }
     }
 
+    public function changePassword()
+    {
+        if (!$this->isLoggedIn) {
+            redirect('/login');
+        }
+
+        if ($this->input->post()) {
+            $input = $this->input->post();
+
+            if (sha1($input['currentPassword'].$this->account->key) !== $this->account->password) {
+                $this->session->set_flashdata('error', 'Incorrect password!');
+                redirect('/changepassword');
+            } elseif ($input['password'] !== $input['password2']) {
+                $this->session->set_flashdata('error', 'Passwords do not match!');
+                redirect('/changepassword');
+            } else {
+                unset($input['currentPassword']);
+                unset($input['password2']);
+                $input['id'] = $this->account->id;
+                $input['key'] = time();
+                $input['password'] = sha1($input['password'].$input['key']);
+                $input['is_first_login'] = 0;
+
+                $result = $this->accounts_model->update($input);
+                if ($result) {
+                    $this->session->set_flashdata('success', 'Password successfully changed!');
+                    redirect('/');
+                } else {
+                    $this->session->set_flashdata('error', 'An error has occured!');
+                    redirect('/changepassword');
+                }
+            }
+        }
+
+        $data = [];
+
+        $data['mainMenu'] = 'account';
+        $data['subMenu'] = 'changePassword';
+        $this->load->view('account/changePassword', $data);
+    }
+
     public function delete($id = false)
     {
         if (!$id) {
@@ -169,7 +198,8 @@ class Account extends MY_Controller {
         }
 
         $result = $this->accounts_model->deleteById($id);
-        if ($result) {
+        $result2 = $this->memberships_model->deleteByAccountId($id);
+        if ($result && $result2) {
             $this->session->set_flashdata('success', 'Account successfully deleted!');
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');

@@ -7,6 +7,9 @@ class Home extends MY_Controller {
         if (!$this->isLoggedIn){
             redirect('/login');
         }
+        if ($this->account->is_first_login){
+            redirect('/changepassword');
+        }
 
         $data = [];
         $this->load->view('home/index', $data);

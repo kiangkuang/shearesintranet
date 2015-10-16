@@ -7,7 +7,7 @@ class Error extends MY_Controller {
         parent::__construct();
 
         if (!$this->isLoggedIn) {
-            redirect('/');
+            redirect('/login');
         }
     }
 

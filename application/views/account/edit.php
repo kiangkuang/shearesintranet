@@ -29,7 +29,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </h1>
           <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-            <li><a href="/cca/view">Account</a></li>
+            <li><a href="/account/view">Account</a></li>
             <li class="active">
               <?php if (isset($account)): ?>
                 Edit
@@ -173,7 +173,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </h3>
                   </div><!-- /.box-header -->
                   <form role="form" action="/membership/updateMemberships" method="post">
-                    <input type="hidden" name="cca_id" value="<?= $account->id ?>">
+                    <input type="hidden" name="account_id" value="<?= $account->id ?>">
                     <div class="box-body">
                       <table class="table table-bordered table-striped data-table">
                         <thead>
@@ -189,7 +189,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <?php foreach ($memberships as $membership): ?>
                               <tr>
                                 <td>
-                                  <?= $membership->cca->name ?>
+                                  <a href="/cca/edit/<?= $membership->cca->id ?>"><?= $membership->cca->name ?></a>
                                   <input type="hidden" name="memberships[<?= $membership->id ?>][id]" value="<?= $membership->id ?>">
                                 </td>
                                 <td>

@@ -13,9 +13,9 @@ class MY_Controller extends CI_Controller {
 		
 		$this->load->model('accounts_model');
 
-        if ($this->session->account) {
+        if ($this->session->accountId) {
             $this->isLoggedIn = true;
-            $this->account = $this->session->account;
+            $this->account = $this->accounts_model->getById($this->session->accountId);
         }
         if ($this->session->success){
             $this->success = $this->session->success;

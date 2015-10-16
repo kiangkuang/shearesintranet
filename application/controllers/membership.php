@@ -7,7 +7,7 @@ class Membership extends MY_Controller {
         parent::__construct();
 
         if (!$this->isLoggedIn) {
-            redirect('/');
+            redirect('/login');
         }
         $this->load->model('memberships_model');
     }
@@ -63,6 +63,11 @@ class Membership extends MY_Controller {
         if (!$this->input->post()) {
             redirect('/');
         }
+        if ($this->input->post('cca_id')) {
+            $type = 'cca';
+        } elseif ($this->input->post('account_id')) {
+            $type = 'account';
+        }
 
         $input = $this->input->post('memberships');
 
@@ -73,7 +78,12 @@ class Membership extends MY_Controller {
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');
         }
-        redirect('/cca/edit/'.$this->input->post('cca_id'));
+        
+        if ($type === 'cca') {
+            redirect('/cca/edit/'.$this->input->post('cca_id'));
+        } elseif ($type === 'account') {
+            redirect('/account/edit/'.$this->input->post('account_id'));
+        }
 
     }
 
