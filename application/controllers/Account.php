@@ -8,8 +8,6 @@ class Account extends MY_Controller {
         $this->load->model('accounts_model');
         $this->load->model('memberships_model');
         $this->load->library('account_library');
-        $this->load->library('cca_library');
-        $this->load->library('membership_library');
     }
 
     public function login()
@@ -57,7 +55,7 @@ class Account extends MY_Controller {
 
         $accounts = $this->accounts_model->getByAcadYear();
         $accounts = $this->account_library->appendTotalPoints($accounts);
-        $accounts = $this->account_library->appendMembershipSummary($accounts);
+        $accounts = $this->account_library->appendMemberships($accounts);
         $data['accounts'] = $accounts;
 
         $data['mainMenu'] = 'admin';
@@ -80,9 +78,7 @@ class Account extends MY_Controller {
                 redirect('/account/view');
             }
 
-            $memberships = $this->memberships_model->getByAccountId($id);
-            $memberships = $this->cca_library->appendCca($memberships);
-            $data['memberships'] = $memberships;
+            $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($id);
 
             $data['ccas'] = $this->account_library->getUnjoinedCcas($memberships);
         }

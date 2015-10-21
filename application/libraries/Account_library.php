@@ -7,8 +7,8 @@ class Account_library
         $this->CI = & get_instance();
         $this->CI->load->model('accounts_model');
         $this->CI->load->model('ccas_model');
+        $this->CI->load->model('memberships_model');
         $this->CI->load->library('cca_library');
-        $this->CI->load->library('membership_library');
     }
 
     public function appendAccount($array)
@@ -26,30 +26,16 @@ class Account_library
     public function appendTotalPoints($accounts)
     {
         foreach ($accounts as &$account) {
-            $account->totalPoints = $this->CI->membership_library->getTotalPointsByAccountId($account->id);
+            $account->totalPoints = $this->CI->memberships_model->getTotalPointsByAccountId($account->id);
         }
 
         return $accounts;
     }
 
-    public function appendMembershipSummary($accounts)
+    public function appendMemberships($accounts)
     {
         foreach ($accounts as &$account) {
-            // ccas list
-            $memberships = $this->CI->memberships_model->getByAccountId($account->id);
-            $memberships = $this->CI->cca_library->appendCca($memberships);
-
-            $membershipSummary = [];
-            if ($memberships) {
-                foreach ($memberships as $membership) {
-                    $membershipSummary[] = (object) [
-                        'cca_id' => $membership->cca->id,
-                        'cca_name' => $membership->cca->name,
-                        'points' => $membership->points,
-                    ];
-                }
-            }
-            $account->membershipSummary = $membershipSummary;
+            $account->memberships = $this->CI->memberships_model->getByAccountIdJoinCcaName($account->id);
         }
 
         return $accounts;

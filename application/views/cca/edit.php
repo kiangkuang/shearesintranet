@@ -74,9 +74,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- select -->
                         <div class="form-group">
                           <label>Type</label>
-                          <select class="form-control" name="type">
+                          <select class="form-control" name="type_id">
                             <?php foreach ($types as $type): ?>
-                              <option value="<?= $type->id ?>" <?= (isset($cca) && $cca->type == $type->id)? 'selected' : '' ?>><?= $type->name ?></option>
+                              <option value="<?= $type->id ?>" <?= (isset($cca) && $cca->type_id == $type->id)? 'selected' : '' ?>><?= $type->name ?></option>
                             <?php endforeach ?>
                           </select>
                         </div>
@@ -86,9 +86,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- select -->
                         <div class="form-group">
                           <label>Classification</label>
-                          <select class="form-control" name="classification">
+                          <select class="form-control" name="classification_id">
                             <?php foreach ($classifications as $classification): ?>
-                              <option value="<?= $classification->id ?>" <?= (isset($cca) && $cca->classification == $classification->id)? 'selected' : '' ?>><?= $classification->name ?></option>
+                              <option value="<?= $classification->id ?>" <?= (isset($cca) && $cca->classification_id == $classification->id)? 'selected' : '' ?>><?= $classification->name ?></option>
                             <?php endforeach ?>
                           </select>
                         </div>
@@ -165,7 +165,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <?php foreach ($memberships as $membership): ?>
                               <tr>
                                 <td>
-                                  <a href="/account/edit/<?= $membership->account->id ?>"><?= $membership->account->name ?></a>
+                                  <a href="/account/edit/<?= $membership->account_id ?>"><?= $membership->account_name ?></a>
                                   <input type="hidden" name="memberships[<?= $membership->id ?>][id]" value="<?= $membership->id ?>">
                                 </td>
                                 <td>

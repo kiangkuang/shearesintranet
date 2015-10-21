@@ -23,30 +23,6 @@ class Cca_library
         return $array;
     }
 
-    public function appendTypeObject($array)
-    {
-        if ($array === false) {
-            return false;
-        }
-
-        foreach ($array as &$object) {
-            $object->typeObject = $this->CI->ccatypes_model->getById($object->type);
-        }
-        return $array;
-    }
-
-    public function appendClassificationObject($array)
-    {
-        if ($array === false) {
-            return false;
-        }
-
-        foreach ($array as &$object) {
-            $object->classificationObject = $this->CI->ccaclassifications_model->getById($object->classification);
-        }
-        return $array;
-    }
-
     public function getUnjoinedAccounts($memberships)
     {
         $joinedAccountIds = pluck($memberships, 'account_id');

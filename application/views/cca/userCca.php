@@ -47,12 +47,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="list-group list-group-unbordered">
                       <?php foreach ($memberships as $membership): ?>
                         <li class="list-group-item">
-                          <b><?= $membership->cca->name ?></b> <span class="pull-right text-light-blue"><?= $membership->points ?></span><br>
+                          <b><?= $membership->cca_name ?></b> <span class="pull-right text-light-blue"><?= $membership->points ?></span><br>
                           <small class="text-muted"><?= $membership->role ?></small>
                         </li>
                       <?php endforeach ?>
                     </ul>
-                    <p class="lead text-light-blue"><b>Total Points <span class="pull-right"><?= $totalPoints ?></span></b></p>
+                    <p class="lead text-light-blue"><b>Total Points <span class="pull-right"><?= $totalPoints->points ?></span></b></p>
                   <?php endif ?>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

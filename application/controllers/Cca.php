@@ -13,11 +13,10 @@ class Cca extends MY_Controller {
         $this->load->model('ccatypes_model');
         $this->load->model('ccaclassifications_model');
         $this->load->model('memberships_model');
-        $this->load->library('account_library');
         $this->load->library('cca_library');
     }
 
-    public function index()
+    public function userCca()
     {
         if ($this->account->is_first_login){
             redirect('/changepassword');
@@ -25,14 +24,11 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $memberships = $this->memberships_model->getByAccountId($this->account->id);
-        $memberships = $this->cca_library->appendCCA($memberships);
-        $data['memberships'] = $memberships;
-
-        $data['totalPoints'] = $this->membership_library->getTotalPointsByAccountId($this->account->id);
+        $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
+        $data['totalPoints'] = $this->memberships_model->getTotalPointsByAccountId($this->account->id);
 
         $data['mainMenu'] = 'cca';
-        $this->load->view('cca/index',$data);
+        $this->load->view('cca/userCca',$data);
     }
 
     public function view($search = false)
@@ -43,10 +39,7 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $ccas = $this->ccas_model->getAll();
-        $ccas = $this->cca_library->appendTypeObject($ccas);
-        $ccas = $this->cca_library->appendClassificationObject($ccas);
-        $data['ccas'] = $ccas;
+        $data['ccas'] = $this->ccas_model->getAllJoinTypeNameJoinClassificationName();
 
         if ($this->input->get('search')) {
             $search = $this->input->get('search');
@@ -74,9 +67,7 @@ class Cca extends MY_Controller {
                 redirect('/cca/view');
             }
 
-            $memberships = $this->memberships_model->getByCcaId($id);
-            $memberships = $this->account_library->appendAccount($memberships);
-            $data['memberships'] = $memberships;
+            $data['memberships'] = $this->memberships_model->getByCcaIdJoinAccountName($id);
 
             $data['accounts'] = $this->cca_library->getUnjoinedAccounts($memberships);
         }

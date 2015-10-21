@@ -61,13 +61,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <td><?= $account->email ?></td>
                           <td><?= $account->contact ?></td>
                           <td>
-                            <?php foreach ($account->membershipSummary as $membership): ?>
-                              <a href="/cca/edit/<?= $membership->cca_id ?>"><?= $membership->cca_name ?></a>
-                              <span class="pull-right"><?= $membership->points ?></span>
-                              <br>
-                            <?php endforeach ?>
+                            <?php if ($account->memberships): ?>
+                              <?php foreach ($account->memberships as $membership): ?>
+                                <a href="/cca/edit/<?= $membership->cca_id ?>"><?= $membership->cca_name ?></a>
+                                <span class="pull-right"><?= $membership->points ?></span>
+                                <br>
+                              <?php endforeach ?>
+                            <?php endif ?>
                           </td>
-                          <td><span class="pull-right"><?= $account->totalPoints ?></span></td>
+                          <td><span class="pull-right"><?= $account->totalPoints->points ?></span></td>
                           <th class="text-center">
                             <a href="/account/edit/<?= $account->id ?>" class="btn btn-sm btn-default">
                               <i class="fa fa-edit"></i> Edit
