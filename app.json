@@ -19,7 +19,6 @@
     }
   },
   "addons":[
-    "jawsdb",
     "logentries",
     "newrelic",
     "papertrail"
