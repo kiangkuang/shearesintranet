@@ -1,0 +1,27 @@
+{
+  "name":"Sheares-Intranet",
+  "scripts":{},
+  "env":{
+    "CI_ENV":{
+      "required":true
+    },
+    "ERROR_PAGE_URL":{
+      "required":true
+    },
+    "MAINTENANCE_PAGE_URL":{
+      "required":true
+    },
+    "NEW_RELIC_APP_NAME":{
+      "required":true
+    },
+    "NEW_RELIC_CONFIG_FILE":{
+      "required":true
+    }
+  },
+  "addons":[
+    "jawsdb",
+    "logentries",
+    "newrelic",
+    "papertrail"
+  ]
+}
