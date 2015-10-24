@@ -84,4 +84,4 @@ define('EXIT_DATABASE', 8); // database error
 define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-define('ACAD_YEAR', '15/16');
+define('VERSION', '1.1.1');
