@@ -7,11 +7,13 @@ class MY_Controller extends CI_Controller {
     var $success = false;
     var $error = false;
 
-	public function __construct()
+    public function __construct()
     {
         parent::__construct();
-		
-		$this->load->model('accounts_model');
+
+        define('ACAD_YEAR', getAcadYear());
+
+        $this->load->model('accounts_model');
 
         if ($this->session->accountId) {
             $this->isLoggedIn = true;
