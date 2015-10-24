@@ -68,8 +68,7 @@ class Cca extends MY_Controller {
             }
 
             $data['memberships'] = $this->memberships_model->getByCcaIdJoinAccountName($id);
-
-            $data['accounts'] = $this->cca_library->getUnjoinedAccounts($memberships);
+            $data['accounts'] = $this->cca_library->getUnjoinedAccounts($data['memberships']);
         }
 
         $data['types'] = $this->ccatypes_model->getAll();
