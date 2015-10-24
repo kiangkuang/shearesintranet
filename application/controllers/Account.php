@@ -79,8 +79,7 @@ class Account extends MY_Controller {
             }
 
             $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($id);
-
-            $data['ccas'] = $this->account_library->getUnjoinedCcas($memberships);
+            $data['ccas'] = $this->account_library->getUnjoinedCcas($data['memberships']);
         }
 
         $data['mainMenu'] = 'admin';
