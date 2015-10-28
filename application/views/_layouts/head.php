@@ -30,4 +30,6 @@
     <![endif]-->
 
     <link rel="stylesheet" href="/assets/AdminLTE-2.3.0/dist/css/custom.css">
+
+    <?php include('application/views/_layouts/analytics.php') ?>
   </head>
