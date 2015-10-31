@@ -1,0 +1,74 @@
+{% extends '_layouts/template.twig' %}
+
+{% block content_header %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      CCA Type
+      <small>
+        All
+      </small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li class="active">CCA Type</li>
+    </ol>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title">CCA Type</h3>
+            <div class="box-tools pull-right">
+              <a href="/ccatype/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+            </div><!-- /.box-tools -->
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <table class="table table-bordered table-striped data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th style="width: 110px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ccatype in ccatypes %}
+                  <tr>
+                    <td>{{ ccatype.name }}</td>
+                    <th class="text-center">
+                      <a href="/ccatype/edit/{{ ccatype.id }}" class="btn btn-sm btn-default">
+                        <i class="fa fa-edit"></i> Edit
+                      </a>
+                      <a href="/ccatype/delete/{{ ccatype.id }}" class="btn btn-sm btn-default">
+                        <i class="fa fa-trash"></i> Delete
+                      </a>
+                    </th>
+                  </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </section><!-- /.content -->
+{% endblock %}
+
+{% block script %}
+  <script>
+    $(function () {
+      $(".data-table").DataTable();
+    });
+  </script>
+{% endblock %}
