@@ -165,10 +165,10 @@
                             <input type="hidden" name="memberships[{{ membership.id }}][id]" value="{{ membership.id }}">
                           </td>
                           <td>
-                            <input type="text" class="form-control" name="memberships[{{ membership.id }}][role]" placeholder="Role" value="{{ membership.role }}" style="width: 100%;">
+                            <input type="text" class="form-control" name="memberships[{{ membership.id }}][role]" placeholder="Role" value="{{ membership.role }}">
                           </td>
                           <td>
-                            <input type="number" class="form-control" name="memberships[{{ membership.id }}][points]" placeholder="Points" value="{{ membership.points }}" style="width: 100%;">
+                            <input type="number" class="form-control" name="memberships[{{ membership.id }}][points]" placeholder="Points" value="{{ membership.points }}">
                           </td>
                           <th class="text-center">
                             <a href="/membership/delete/{{ membership.id }}?redirect={{ this.uri.uri_string()|url_encode }}" class="btn btn-sm btn-default">
