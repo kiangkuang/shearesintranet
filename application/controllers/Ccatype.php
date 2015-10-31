@@ -46,7 +46,8 @@ class Ccatype extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        $this->load->view('ccatype/edit', $data);
+        $data['this'] = $this;
+        $this->twig->display('ccatype/edit', $data);
     }
 
     public function update()
