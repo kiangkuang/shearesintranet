@@ -27,8 +27,9 @@ class Cca extends MY_Controller {
         $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
         $data['totalPoints'] = $this->memberships_model->getTotalPointsByAccountId($this->account->id);
 
-        $data['mainMenu'] = 'cca';
-        $this->load->view('cca/userCca',$data);
+        //$data['mainMenu'] = 'myCca';
+        $data['this'] = $this;
+        $this->twig->display('cca/userCca',$data);
     }
 
     public function view($search = false)
