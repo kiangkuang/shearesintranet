@@ -62,7 +62,8 @@ class Account extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
         $data['subSubMenu'] = 'viewAccount';
-        $this->load->view('account/view', $data);
+        $data['this'] = $this;
+        $this->twig->display('account/view', $data);
     }
 
     public function edit($id = false)
