@@ -1,0 +1,189 @@
+{% extends '_layouts/template.twig' %}
+
+{% block content_header %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      CCA
+      <small>
+        {{ cca ? 'Edit' : 'Add' }}
+      </small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="/cca/view">CCA</a></li>
+      <li class="active">
+        {{ cca ? 'Edit' : 'Add' }}
+      </li>
+    </ol>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- column -->
+      <div class="col-xs-12">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              {{ cca ? 'Edit Information' : 'Add New CCA' }}
+            </h3>
+          </div><!-- /.box-header -->
+
+          <form role="form" action="/cca/update" method="post">
+            <div class="box-body">
+              <div class="row">
+                {% if cca %}
+                  <input type="hidden" name="id" value="{{ cca.id }}">
+                {% endif %}
+                <div class="col-md-12">
+                  <!-- text input -->
+                  <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ cca.name }}">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>Type</label>
+                    <select class="form-control" name="type_id">
+                      {% for type in types %}
+                        <option value="{{ type.id }}" {{ cca.type_id == type.id ? 'selected' }}>{{ type.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>Classification</label>
+                    <select class="form-control" name="classification_id">
+                      {% for classification in classifications %}
+                        <option value="{{ classification.id }}" {{ cca.classification_id == classification.id ? 'selected' }}>{{ classification.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button class="btn btn-success" type="submit">
+                <i class="fa fa-save"></i> {{ cca ? 'Save' : 'Add' }}
+              </button>
+              <a class="btn btn-default" href="/cca/view">
+                <i class="fa fa-undo"></i> Back
+              </a>
+            </div>
+          </form>
+        </div><!-- /.box -->
+
+        {% if cca %}
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                Add Members
+              </h3>
+            </div><!-- /.box-header -->
+
+            <form role="form" action="/membership/addMembership" method="post">
+              <div class="box-body">
+                <div class="row">
+                  <input type="hidden" name="cca_id" value="{{ cca.id }}">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Names</label>
+                      <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="account_ids[]">
+                        {% for account in accounts %}
+                          <option value="{{ account.id }}">{{ account.name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div><!-- /.form-group -->
+                  </div>
+                </div>
+              </div><!-- /.box-body -->
+              <div class="box-footer">
+                <button class="btn btn-success" type="submit">
+                  <i class="fa fa-plus"></i> Add
+                </button>
+              </div>
+            </form>
+          </div><!-- /.box -->
+
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                Membership
+              </h3>
+            </div><!-- /.box-header -->
+            <form role="form" action="/membership/updateMemberships" method="post">
+              <input type="hidden" name="cca_id" value="{{ cca.id }}">
+              <div class="box-body">
+                <table class="table table-bordered table-striped data-table">
+                  <thead>
+                    <tr>
+                      <th>Member</th>
+                      <th>Role</th>
+                      <th>Points</th>
+                      <th style="width: 50px;"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if memberships %}
+                      {% for membership in memberships %}
+                        <tr>
+                          <td>
+                            <a href="/account/edit/{{ membership.account_id }}">{{ membership.account_name }}</a>
+                            <input type="hidden" name="memberships[{{ membership.id }}][id]" value="{{ membership.id }}">
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" name="memberships[{{ membership.id }}][role]" placeholder="Role" value="{{ membership.role }}">
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" name="memberships[{{ membership.id }}][points]" placeholder="Points" value="{{ membership.points }}">
+                          </td>
+                          <th class="text-center">
+                            <a href="/membership/delete/{{ membership.id }}?redirect={{ this.uri.uri_string()|url_encode }}" class="btn btn-sm btn-default">
+                              <i class="fa fa-trash"></i> Delete
+                            </a>
+                          </th>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>Member</th>
+                      <th>Role</th>
+                      <th>Points</th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div><!-- /.box-body -->
+              <div class="box-footer">
+                <button class="btn btn-success" type="submit">
+                  <i class="fa fa-save"></i> Save
+                </button>
+              </div>
+            </form>
+          </div><!-- /.box -->
+        {% endif %}
+      </div><!--/.col -->
+    </div>   <!-- /.row -->
+  </section><!-- /.content -->
+{% endblock %}
+
+{% block script %}
+  <script>
+    $(function () {
+      $(".data-table").DataTable();
+      //Initialize Select2 Elements
+      $(".select2").select2();
+    });
+  </script>
+{% endblock %}

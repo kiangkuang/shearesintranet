@@ -77,7 +77,8 @@ class Cca extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        $this->load->view('cca/edit',$data);
+        $data['this'] = $this;
+        $this->twig->display('cca/edit',$data);
     }
 
     public function update()
