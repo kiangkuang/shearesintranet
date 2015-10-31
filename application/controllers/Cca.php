@@ -50,7 +50,8 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['subSubMenu'] = 'viewCca';
-        $this->load->view('cca/view',$data);
+        $data['this'] = $this;
+        $this->twig->display('cca/view',$data);
     }
 
     public function edit($id = false)
