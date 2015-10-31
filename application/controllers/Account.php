@@ -183,7 +183,8 @@ class Account extends MY_Controller {
 
         $data['mainMenu'] = 'account';
         $data['subMenu'] = 'changePassword';
-        $this->load->view('account/changePassword', $data);
+        $data['this'] = $this;
+        $this->twig->display('account/changePassword', $data);
     }
 
     public function delete($id = false)
