@@ -7,7 +7,7 @@
           <!-- Sidebar user panel (optional) -->
           <div class="user-panel">
             <div class="pull-left image">
-              <img src="/assets/AdminLTE-2.3.0/dist/img/default.png" class="img-circle" alt="User Image">
+              <img src="/assets/images/default.png" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
               <p><?= $this->account->name ?></p>
