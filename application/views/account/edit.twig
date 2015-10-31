@@ -42,7 +42,7 @@
                   <!-- text input -->
                   <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ account.name }}">
+                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ account.name }}" required>
                   </div>
                 </div>
 
@@ -50,7 +50,7 @@
                   <!-- text input -->
                   <div class="form-group">
                     <label>Username</label>
-                    <input type="text" class="form-control" name="user" placeholder="Username" value="{{ account.user }}">
+                    <input type="text" class="form-control" name="user" placeholder="Username" value="{{ account.user }}" required>
                   </div>
                 </div>
 
@@ -82,7 +82,7 @@
                   <!-- text input -->
                   <div class="form-group">
                     <label>Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="{{ account ? 'Leave blank if not changing' : 'Password' }}">
+                    <input type="password" class="form-control" name="password" placeholder="{{ account ? 'Leave blank if not changing' : 'Password' }}" {{ account ? '' : 'required' }}>
                   </div>
                 </div>
 
@@ -90,7 +90,7 @@
                   <!-- text input -->
                   <div class="form-group">
                     <label>Confirm Password</label>
-                    <input type="password" class="form-control" name="password2" placeholder="{{ account ? 'Leave blank if not changing' : 'Confirm Password' }}">
+                    <input type="password" class="form-control" name="password2" placeholder="{{ account ? 'Leave blank if not changing' : 'Confirm Password' }}" {{ account ? '' : 'required' }}>
                   </div>
                 </div>
               </div>

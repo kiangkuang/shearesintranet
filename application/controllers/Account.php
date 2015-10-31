@@ -18,7 +18,8 @@ class Account extends MY_Controller {
 
         $data = [];
 
-        $this->load->view('account/login',$data);
+        $data['this'] = $this;
+        $this->twig->display('account/login',$data);
     }
 
     public function processLogin()
