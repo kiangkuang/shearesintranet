@@ -9,9 +9,10 @@ class Ccas_model extends MY_Model {
         $this->db_name = 'ccas';
     }
     
-    public function getAllJoinTypeNameJoinClassificationName()
+    public function getAllJoinTypeNameJoinClassificationName($acad_year = ACAD_YEAR)
     {
         $this->db->select('ccas.*, ccatypes.name AS type_name, ccaclassifications.name AS classification_name');
+        $this->db->where('acad_year', $acad_year);
         $this->db->join('ccatypes', 'ccas.type_id = ccatypes.id');
         $this->db->join('ccaclassifications', 'ccas.classification_id = ccaclassifications.id');
 
@@ -22,43 +23,6 @@ class Ccas_model extends MY_Model {
         }
 
         return false;
-    }
-
-    public function getByType($type)
-    {
-        $this->db->where('type', $type);
-
-        $query = $this->db->get($this->db_name);
-
-        if ($query->num_rows() > 0) {
-            return $query->result();
-        }
-
-        return false;
-    }
-
-    public function getByClassification($classification)
-    {
-        $this->db->where('classification', $classification);
-
-        $query = $this->db->get($this->db_name);
-
-        if ($query->num_rows() > 0) {
-            return $query->result();
-        }
-
-        return false;
-    }
-
-    public function getByTypeOrClassification($query)
-    {
-        if ($type = $this->getByType($query)) {
-            return $type;
-        } elseif ($classification = $this->getByClassification($query)) {
-            return $classification;
-        } else {
-            return false;
-        }
     }
 
 }
