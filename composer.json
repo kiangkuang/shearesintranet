@@ -17,5 +17,8 @@
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
-	}
+	},
+	"scripts": {
+        "post-install-cmd": "cp vendor/almasaeed2010/adminlte/. assets/adminlte -R"
+    }
 }
