@@ -92,6 +92,8 @@ class Membership extends MY_Controller {
         if (!$id) {
             redirect('/cca/view');
         }
+
+        $redirect = $this->input->get('redirect') ? : '/';
         $membership = $this->memberships_model->getById($id);
         $result = $this->memberships_model->deleteById($id);
         if ($result) {
@@ -99,6 +101,7 @@ class Membership extends MY_Controller {
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');
         }
-        redirect('/cca/edit/'.$membership->cca_id);
+
+        redirect($redirect);
     }
 }

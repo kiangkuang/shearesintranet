@@ -11,9 +11,14 @@
 		"source": "https://github.com/bcit-ci/CodeIgniter"
 	},
 	"require": {
-		"php": ">=5.2.4"
+		"php": ">=5.2.4",
+		"almasaeed2010/adminlte": "~2.0",
+		"kenjis/codeigniter-ss-twig": "1.0.x@dev"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
-	}
+	},
+	"scripts": {
+        "post-install-cmd": "cp vendor/almasaeed2010/adminlte/. assets/adminlte -R"
+    }
 }

@@ -1,0 +1,63 @@
+{% extends '_layouts/template.twig' %}
+
+{% block content_header %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      CCA Classification
+      <small>
+        {{ ccaclassification ? 'Edit' : 'Add' }}
+      </small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="/ccaclassification/view">CCA Classification</a></li>
+      <li class="active">
+        {{ ccaclassification ? 'Edit' : 'Add' }}
+      </li>
+    </ol>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- column -->
+      <div class="col-xs-12">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              {{ ccaclassification ? 'Edit Information' : 'Add New CCA Classification' }}
+            </h3>
+          </div><!-- /.box-header -->
+
+          <form role="form" action="/ccaclassification/update" method="post">
+            <div class="box-body">
+              <div class="row">
+                {% if ccaclassification %}
+                  <input type="hidden" name="id" value="{{ ccaclassification.id }}">
+                {% endif %}
+                <div class="col-md-12">
+                  <!-- text input -->
+                  <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ ccaclassification.name }}">
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button class="btn btn-success" type="submit">
+                <i class="fa fa-save"></i> {{ ccaclassification ? 'Save' : 'Add' }}
+              </button>
+              <a class="btn btn-default" href="/ccaclassification/view">
+                <i class="fa fa-undo"></i> Back
+              </a>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div><!--/.col -->
+    </div>   <!-- /.row -->
+  </section><!-- /.content -->
+{% endblock %}

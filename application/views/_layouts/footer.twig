@@ -1,0 +1,16 @@
+<!-- Main Footer -->
+<footer class="main-footer">
+  <!-- Default to the left -->
+  <strong>
+    Copyright &copy; {{ '2015' != 'now'|date('Y') ? '2015 - ' ~ 'now'|date('Y') : '2015' }}
+    <a href="#">Kuek Kiang Kuang</a>.
+  </strong>
+  All rights reserved.
+
+  <!-- To the right -->
+  <div class="pull-right hidden-xs">
+    <b>Academic Year</b> {{ constant('ACAD_YEAR') }}
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Version</b> {{ constant('VERSION') }}
+  </div>
+</footer>
