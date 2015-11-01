@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  {% include '_layouts/head.twig' %}
+  <body class="hold-transition login-page">
+    <div class="login-box">
+      <div class="login-logo">
+        <a href="/"><b>Sheares</b> Intranet</a>
+      </div><!-- /.login-logo -->
+      <div class="login-box-body">
+        <p class="login-box-msg"><big>Sign In</big></p>
+        <form action="account/processLogin" method="post">
+          <div class="form-group has-feedback">
+            <input name="user" class="form-control" placeholder="A1234567X" required>
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          </div>
+          <div class="form-group has-feedback">
+            <input name="password" type="password" class="form-control" placeholder="Password" required>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          </div>
+          {% if this.error %}
+            <div class="row">
+              <div class="col-xs-12">
+                <p class="text-center text-red"><i class="icon fa fa-warning"></i> {{ this.error }}</p>
+              </div>
+            </div>
+          {% endif %}
+          <div class="row">
+            <div class="col-xs-8">
+              <a href="#">I forgot my password</a>
+            </div><!-- /.col -->
+            <div class="col-xs-4">
+              <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            </div><!-- /.col -->
+          </div>
+        </form>
+      </div><!-- /.login-box-body -->
+    </div><!-- /.login-box -->
+
+    {% include '_layouts/javascript.twig' %}
+  </body>
+</html>

@@ -27,8 +27,9 @@ class Cca extends MY_Controller {
         $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
         $data['totalPoints'] = $this->memberships_model->getTotalPointsByAccountId($this->account->id);
 
-        $data['mainMenu'] = 'cca';
-        $this->load->view('cca/userCca',$data);
+        //$data['mainMenu'] = 'myCca';
+        $data['this'] = $this;
+        $this->twig->display('cca/userCca',$data);
     }
 
     public function view($search = false)
@@ -49,7 +50,8 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['subSubMenu'] = 'viewCca';
-        $this->load->view('cca/view',$data);
+        $data['this'] = $this;
+        $this->twig->display('cca/view',$data);
     }
 
     public function edit($id = false)
@@ -76,7 +78,8 @@ class Cca extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        $this->load->view('cca/edit',$data);
+        $data['this'] = $this;
+        $this->twig->display('cca/edit',$data);
     }
 
     public function update()

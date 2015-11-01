@@ -13,6 +13,8 @@ class Error extends MY_Controller {
 
     public function index()
     {
-        $this->load->view('errors/html/error_404');
+        $data = [];
+        $data['this'] = $this;
+        $this->twig->display('errors/html/error_404', $data);
     }
 }

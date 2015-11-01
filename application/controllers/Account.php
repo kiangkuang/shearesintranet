@@ -18,7 +18,8 @@ class Account extends MY_Controller {
 
         $data = [];
 
-        $this->load->view('account/login',$data);
+        $data['this'] = $this;
+        $this->twig->display('account/login',$data);
     }
 
     public function processLogin()
@@ -61,7 +62,8 @@ class Account extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
         $data['subSubMenu'] = 'viewAccount';
-        $this->load->view('account/view', $data);
+        $data['this'] = $this;
+        $this->twig->display('account/view', $data);
     }
 
     public function edit($id = false)
@@ -84,7 +86,8 @@ class Account extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
-        $this->load->view('account/edit', $data);
+        $data['this'] = $this;
+        $this->twig->display('account/edit', $data);
     }
 
     public function update()
@@ -183,7 +186,8 @@ class Account extends MY_Controller {
 
         $data['mainMenu'] = 'account';
         $data['subMenu'] = 'changePassword';
-        $this->load->view('account/changePassword', $data);
+        $data['this'] = $this;
+        $this->twig->display('account/changePassword', $data);
     }
 
     public function delete($id = false)

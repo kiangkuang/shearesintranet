@@ -24,7 +24,8 @@ class Ccaclassification extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['subSubMenu'] = 'viewCcaclassification';
-        $this->load->view('ccaclassification/view',$data);
+        $data['this'] = $this;
+        $this->twig->display('ccaclassification/view', $data);
     }
 
     public function edit($id = false)
@@ -45,7 +46,8 @@ class Ccaclassification extends MY_Controller {
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
-        $this->load->view('ccaclassification/edit',$data);
+        $data['this'] = $this;
+        $this->twig->display('ccaclassification/edit', $data);
     }
 
     public function update()
