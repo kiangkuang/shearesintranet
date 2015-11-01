@@ -85,4 +85,10 @@ class Memberships_model extends MY_Model {
         return $this->db->delete($this->db_name);
     }
 
+    public function deleteByCcaId($cca_id)
+    {
+        $this->db->where('cca_id', $cca_id);
+        return $this->db->delete($this->db_name);
+    }
+
 }
