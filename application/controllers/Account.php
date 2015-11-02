@@ -93,7 +93,7 @@ class Account extends MY_Controller {
 
     public function update()
     {
-        if (!$this->input->post()) {
+        if (!$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
@@ -193,7 +193,7 @@ class Account extends MY_Controller {
 
     public function delete($id = false)
     {
-        if (!$id) {
+        if (!$id || !$this->editable) {
             redirect('/account/view');
         }
 
