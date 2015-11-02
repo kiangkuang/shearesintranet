@@ -25,7 +25,7 @@
           <div class="box-header">
             <h3 class="box-title">Account</h3>
             <div class="box-tools pull-right">
-              <a href="/account/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+              <a href="/account/edit" class="btn btn-success {{ this.editable ? '' : 'disabled' }}"><i class="fa fa-plus"></i> Add</a>
             </div><!-- /.box-tools -->
           </div><!-- /.box-header -->
           <div class="box-body">
@@ -60,9 +60,9 @@
                     <td><span class="pull-right">{{ account.totalPoints.points }}</span></td>
                     <th class="text-center">
                       <a href="/account/edit/{{ account.id }}" class="btn btn-sm btn-default">
-                        <i class="fa fa-edit"></i> Edit
+                        <i class="fa fa-edit"></i> {{ this.editable ? 'Edit' : 'View' }}
                       </a>
-                      <a href="/account/delete/{{ account.id }}" class="btn btn-sm btn-default">
+                      <a href="/account/delete/{{ account.id }}" class="btn btn-sm btn-default {{ this.editable ? '' : 'disabled' }}">
                         <i class="fa fa-trash"></i> Delete
                       </a>
                     </th>
