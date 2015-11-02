@@ -1,5 +1,5 @@
 <!-- Alerts -->
-{% if this.success or this.error or this.warning %}
+{% if this.success or this.error or this.warning or this.info %}
   <div class="content-header">
     {% if this.success %}
       <div class="alert alert-success alert-dismissable">
@@ -22,6 +22,14 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <h4><i class="icon fa fa-warning"></i> Warning!</h4>
         {{ this.warning }}
+      </div>
+    {% endif %}
+
+    {% if this.info %}
+      <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-info"></i> Info!</h4>
+        {{ this.info|raw }}
       </div>
     {% endif %}
   </div>

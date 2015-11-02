@@ -14,7 +14,7 @@ class Membership extends MY_Controller {
 
     public function addMembership()
     {
-        if (!$this->input->post()) {
+        if (!$this->input->post() || !$this->editable) {
             redirect('/');
         }
         if ($this->input->post('cca_id')) {
@@ -60,7 +60,7 @@ class Membership extends MY_Controller {
 
     public function updateMemberships()
     {
-        if (!$this->input->post()) {
+        if (!$this->input->post() || !$this->editable) {
             redirect('/');
         }
         if ($this->input->post('cca_id')) {
@@ -89,8 +89,8 @@ class Membership extends MY_Controller {
 
     public function delete($id = false)
     {
-        if (!$id) {
-            redirect('/cca/view');
+        if (!$id || !$this->editable) {
+            redirect('/');
         }
 
         $redirect = $this->input->get('redirect') ? : '/';

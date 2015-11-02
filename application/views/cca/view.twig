@@ -25,7 +25,9 @@
           <div class="box-header">
             <h3 class="box-title">CCA</h3>
             <div class="box-tools pull-right">
-              <a href="/cca/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+              {% if this.editable %}
+                <a href="/cca/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+              {% endif %}
             </div><!-- /.box-tools -->
           </div><!-- /.box-header -->
           <div class="box-body">
@@ -46,11 +48,13 @@
                     <td><a href="/cca/view/{{ cca.classification_name|lower|url_encode }}">{{ cca.classification_name }}</a></td>
                     <th class="text-center">
                       <a href="/cca/edit/{{ cca.id }}" class="btn btn-sm btn-default">
-                        <i class="fa fa-edit"></i> Edit
+                        <i class="fa fa-edit"></i> {{ this.editable ? 'Edit' : 'View' }}
                       </a>
-                      <a href="/cca/delete/{{ cca.id }}" class="js-confirm-delete btn btn-sm btn-default">
-                        <i class="fa fa-trash"></i> Delete
-                      </a>
+                      {% if this.editable %}
+                        <a href="/cca/delete/{{ cca.id }}" class="js-confirm-delete btn btn-sm btn-default">
+                          <i class="fa fa-trash"></i> Delete
+                        </a>
+                      {% endif %}
                     </th>
                   </tr>
                 {% endfor %}

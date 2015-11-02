@@ -56,4 +56,5 @@ $route['translate_uri_dashes'] = FALSE;
 $route['(?i)cca'] = 'cca/userCca';
 $route['(?i)login'] = 'account/login';
 $route['(?i)logout'] = 'account/logout';
+$route['(?i)archive'] = 'account/archive';
 $route['(?i)changepassword'] = 'account/changePassword';
