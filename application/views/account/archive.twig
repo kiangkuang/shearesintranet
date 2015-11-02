@@ -38,7 +38,7 @@
                 <div class="col-md-3">
                   <!-- select -->
                   <div class="form-group">
-                    <label>Change Academic Year view</label>
+                    <label>Change Academic Year View</label>
                     <select class="form-control" name="acad_year">
                       {% for acadYear in acadYears if acadYear.acad_year != '' %}
                         <option value="{{ acadYear.acad_year }}" {{ acadYear.acad_year == currentAcadYearView ? 'selected' }}>AY{{ acadYear.acad_year }}{{ acadYear.acad_year == constant('ACAD_YEAR') ? ' (Current)'}}</option>
