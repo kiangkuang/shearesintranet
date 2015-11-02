@@ -65,7 +65,7 @@
                         <i class="fa fa-edit"></i> {{ this.editable ? 'Edit' : 'View' }}
                       </a>
                       {% if this.editable %}
-                        <a href="/account/delete/{{ account.id }}" class="btn btn-sm btn-default">
+                        <a href="/account/delete/{{ account.id }}" class="js-confirm-delete btn btn-sm btn-default">
                           <i class="fa fa-trash"></i> Delete
                         </a>
                       {% endif %}

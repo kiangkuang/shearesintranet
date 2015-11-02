@@ -121,7 +121,8 @@ class Cca extends MY_Controller {
         }
 
         $result = $this->ccas_model->deleteById($id);
-        if ($result) {
+        $result2 = $this->memberships_model->deleteByCcaId($id);
+        if ($result && $result2) {
             $this->session->set_flashdata('success', 'CCA successfully deleted!');
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');
