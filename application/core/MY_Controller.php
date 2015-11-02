@@ -39,7 +39,7 @@ class MY_Controller extends CI_Controller {
         if ($this->session->info){
             $this->info = $this->session->info;
         } else if ($this->session->acadYearView !== ACAD_YEAR) {
-            $this->info = 'Viewing past AY' . $this->session->acadYearView . ' archive! Editing is not allowed. Change <a href="/archive">here</a>.';
+            $this->info = 'Viewing in AY' . $this->session->acadYearView . ' mode! Editing is not allowed. Change year <a href="/archive">here</a>.';
             $this->editable = false;
         }
 

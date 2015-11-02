@@ -41,9 +41,10 @@
                     <label>Change Academic Year view</label>
                     <select class="form-control" name="acad_year">
                       {% for acadYear in acadYears if acadYear.acad_year != '' %}
-                        <option value="{{ acadYear.acad_year }}" {{ acadYear.acad_year == currentAcadYearView ? 'selected' }}>{{ acadYear.acad_year }}</option>
+                        <option value="{{ acadYear.acad_year }}" {{ acadYear.acad_year == currentAcadYearView ? 'selected' }}>AY{{ acadYear.acad_year }}{{ acadYear.acad_year == constant('ACAD_YEAR') ? ' (Current)'}}</option>
                       {% endfor %}
                     </select>
+                    <small>Editing is not allowed except for current year.</small>
                   </div>
                 </div>
               </div>

@@ -217,7 +217,7 @@ class Account extends MY_Controller {
             $input = $this->input->post();
 
             $this->session->set_userdata('acadYearView', $input['acad_year']);
-            redirect('/account/archive');
+            redirect('/account/view');
         }
 
         $data = [];
