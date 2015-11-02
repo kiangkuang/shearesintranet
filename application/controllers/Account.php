@@ -56,8 +56,10 @@ class Account extends MY_Controller {
         $data = [];
 
         $accounts = $this->accounts_model->getByAcadYear();
-        $accounts = $this->account_library->appendTotalPoints($accounts);
-        $accounts = $this->account_library->appendMemberships($accounts);
+        if ($accounts) {
+            $accounts = $this->account_library->appendTotalPoints($accounts);
+            $accounts = $this->account_library->appendMemberships($accounts);
+        }
         $data['accounts'] = $accounts;
 
         $data['mainMenu'] = 'admin';
