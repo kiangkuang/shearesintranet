@@ -7,6 +7,7 @@ class MY_Controller extends CI_Controller {
     var $success = false;
     var $warning = false;
     var $error = false;
+    var $editable = true;
 
     public function __construct()
     {
@@ -25,14 +26,22 @@ class MY_Controller extends CI_Controller {
             $this->success = $this->session->success;
         }
 
+        if ($this->session->error){
+            $this->error = $this->session->error;
+        }
+
         if ($this->session->warning){
             $this->warning = $this->session->warning;
         } else if ($this->account && $this->account->is_first_login) {
             $this->warning = 'Change your password now to proceed!';
         }
 
-        if ($this->session->error){
-            $this->error = $this->session->error;
+        if ($this->session->info){
+            $this->info = $this->session->info;
+        } else if ($this->session->acadYearView !== ACAD_YEAR) {
+            $this->info = 'Viewing past AY' . $this->session->acadYearView . ' archive in non-editable mode! Change <a href="/archive">here</a>.';
+            $this->editable = false;
         }
+
     }
 }

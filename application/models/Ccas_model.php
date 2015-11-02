@@ -9,8 +9,10 @@ class Ccas_model extends MY_Model {
         $this->db_name = 'ccas';
     }
     
-    public function getAllJoinTypeNameJoinClassificationName($acad_year = ACAD_YEAR)
+    public function getAllJoinTypeNameJoinClassificationName()
     {
+        $acad_year = $this->session->acadYearView;
+
         $this->db->select('ccas.*, ccatypes.name AS type_name, ccaclassifications.name AS classification_name');
         $this->db->where('acad_year', $acad_year);
         $this->db->join('ccatypes', 'ccas.type_id = ccatypes.id');
