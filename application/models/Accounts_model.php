@@ -48,9 +48,26 @@ class Accounts_model extends MY_Model {
         return false;
     }
 
-    public function getByAcadYear($acad_year = ACAD_YEAR)
+    public function getByAcadYear()
     {
+        $acad_year = $this->session->acadYearView;
+
         $this->db->where('acad_year', $acad_year);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
+
+    public function getAcadYears()
+    {
+        $this->db->select('acad_year');
+        $this->db->order_by('acad_year', 'desc');
+        $this->db->distinct();
 
         $query = $this->db->get($this->db_name);
 

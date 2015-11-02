@@ -41,12 +41,14 @@
                   <tr>
                     <td>{{ ccatype.name }}</td>
                     <th class="text-center">
-                      <a href="/ccatype/edit/{{ ccatype.id }}" class="btn btn-sm btn-default">
-                        <i class="fa fa-edit"></i> Edit
-                      </a>
-                      <a href="/ccatype/delete/{{ ccatype.id }}" class="js-confirm-delete btn btn-sm btn-default">
-                        <i class="fa fa-trash"></i> Delete
-                      </a>
+                      {% if this.editable %}
+                        <a href="/ccatype/edit/{{ ccatype.id }}" class="btn btn-sm btn-default">
+                          <i class="fa fa-edit"></i> Edit
+                        </a>
+                        <a href="/ccatype/delete/{{ ccatype.id }}" class="js-confirm-delete btn btn-sm btn-default">
+                          <i class="fa fa-trash"></i> Delete
+                        </a>
+                      {% endif %}
                     </th>
                   </tr>
                 {% endfor %}

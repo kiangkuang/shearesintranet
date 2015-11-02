@@ -33,6 +33,7 @@ class Account extends MY_Controller {
 
         if ($account) {
             $this->session->set_userdata('accountId', $account->id);
+            $this->session->set_userdata('acadYearView', ACAD_YEAR);
             redirect('/');
         } else {
             $this->session->set_flashdata('error', 'Incorrect login or password.');
@@ -92,7 +93,7 @@ class Account extends MY_Controller {
 
     public function update()
     {
-        if (!$this->input->post()) {
+        if (!$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
@@ -192,7 +193,7 @@ class Account extends MY_Controller {
 
     public function delete($id = false)
     {
-        if (!$id) {
+        if (!$id || !$this->editable) {
             redirect('/account/view');
         }
 
@@ -204,5 +205,29 @@ class Account extends MY_Controller {
             $this->session->set_flashdata('error', 'An error has occured!');
         }
         redirect('/account/view');
+    }
+
+    public function archive()
+    {
+        if (!$this->isLoggedIn) {
+            redirect('/login');
+        }
+
+        if ($this->input->post()) {
+            $input = $this->input->post();
+
+            $this->session->set_userdata('acadYearView', $input['acad_year']);
+            redirect('/account/view');
+        }
+
+        $data = [];
+
+        $data['acadYears'] = $this->accounts_model->getAcadYears();
+        $data['currentAcadYearView'] = $this->session->acadYearView;
+
+        $data['mainMenu'] = 'admin';
+        $data['subMenu'] = 'archive';
+        $data['this'] = $this;
+        $this->twig->display('account/archive', $data);
     }
 }
