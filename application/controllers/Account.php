@@ -34,7 +34,11 @@ class Account extends MY_Controller {
         if ($account) {
             $this->session->set_userdata('accountId', $account->id);
             $this->session->set_userdata('acadYearView', ACAD_YEAR);
-            redirect('/');
+            if ($account->is_admin) {
+                redirect('/account/view');
+            } else {
+                redirect('/');
+            }
         } else {
             $this->session->set_flashdata('error', 'Incorrect login or password.');
             redirect('/login');
