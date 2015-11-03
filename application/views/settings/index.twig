@@ -1,0 +1,107 @@
+{% extends '_layouts/template.twig' %}
+
+{% block content_header %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Settings
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li class="active">
+        Settings
+      </li>
+    </ol>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- column -->
+      <div class="col-md-6">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              General
+            </h3>
+          </div><!-- /.box-header -->
+
+          <form role="form" action="settings/general" method="post">
+            <div class="box-body">
+              <div class="row">
+                <input type="hidden" name="id" value="{{ settings.id }}">
+                <div class="col-xs-12">
+                  <!-- text input -->
+                  <div class="form-group">
+                    <label>Current Academic Year</label>
+                    <input type="text" class="form-control" value="AY{{ constant('ACAD_YEAR') }}" disabled>
+                    <small>Automatically changes every 1 August.</small>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>Allow Login</label>
+                    <select class="form-control" name="allow_login">
+                      <option value="1" {{ settings.allow_login == 1 ? 'selected' }}>Allow</option>
+                      <option value="0" {{ settings.allow_login == 0 ? 'selected' }}>Disallow</option>
+                    </select>
+                    <small>
+                      For residents only, does not affect admin.<br>
+                      If disallowed, they will receive incorrect username/password error.<br>
+                      Recommended disallow until points are ready for public viewing.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button class="btn btn-success" type="submit">
+                <i class="fa fa-save"></i> Save
+              </button>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div><!--/.col -->
+
+      <!-- column -->
+      <div class="col-md-6">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Archive
+            </h3>
+          </div><!-- /.box-header -->
+
+          <form role="form" action="/settings/archive" method="post">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-xs-12">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>Change Academic Year View</label>
+                    <select class="form-control" name="acad_year">
+                      {% for acadYear in acadYears if acadYear.acad_year != '' %}
+                        <option value="{{ acadYear.acad_year }}" {{ acadYear.acad_year == currentAcadYearView ? 'selected' }}>AY{{ acadYear.acad_year }}{{ acadYear.acad_year == constant('ACAD_YEAR') ? ' (Current)'}}</option>
+                      {% endfor %}
+                    </select>
+                    <small>Editing is not allowed except for current year.</small>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button class="btn btn-success" type="submit">
+                <i class="fa fa-save"></i> Save
+              </button>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div><!--/.col -->
+    </div>   <!-- /.row -->
+  </section><!-- /.content -->
+{% endblock %}

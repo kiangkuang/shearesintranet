@@ -12,7 +12,7 @@ class Accounts_model extends MY_Model {
     public function authenticate($user, $password)
     {
         $this->db->where('user', $user);
-        $this->db->where('acad_year', ACAD_YEAR);
+        $this->db->where('is_admin', 1);
 
         $query = $this->db->get($this->db_name);
 
@@ -28,19 +28,21 @@ class Accounts_model extends MY_Model {
             }
         }
 
-        $this->db->where('user', $user);
-        $this->db->where('is_admin', 1);
+        if ($this->settings->allow_login) {
+            $this->db->where('user', $user);
+            $this->db->where('acad_year', ACAD_YEAR);
 
-        $query = $this->db->get($this->db_name);
+            $query = $this->db->get($this->db_name);
 
-        if ($query->num_rows() > 0) {
-            $result = $query->result();
+            if ($query->num_rows() > 0) {
+                $result = $query->result();
 
-            foreach ($result as $row) {
-                $encrypted_password = sha1($password.$row->key);
+                foreach ($result as $row) {
+                    $encrypted_password = sha1($password.$row->key);
 
-                if($encrypted_password === $row->password) {
-                    return $row;
+                    if($encrypted_password === $row->password) {
+                        return $row;
+                    }
                 }
             }
         }

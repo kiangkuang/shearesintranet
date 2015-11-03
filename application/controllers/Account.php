@@ -208,28 +208,4 @@ class Account extends MY_Controller {
         }
         redirect('/account/view');
     }
-
-    public function archive()
-    {
-        if (!$this->isLoggedIn) {
-            redirect('/login');
-        }
-
-        if ($this->input->post()) {
-            $input = $this->input->post();
-
-            $this->session->set_userdata('acadYearView', $input['acad_year']);
-            redirect('/account/view');
-        }
-
-        $data = [];
-
-        $data['acadYears'] = $this->accounts_model->getAcadYears();
-        $data['currentAcadYearView'] = $this->session->acadYearView;
-
-        $data['mainMenu'] = 'admin';
-        $data['subMenu'] = 'archive';
-        $data['this'] = $this;
-        $this->twig->display('account/archive', $data);
-    }
 }
