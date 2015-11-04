@@ -28,6 +28,7 @@ class Accounts_model extends MY_Model {
             }
         }
 
+        // user manual login
         if ($this->settings->allow_login) {
             $this->db->where('user', $user);
             $this->db->where('acad_year', ACAD_YEAR);
@@ -45,6 +46,20 @@ class Accounts_model extends MY_Model {
                     }
                 }
             }
+        }
+
+        return false;
+    }
+
+    public function getByUser($user)
+    {
+        $this->db->where('user', $user);
+        $this->db->where('acad_year', ACAD_YEAR);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->first_row();
         }
 
         return false;

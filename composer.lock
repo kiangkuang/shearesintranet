@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0f7a323d5d2802e5d0b14135b806c1e3",
-    "content-hash": "2ee67156e425ee863efb2d98b8615ba4",
+    "hash": "fae6665182662fa81b09770dc9347516",
+    "content-hash": "724f20a86a64de2645b5a3ab660f54c0",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -90,6 +90,39 @@
                 "twig"
             ],
             "time": "2015-10-23 06:16:15"
+        },
+        {
+            "name": "lightopenid/lightopenid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mewp/lightopenid.git",
+                "reference": "9d42dc24e4dd34121c98a6491bc3ef7933a68a19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Mewp/lightopenid/zipball/9d42dc24e4dd34121c98a6491bc3ef7933a68a19",
+                "reference": "9d42dc24e4dd34121c98a6491bc3ef7933a68a19",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "homepage": "http://code.google.com/p/lightopenid/",
+            "keywords": [
+                "OpenId"
+            ],
+            "time": "2013-10-27 16:25:49"
         },
         {
             "name": "twig/twig",
@@ -188,7 +221,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kenjis/codeigniter-ss-twig": 20
+        "kenjis/codeigniter-ss-twig": 20,
+        "lightopenid/lightopenid": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

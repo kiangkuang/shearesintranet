@@ -208,4 +208,46 @@ class Account extends MY_Controller {
         }
         redirect('/account/view');
     }
+
+    public function processOpenId()
+    {
+        require 'vendor/lightopenid/lightopenid/openid.php';
+
+        try {
+            # Change 'localhost' to your domain name.
+            $openid = new LightOpenID('sheares-intranet.app');
+            if(!$openid->mode) {
+                $openid->identity = 'https://openid.nus.edu.sg';
+
+                # The following two lines request email, full name, and a nickname
+                # from the provider. Remove them if you don't need that data.
+                //$openid->required = array('contact/email');
+                //$openid->optional = array('namePerson', 'namePerson/friendly', 'contact/email');
+
+                $openid->required = array('namePerson/friendly');
+                redirect($openid->authUrl());
+            }
+            elseif($openid->mode == 'cancel') {
+                $this->session->set_flashdata('error', 'User has cancelled authentication.');
+                redirect('/login');
+            }
+            else {
+                if ($openid->validate()) {
+                    $openIdAttributes = $openid->getAttributes();
+                    $account = $this->accounts_model->getByUser($openIdAttributes['namePerson/friendly']);
+
+                    $this->session->set_userdata('accountId', $account->id);
+                    $this->session->set_userdata('acadYearView', ACAD_YEAR);
+                    redirect('/');
+                } else {
+                    $this->session->set_flashdata('error', 'An error has occurred.');
+                    redirect('/login');
+                }
+            }
+        } catch(ErrorException $e) {
+            $this->session->set_flashdata('error', 'An error has occurred.');
+            redirect('/login');
+        }
+    }
+
 }
