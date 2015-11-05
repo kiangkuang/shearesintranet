@@ -25,11 +25,6 @@ class MY_Controller extends CI_Controller {
             $this->account = $this->accounts_model->getById($this->session->accountId);
         }
 
-        // can be replaced by session warning
-        if ($this->account && $this->account->is_first_login) {
-            $this->warning = 'Change your password now to proceed!';
-        }
-
         // can be replaced by session info
         if ($this->session->acadYearView !== ACAD_YEAR) {
             $this->info = 'Viewing archive of AY' . $this->session->acadYearView . '! Editing is not allowed. Change year <a href="/settings">here</a>.';

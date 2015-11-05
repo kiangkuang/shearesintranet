@@ -12,6 +12,7 @@ class Accounts_model extends MY_Model {
     public function authenticate($user, $password)
     {
         $this->db->where('user', $user);
+        $this->db->where('has_password', 1);
         $this->db->where('is_admin', 1);
 
         $query = $this->db->get($this->db_name);
@@ -31,6 +32,7 @@ class Accounts_model extends MY_Model {
         // user manual login
         if ($this->settings->allow_login) {
             $this->db->where('user', $user);
+            $this->db->where('has_password', 1);
             $this->db->where('acad_year', ACAD_YEAR);
 
             $query = $this->db->get($this->db_name);

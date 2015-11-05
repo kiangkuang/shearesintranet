@@ -7,7 +7,7 @@ class Ccaclassification extends MY_Controller {
         parent::__construct();
 
         if (!$this->isLoggedIn) {
-            redirect('/login');
+            redirect('/');
         }
         $this->load->model('ccaclassifications_model');
     }
@@ -52,7 +52,7 @@ class Ccaclassification extends MY_Controller {
 
     public function update()
     {
-        if (!$this->input->post() || !$this->editable) {
+        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
@@ -82,10 +82,10 @@ class Ccaclassification extends MY_Controller {
         }
     }
 
-    public function delete($id = false)
+    public function delete($id = null)
     {
-        if (!$id || !$this->editable) {
-            redirect('/ccaclassification/view');
+        if (!$this->account->is_admin || !$this->editable || !$id) {
+            redirect('/');
         }
 
         $result = $this->ccaclassifications_model->deleteById($id);
