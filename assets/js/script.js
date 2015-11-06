@@ -9,7 +9,7 @@ $('.js-confirm-delete').click(function() {
     return confirm("Confirm deletion? Process is irreversible!");
 });
 
-$(".data-table").DataTable();
+var dataTable = $(".data-table").DataTable();
 
 //Initialize Select2 Elements
 $(".select2").select2();

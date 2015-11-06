@@ -96,4 +96,5 @@ class Ccaclassification extends MY_Controller {
         }
         redirect('/ccaclassification/view');
     }
+
 }

@@ -84,7 +84,6 @@ class Membership extends MY_Controller {
         } elseif ($type === 'account') {
             redirect('/account/edit/'.$this->input->post('account_id'));
         }
-
     }
 
     public function delete($id = null)
@@ -104,4 +103,5 @@ class Membership extends MY_Controller {
 
         redirect($redirect);
     }
+
 }
