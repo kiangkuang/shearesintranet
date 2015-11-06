@@ -69,7 +69,7 @@ class Accounts_model extends MY_Model {
 
     public function getByAcadYear($acad_year = null)
     {
-        if (acad_year === null) {
+        if ($acad_year === null) {
             $acad_year = $this->session->acadYearView;
         }
 
