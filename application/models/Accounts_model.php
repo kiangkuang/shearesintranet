@@ -110,7 +110,7 @@ class Accounts_model extends MY_Model {
         $query = $this->db->get($this->db_name);
 
         if ($query->num_rows() > 0) {
-            return $query->result();
+            return $query->first_row();
         }
 
         return false;
