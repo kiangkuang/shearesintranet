@@ -12,7 +12,7 @@ class Ccatype extends MY_Controller {
         $this->load->model('ccatypes_model');
     }
 
-    public function view($search = false)
+    public function view($search = null)
     {
         if (!$this->account->is_admin) {
             redirect('/');
@@ -28,7 +28,7 @@ class Ccatype extends MY_Controller {
         $this->twig->display('ccatype/view', $data);
     }
 
-    public function edit($id = false)
+    public function edit($id = null)
     {
         if (!$this->account->is_admin) {
             redirect('/');
