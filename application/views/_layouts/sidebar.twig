@@ -25,7 +25,9 @@
         <a href="#"><i class="fa fa-user"></i> <span>My Account</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">
           <li class="{{ subMenu == 'profile' ? 'active' }}"><a href="#"><i class="fa fa-circle-o"></i> View Profile</a></li>
-          <li class="{{ subMenu == 'changePassword' ? 'active' }}"><a href="/changepassword"><i class="fa fa-circle-o"></i> Change Password</a></li>
+          {% if this.account.has_password %}
+            <li class="{{ subMenu == 'changePassword' ? 'active' }}"><a href="/changepassword"><i class="fa fa-circle-o"></i> Change Password</a></li>
+          {% endif %}
           <li><a href="/logout"><i class="fa fa-sign-out"></i> Sign Out</a></li>
         </ul>
       </li>
@@ -36,15 +38,15 @@
             <li class="{{ subMenu == 'account' ? 'active' }}">
               <a href="#"><i class="fa fa-circle-o"></i> <span>Account</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li class="{{ subSubMenu == 'viewAccount' ? 'active' }}"><a href="/account/view"><i class="fa fa-square-o"></i> View all Accounts</a></li>
+                <li class="{{ subSubMenu == 'viewAccount' ? 'active' }}"><a href="/account/view"><i class="fa fa-caret-right"></i> View all Accounts</a></li>
               </ul>
             </li>
             <li class="{{ subMenu == 'cca' ? 'active' }}">
               <a href="#"><i class="fa fa-circle-o"></i> <span>CCA</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li class="{{ subSubMenu == 'viewCca' ? 'active' }}"><a href="/cca/view"><i class="fa fa-square-o"></i> View all CCAs</a></li>
-                <li class="{{ subSubMenu == 'viewCcatype' ? 'active' }}"><a href="/ccatype/view"><i class="fa fa-square-o"></i> View all CCA Types</a></li>
-                <li class="{{ subSubMenu == 'viewCcaclassification' ? 'active' }}"><a href="/ccaclassification/view"><i class="fa fa-square-o"></i> View all CCA Classifications</a></li>
+                <li class="{{ subSubMenu == 'viewCca' ? 'active' }}"><a href="/cca/view"><i class="fa fa-caret-right"></i> View all CCAs</a></li>
+                <li class="{{ subSubMenu == 'viewCcatype' ? 'active' }}"><a href="/ccatype/view"><i class="fa fa-caret-right"></i> View all CCA Types</a></li>
+                <li class="{{ subSubMenu == 'viewCcaclassification' ? 'active' }}"><a href="/ccaclassification/view"><i class="fa fa-caret-right"></i> View all CCA Classifications</a></li>
               </ul>
             </li>
             <li class="{{ subMenu == 'settings' ? 'active' }}"><a href="/settings"><i class="fa fa-cogs"></i> Settings</a></li>

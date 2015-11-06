@@ -18,10 +18,6 @@ class Cca extends MY_Controller {
 
     public function userCca()
     {
-        if ($this->account->is_first_login){
-            redirect('/changepassword');
-        }
-
         $data = [];
 
         $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
@@ -32,7 +28,7 @@ class Cca extends MY_Controller {
         $this->twig->display('cca/userCca',$data);
     }
 
-    public function view($search = false)
+    public function view($search = null)
     {
         if (!$this->account->is_admin) {
             redirect('/');
@@ -54,7 +50,7 @@ class Cca extends MY_Controller {
         $this->twig->display('cca/view',$data);
     }
 
-    public function edit($id = false)
+    public function edit($id = null)
     {
         if (!$this->account->is_admin) {
             redirect('/');
@@ -62,7 +58,7 @@ class Cca extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['cca'] = $this->ccas_model->getById($id);
+            $data['cca'] = $this->ccas_model->getByIdAcadYear($id);
 
             if ($data['cca'] === false) {
                 $this->session->set_flashdata('error', 'CCA not found!');
@@ -84,7 +80,7 @@ class Cca extends MY_Controller {
 
     public function update()
     {
-        if (!$this->input->post() || !$this->editable) {
+        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
@@ -114,10 +110,10 @@ class Cca extends MY_Controller {
         }
     }
 
-    public function delete($id = false)
+    public function delete($id = null)
     {
-        if (!$id || !$this->editable) {
-            redirect('/cca/view');
+        if (!$this->account->is_admin || !$this->editable || !$id) {
+            redirect('/');
         }
 
         $result = $this->ccas_model->deleteById($id);

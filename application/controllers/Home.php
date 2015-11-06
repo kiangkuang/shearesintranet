@@ -5,10 +5,7 @@ class Home extends MY_Controller {
     public function index()
     {
         if (!$this->isLoggedIn){
-            redirect('/login');
-        }
-        if ($this->account->is_first_login){
-            redirect('/changepassword');
+            redirect('/');
         }
 
         $data = [];

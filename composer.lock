@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0f7a323d5d2802e5d0b14135b806c1e3",
-    "content-hash": "2ee67156e425ee863efb2d98b8615ba4",
+    "hash": "dc7be29777e8d6b75c04a668d3abd7fe",
+    "content-hash": "a06929ddd9feef7026c114927bff70d9",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -46,6 +46,54 @@
                 "web"
             ],
             "time": "2015-10-23 14:50:49"
+        },
+        {
+            "name": "fortawesome/font-awesome",
+            "version": "v4.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "jekyll": "1.0.2",
+                "lessc": "1.4.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OFL-1.1",
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dave Gandy",
+                    "email": "dave@fontawesome.io",
+                    "homepage": "http://twitter.com/davegandy",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The iconic font and CSS framework",
+            "homepage": "http://fontawesome.io/",
+            "keywords": [
+                "FontAwesome",
+                "awesome",
+                "bootstrap",
+                "font",
+                "icon"
+            ],
+            "time": "2015-07-28 21:55:03"
         },
         {
             "name": "kenjis/codeigniter-ss-twig",
@@ -90,6 +138,39 @@
                 "twig"
             ],
             "time": "2015-10-23 06:16:15"
+        },
+        {
+            "name": "lightopenid/lightopenid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mewp/lightopenid.git",
+                "reference": "9d42dc24e4dd34121c98a6491bc3ef7933a68a19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Mewp/lightopenid/zipball/9d42dc24e4dd34121c98a6491bc3ef7933a68a19",
+                "reference": "9d42dc24e4dd34121c98a6491bc3ef7933a68a19",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "homepage": "http://code.google.com/p/lightopenid/",
+            "keywords": [
+                "OpenId"
+            ],
+            "time": "2013-10-27 16:25:49"
         },
         {
             "name": "twig/twig",
@@ -188,7 +269,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kenjis/codeigniter-ss-twig": 20
+        "kenjis/codeigniter-ss-twig": 20,
+        "lightopenid/lightopenid": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

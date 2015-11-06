@@ -24,7 +24,7 @@ class Account extends MY_Controller {
 
     public function processLogin()
     {
-        if (!$this->input->post()) {
+        if ($this->isLoggedIn || !$this->input->post()) {
             redirect('/');
         }
 
@@ -34,10 +34,69 @@ class Account extends MY_Controller {
         if ($account) {
             $this->session->set_userdata('accountId', $account->id);
             $this->session->set_userdata('acadYearView', ACAD_YEAR);
-            redirect('/');
+            if ($account->is_admin) {
+                redirect('/account/view');
+            } else {
+                redirect('/');
+            }
         } else {
             $this->session->set_flashdata('error', 'Incorrect login or password.');
             redirect('/login');
+        }
+    }
+
+    public function processOpenId()
+    {
+        if ($this->isLoggedIn) {
+            redirect('/');
+        }
+
+        if (!$this->settings->allow_login) {
+            $this->session->set_flashdata('error', 'Login currently is disabled.');
+            redirect('/');
+        }
+
+        require 'vendor/lightopenid/lightopenid/openid.php';
+
+        try {
+            # Change 'localhost' to your domain name.
+            $openid = new LightOpenID(DOMAIN);
+            if(!$openid->mode) {
+                $openid->identity = 'https://openid.nus.edu.sg';
+
+                # The following two lines request email, full name, and a nickname
+                # from the provider. Remove them if you don't need that data.
+                //$openid->required = array('contact/email');
+                //$openid->optional = array('namePerson', 'namePerson/friendly', 'contact/email');
+
+                $openid->required = array('namePerson/friendly');
+                redirect($openid->authUrl());
+            }
+            elseif($openid->mode == 'cancel') {
+                $this->session->set_flashdata('error', 'Please press allow!');
+                redirect('/');
+            }
+            else {
+                if ($openid->validate()) {
+                    $openIdAttributes = $openid->getAttributes();
+                    $account = $this->accounts_model->getByUser($openIdAttributes['namePerson/friendly']);
+
+                    if ($account) {
+                        $this->session->set_userdata('accountId', $account->id);
+                        $this->session->set_userdata('acadYearView', ACAD_YEAR);
+                        redirect('/');
+                    } else {
+                        $this->session->set_flashdata('error', 'Account not found in intranet.');
+                        redirect('/');
+                    }
+                } else {
+                    $this->session->set_flashdata('error', 'An error has occurred.');
+                    redirect('/');
+                }
+            }
+        } catch(ErrorException $e) {
+            $this->session->set_flashdata('error', 'An error has occurred.');
+            redirect('/');
         }
     }
 
@@ -49,7 +108,7 @@ class Account extends MY_Controller {
 
     public function view()
     {
-        if (!$this->account->is_admin) {
+        if (!$this->isLoggedIn || !$this->account->is_admin) {
             redirect('/');
         }
 
@@ -69,15 +128,15 @@ class Account extends MY_Controller {
         $this->twig->display('account/view', $data);
     }
 
-    public function edit($id = false)
+    public function edit($id = null)
     {
-        if (!$this->account->is_admin) {
+        if (!$this->isLoggedIn || !$this->account->is_admin) {
             redirect('/');
         }
 
         $data = [];
         if ($id) {
-            $data['account'] = $this->accounts_model->getById($id);
+            $data['account'] = $this->accounts_model->getByIdAcadYear($id);
             if ($data['account'] === false) {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');
@@ -95,7 +154,7 @@ class Account extends MY_Controller {
 
     public function update()
     {
-        if (!$this->input->post() || !$this->editable) {
+        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
@@ -110,13 +169,13 @@ class Account extends MY_Controller {
             } elseif ($input['password'] !== $input['password2']) {
                 // password mismatch
                 $this->session->set_flashdata('error', 'The passwords do not match!');
-                redirect('/account/edit/');
+                redirect('/account/edit/'.$input['id']);
             } else {
                 // changing password
                 unset($input['password2']);
                 $input['key'] = time();
                 $input['password'] = sha1($input['password'].$input['key']);
-                $input['is_first_login'] = 1;
+                $input['has_password'] = 1;
             }
 
             $result = $this->accounts_model->update($input);
@@ -135,9 +194,9 @@ class Account extends MY_Controller {
             }
 
             unset($input['password2']);
+            $input['has_password'] = $input['password'] === '' ? 0 : 1;
             $input['key'] = time();
             $input['password'] = sha1($input['password'].$input['key']);
-            $input['is_first_login'] = 1;
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
@@ -154,7 +213,7 @@ class Account extends MY_Controller {
     public function changePassword()
     {
         if (!$this->isLoggedIn) {
-            redirect('/login');
+            redirect('/');
         }
 
         if ($this->input->post()) {
@@ -172,7 +231,7 @@ class Account extends MY_Controller {
                 $input['id'] = $this->account->id;
                 $input['key'] = time();
                 $input['password'] = sha1($input['password'].$input['key']);
-                $input['is_first_login'] = 0;
+                $input['has_password'] = 1;
 
                 $result = $this->accounts_model->update($input);
                 if ($result) {
@@ -193,10 +252,37 @@ class Account extends MY_Controller {
         $this->twig->display('account/changePassword', $data);
     }
 
-    public function delete($id = false)
+    public function removePassword($id = null)
     {
-        if (!$id || !$this->editable) {
-            redirect('/account/view');
+        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->editable || !$id) {
+            redirect('/');
+        }
+
+        $account = $this->accounts_model->getById($id);
+        if ($account) {
+            if ($account->is_admin) {
+                $this->session->set_flashdata('error', 'Don\'t remove password on admin acount!');
+                redirect('/account/edit/'.$id);
+            }
+
+            $input['id'] = $id;
+            $input['has_password'] = 0;
+
+            $result = $this->accounts_model->update($input);
+            if ($result) {
+                $this->session->set_flashdata('success', 'Password successfully removed!');
+                redirect('/account/edit/'.$id);
+            } else {
+                $this->session->set_flashdata('error', 'An error has occured!');
+                redirect('/account/edit/'.$id);
+            }
+        }
+    }
+
+    public function delete($id = null)
+    {
+        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->editable || !$id) {
+            redirect('/');
         }
 
         $result = $this->accounts_model->deleteById($id);
@@ -208,4 +294,5 @@ class Account extends MY_Controller {
         }
         redirect('/account/view');
     }
+
 }

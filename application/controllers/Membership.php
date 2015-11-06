@@ -7,14 +7,14 @@ class Membership extends MY_Controller {
         parent::__construct();
 
         if (!$this->isLoggedIn) {
-            redirect('/login');
+            redirect('/');
         }
         $this->load->model('memberships_model');
     }
 
     public function addMembership()
     {
-        if (!$this->input->post() || !$this->editable) {
+        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
         if ($this->input->post('cca_id')) {
@@ -60,7 +60,7 @@ class Membership extends MY_Controller {
 
     public function updateMemberships()
     {
-        if (!$this->input->post() || !$this->editable) {
+        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
         if ($this->input->post('cca_id')) {
@@ -87,9 +87,9 @@ class Membership extends MY_Controller {
 
     }
 
-    public function delete($id = false)
+    public function delete($id = null)
     {
-        if (!$id || !$this->editable) {
+        if (!$this->account->is_admin || !$this->editable || !$id) {
             redirect('/');
         }
 

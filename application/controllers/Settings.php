@@ -12,7 +12,7 @@ class Settings extends MY_Controller {
     public function index()
     {
         if (!$this->isLoggedIn) {
-            redirect('/login');
+            redirect('/');
         }
 
         $data = [];
@@ -29,7 +29,7 @@ class Settings extends MY_Controller {
 
     public function general()
     {
-        if (!$this->input->post()) {
+        if (!$this->account->is_admin || !$this->input->post()) {
             redirect('/');
         }
 
@@ -47,7 +47,7 @@ class Settings extends MY_Controller {
 
     public function archive()
     {
-        if (!$this->input->post()) {
+        if (!$this->account->is_admin || !$this->input->post()) {
             redirect('/');
         }
 

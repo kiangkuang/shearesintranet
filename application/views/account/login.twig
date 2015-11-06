@@ -8,7 +8,14 @@
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg"><big>Sign In</big></p>
-        <form action="account/processLogin" method="post">
+
+        {% if this.error %}
+          <div class="form-group text-center">
+            <span class="text-center text-red"><i class="icon fa fa-warning"></i> {{ this.error }}</span>
+          </div>
+        {% endif %}
+
+        <form class="js-admin" action="account/processLogin" method="post">
           <div class="form-group has-feedback">
             <input name="user" class="form-control" placeholder="A1234567X" required>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -17,25 +24,34 @@
             <input name="password" type="password" class="form-control" placeholder="Password" required>
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
-          {% if this.error %}
-            <div class="row">
-              <div class="col-xs-12">
-                <p class="text-center text-red"><i class="icon fa fa-warning"></i> {{ this.error }}</p>
-              </div>
-            </div>
-          {% endif %}
-          <div class="row">
-            <div class="col-xs-8">
-              <a href="#">I forgot my password</a>
-            </div><!-- /.col -->
-            <div class="col-xs-4">
-              <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-            </div><!-- /.col -->
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+          </div>
+          <div class="text-center">
+            <a class="js-toggle" href="#">Use NUSNET account</a>
           </div>
         </form>
+
+        <div class="js-user">
+          <div class="form-group">
+            <a href="account/processOpenId" class="btn btn-warning btn-block btn-flat">Sign in with NUSNET account</a>
+          </div>
+          <div class="text-center">
+            <a class="js-toggle" href="#">Alternative Sign In</a>
+          </div>
+        </div>
+
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
 
     {% include '_layouts/javascript.twig' %}
+    <script>
+      $('form').hide();
+
+      $('.js-toggle').click(function() {
+        $('.js-user').slideToggle();
+        $('.js-admin').slideToggle();
+      });
+    </script>
   </body>
 </html>
