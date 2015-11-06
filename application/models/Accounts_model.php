@@ -97,4 +97,23 @@ class Accounts_model extends MY_Model {
         return false;
     }
 
+    // used by account/edit
+    public function getByIdAcadYear($id, $acad_year = null)
+    {
+        if ($acad_year === null) {
+            $acad_year = $this->session->acadYearView;
+        }
+
+        $this->db->where('id', $id);
+        $this->db->where('acad_year', $acad_year);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
+
 }

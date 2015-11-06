@@ -132,7 +132,7 @@ class Account extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['account'] = $this->accounts_model->getById($id);
+            $data['account'] = $this->accounts_model->getByIdAcadYear($id);
             if ($data['account'] === false) {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');

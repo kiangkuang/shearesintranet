@@ -58,7 +58,7 @@ class Cca extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['cca'] = $this->ccas_model->getById($id);
+            $data['cca'] = $this->ccas_model->getByIdAcadYear($id);
 
             if ($data['cca'] === false) {
                 $this->session->set_flashdata('error', 'CCA not found!');
