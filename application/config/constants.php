@@ -85,3 +85,4 @@ define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 define('VERSION', '1.1.1');
+define('DOMAIN', $_SERVER['SERVER_NAME']);

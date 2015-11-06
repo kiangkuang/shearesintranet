@@ -83,7 +83,14 @@
                     <!-- text input -->
                     <div class="form-group">
                       <label>Password</label>
-                      <input type="password" class="form-control" name="password" placeholder="{{ account ? 'Leave blank if not changing' : 'Password' }}" {{ account ? '' : 'required' }}>
+                      <input type="password" class="form-control" name="password" placeholder="{{ account ? 'Leave blank if not changing' : 'Optional' }}">
+                      <small>Optional. Only set for users who have trouble logging in using NUSNET account.</small><br>
+                      {% if account.has_password %}
+                        <small class="text-yellow">Account currently has password.</small>
+                        <small>Click <a href="/account/removePassword/{{ account.id }}">here</a> to remove.</small>
+                      {% else %}
+                        <small class="text-muted">Account currently has no password.</small>
+                      {% endif %}
                     </div>
                   </div>
 
@@ -91,7 +98,7 @@
                     <!-- text input -->
                     <div class="form-group">
                       <label>Confirm Password</label>
-                      <input type="password" class="form-control" name="password2" placeholder="{{ account ? 'Leave blank if not changing' : 'Confirm Password' }}" {{ account ? '' : 'required' }}>
+                      <input type="password" class="form-control" name="password2" placeholder="{{ account ? 'Leave blank if not changing' : 'Optional' }}">
                     </div>
                   </div>
                 {% endif %}

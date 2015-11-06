@@ -13,12 +13,17 @@
 	"require": {
 		"php": ">=5.2.4",
 		"almasaeed2010/adminlte": "~2.0",
-		"kenjis/codeigniter-ss-twig": "1.0.x@dev"
+		"kenjis/codeigniter-ss-twig": "1.0.x@dev",
+		"lightopenid/lightopenid": "dev-master",
+		"fortawesome/font-awesome": "^4.4"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
 	},
 	"scripts": {
-        "post-install-cmd": "cp vendor/almasaeed2010/adminlte/. assets/adminlte -R"
+        "post-install-cmd": [
+        	"cp vendor/almasaeed2010/adminlte/. assets/adminlte -R",
+        	"cp vendor/fortawesome/font-awesome/. assets/font-awesome -R"
+        ]
     }
 }
