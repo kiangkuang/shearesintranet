@@ -13,4 +13,5 @@ class Home extends MY_Controller {
         $data['this'] = $this;
         $this->twig->display('home/index', $data);
     }
+
 }

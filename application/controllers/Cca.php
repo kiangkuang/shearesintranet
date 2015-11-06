@@ -125,4 +125,5 @@ class Cca extends MY_Controller {
         }
         redirect('/cca/view');
     }
+
 }

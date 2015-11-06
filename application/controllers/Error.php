@@ -17,4 +17,5 @@ class Error extends MY_Controller {
         $data['this'] = $this;
         $this->twig->display('errors/html/error_404', $data);
     }
+
 }

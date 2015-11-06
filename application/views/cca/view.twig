@@ -75,10 +75,11 @@
   </section><!-- /.content -->
 {% endblock %}
 
-{% block script %}
+{% block javascript %}
+  {{ parent() }}
   <script>
     $(function () {
-      $(".data-table").DataTable().search('{{ search }}').draw();
+      dataTable.search('{{ search }}').draw();
     });
   </script>
 {% endblock %}

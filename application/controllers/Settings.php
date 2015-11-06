@@ -56,4 +56,5 @@ class Settings extends MY_Controller {
         $this->session->set_userdata('acadYearView', $input['acad_year']);
         redirect('/account/view');
     }
+
 }
