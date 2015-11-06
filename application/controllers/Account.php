@@ -56,7 +56,7 @@ class Account extends MY_Controller {
 
         try {
             # Change 'localhost' to your domain name.
-            $openid = new LightOpenID('sheares-intranet.app');
+            $openid = new LightOpenID(DOMAIN);
             if(!$openid->mode) {
                 $openid->identity = 'https://openid.nus.edu.sg';
 
@@ -165,7 +165,7 @@ class Account extends MY_Controller {
             } elseif ($input['password'] !== $input['password2']) {
                 // password mismatch
                 $this->session->set_flashdata('error', 'The passwords do not match!');
-                redirect('/account/edit/');
+                redirect('/account/edit/'.$input['id']);
             } else {
                 // changing password
                 unset($input['password2']);
