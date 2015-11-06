@@ -96,4 +96,5 @@ class Ccatype extends MY_Controller {
         }
         redirect('/ccatype/view');
     }
+
 }

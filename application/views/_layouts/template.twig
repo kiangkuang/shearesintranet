@@ -10,12 +10,12 @@
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
-        {% block content_header %} {% endblock %}
+        {% block content_header %}{% endblock %}
         
         {% include '_layouts/alerts.twig' %}
 
         <!-- Main content -->
-        {% block content %} {% endblock %}
+        {% block content %}{% endblock %}
 
       </div><!-- /.content-wrapper -->
 
@@ -24,9 +24,9 @@
       {# include '_layouts/control-sidebar.twig' #}
     </div><!-- ./wrapper -->
 
-    {% include '_layouts/javascript.twig' %}
-    <!-- page script -->
-    {% block script %}{% endblock %}
+    {% block javascript %}
+      {% include '_layouts/javascript.twig' %}
+    {% endblock %}
 
   </body>
 </html>
