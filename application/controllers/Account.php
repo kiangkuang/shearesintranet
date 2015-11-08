@@ -56,8 +56,6 @@ class Account extends MY_Controller {
             redirect('/');
         }
 
-        require 'vendor/lightopenid/lightopenid/openid.php';
-
         try {
             # Change 'localhost' to your domain name.
             $openid = new LightOpenID(DOMAIN);

@@ -8,8 +8,11 @@
  * @link       https://github.com/kenjis/codeigniter-ss-twig
  */
 
-require_once 'vendor/twig/twig/lib/Twig/Autoloader.php';
+// If you don't use Composer, uncomment below
+/*
+require_once APPPATH . 'third_party/Twig-1.xx.x/lib/Twig/Autoloader.php';
 Twig_Autoloader::register();
+*/
 
 class Twig
 {
