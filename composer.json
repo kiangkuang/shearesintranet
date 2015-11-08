@@ -23,6 +23,7 @@
 	},
 	"scripts": {
         "post-install-cmd": [
+        	"php vendor/kenjis/codeigniter-ss-twig/install.php",
         	"cp vendor/almasaeed2010/adminlte/. assets/adminlte -R",
         	"cp vendor/fortawesome/font-awesome/. assets/font-awesome -R"
         ]

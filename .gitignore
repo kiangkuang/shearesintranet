@@ -19,6 +19,7 @@ assets/adminlte/
 assets/font-awesome/
 uploads/*
 !uploads/index.html
+application/libraries/Twig.php
 
 # IDE Files
 #-------------------------
