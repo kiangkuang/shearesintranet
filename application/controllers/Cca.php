@@ -126,4 +126,44 @@ class Cca extends MY_Controller {
         redirect('/cca/view');
     }
 
+    public function import()
+    {
+        if (!$this->account->is_admin || !$this->editable) {
+            redirect('/');
+        }
+
+        $data = [];
+
+        $input = $this->input->post();
+        if ($input) {
+            $config['upload_path']          = './uploads/';
+            $config['allowed_types']        = 'csv';
+            $config['max_size']             = 2048;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file'))
+            {
+                $this->session->set_flashdata('error', $this->upload->display_errors('', ''));
+                redirect('cca/import');
+            }
+            else
+            {
+                $upload = $this->upload->data();
+
+
+                $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                foreach($csvFile as $row) {
+                    $file[] = $row;
+                }
+                var_dump($file);
+            }
+        }
+
+        $data['mainMenu'] = 'admin';
+        $data['subMenu'] = 'cca';
+        $data['this'] = $this;
+        $this->twig->display('cca/import',$data);
+    }
+
 }

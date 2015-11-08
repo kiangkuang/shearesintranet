@@ -1,0 +1,63 @@
+{% extends '_layouts/template.twig' %}
+
+{% block content_header %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      CCA
+      <small>
+        Import
+      </small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="/ccaclassification/view">CCA</a></li>
+      <li class="active">
+        Import
+      </li>
+    </ol>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- column -->
+      <div class="col-xs-12">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Import
+            </h3>
+          </div><!-- /.box-header -->
+
+          <form role="form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="submit">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- file upload -->
+                  <div class="form-group">
+                    <label for="exampleInputFile">File input</label>
+                    <input type="file" id="exampleInputFile" name="file">
+
+                    <p class="help-block">CSV format only. Max 2MB file size.</p>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button class="btn btn-success" type="submit">
+                <i class="fa fa-save"></i> Upload
+              </button>
+              <a class="btn btn-default" href="/ccaclassification/view">
+                <i class="fa fa-undo"></i> Back
+              </a>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div><!--/.col -->
+    </div>   <!-- /.row -->
+  </section><!-- /.content -->
+{% endblock %}

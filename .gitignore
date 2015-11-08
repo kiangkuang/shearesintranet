@@ -17,6 +17,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 system/sessions/*
 assets/adminlte/
 assets/font-awesome/
+uploads/*
+!uploads/index.html
 
 # IDE Files
 #-------------------------
