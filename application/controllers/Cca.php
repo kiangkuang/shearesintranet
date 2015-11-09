@@ -99,6 +99,8 @@ class Cca extends MY_Controller {
             }
         } else {
             // add
+            $input['acad_year'] = ACAD_YEAR;
+
             $result = $this->ccas_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully created!');
@@ -132,8 +134,6 @@ class Cca extends MY_Controller {
             redirect('/');
         }
 
-        $data = [];
-
         $input = $this->input->post();
         if ($input) {
             $config['upload_path']          = './uploads/';
@@ -142,22 +142,53 @@ class Cca extends MY_Controller {
 
             $this->load->library('upload', $config);
 
-            if ( ! $this->upload->do_upload('file'))
-            {
+            if ( ! $this->upload->do_upload('file')) {
                 $this->session->set_flashdata('error', $this->upload->display_errors('', ''));
                 redirect('cca/import');
-            }
-            else
-            {
-                $upload = $this->upload->data();
-
-
-                $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
-                foreach($csvFile as $row) {
-                    $file[] = $row;
+            } else {
+                $ccaTypes = $this->ccatypes_model->getAll();
+                foreach ($ccaTypes as $ccaType) {
+                    $ccaTypeArray[$ccaType->id] = $ccaType->name;
                 }
-                var_dump($file);
+
+                $ccaClassifications = $this->ccaclassifications_model->getAll();
+                foreach ($ccaClassifications as $ccaClassification) {
+                    $ccaClassificationArray[$ccaClassification->id] = $ccaClassification->name;
+                }
+
+                $upload = $this->upload->data();
+                $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                foreach ($csvFile as $row) {
+                    // ignore heading row and empty names
+                    if ($row[0] !== 'Name' && $row[1] !== 'Type' && $row[2] !== 'Classification' && $row[0] !== '') {
+                        $temp['name'] = $row[0];
+                        $temp['shortname'] = strtolower(str_replace(' ', '-', $row[0]));
+                        $temp['type_id'] = array_search($row[1], $ccaTypeArray) ? : 1; // defaults to None type
+                        $temp['classification_id'] = array_search($row[2], $ccaClassificationArray) ? : 1; // defaults to None classification
+                        $temp['acad_year'] = ACAD_YEAR;
+                        $import[] = $temp;
+                    }
+                }
+                $result = $this->ccas_model->insertBatch($import);
+                if ($result !== false) {
+                    $this->session->set_flashdata('success', $result . ' CCAs imported!');
+                    foreach ($import as &$row) {
+                        $row['type_name'] = $ccaTypeArray[$row['type_id']];
+                        $row['classification_name'] = $ccaClassificationArray[$row['classification_id']];
+                    }
+                    $this->session->set_flashdata('imported', $import);
+                    redirect('cca/import');
+                } else {
+                    $this->session->set_flashdata('error', 'Error updating database!');
+                    redirect('cca/import');
+                }
             }
+        }
+
+        $data = [];
+
+        if ($this->session->imported) {
+            $data['imported'] = $this->session->imported;
         }
 
         $data['mainMenu'] = 'admin';
