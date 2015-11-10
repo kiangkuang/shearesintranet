@@ -191,10 +191,38 @@ class Cca extends MY_Controller {
             $data['imported'] = $this->session->imported;
         }
 
+        $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
+
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['this'] = $this;
         $this->twig->display('cca/import',$data);
+    }
+
+    public function importLastYear()
+    {
+        if (!$this->account->is_admin || !$this->editable) {
+            redirect('/');
+        }
+
+        $lastAcadYear = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
+
+        $ccas = $this->ccas_model->getByAcadYear($lastAcadYear);
+
+        foreach ($ccas as $cca) {
+            unset($cca->id, $cca->updated_at, $cca->created_at);
+            $cca->acad_year = ACAD_YEAR;
+        }        
+
+        $result = $this->ccas_model->insertBatch($ccas);
+
+        if ($result !== false) {
+            $this->session->set_flashdata('success', $result . ' CCAs imported from previous year!');
+            redirect('cca/import');
+        } else {
+            $this->session->set_flashdata('error', 'Error updating database!');
+            redirect('cca/import');
+        }
     }
 
 }

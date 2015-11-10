@@ -63,7 +63,7 @@
         <div class="box box-primary">
           <div class="box-header with-border">
             <h3 class="box-title">
-              Import
+              Import from File
             </h3>
           </div><!-- /.box-header -->
           <form role="form" method="post" enctype="multipart/form-data">
@@ -88,13 +88,33 @@
             </div><!-- /.box-body -->
             <div class="box-footer">
               <button class="btn btn-success" type="submit">
-                <i class="fa fa-save"></i> Upload
+                <i class="fa fa-upload"></i> Upload
               </button>
-              <a class="btn btn-default" href="/ccaclassification/view">
-                <i class="fa fa-undo"></i> Back
-              </a>
             </div>
           </form>
+        </div><!-- /.box -->
+
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Import from Previous Year
+            </h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <div class="row">
+              <div class="col-md-12">
+                <ul>
+                  <li>Import CCAs from previous AY{{ lastAcadYear }}.</li>
+                  <li>No memberships will be imported.</li>
+                </ul>
+              </div>
+            </div>
+          </div><!-- /.box-body -->
+          <div class="box-footer">
+            <a href="/cca/importLastYear" class="btn btn-success">
+              <i class="fa fa-history"></i> Import from AY{{ lastAcadYear }}
+            </a>
+          </div>
         </div><!-- /.box -->
       </div><!--/.col -->
     </div>   <!-- /.row -->
