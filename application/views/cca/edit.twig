@@ -74,11 +74,11 @@
             <div class="box-footer">
               {% if this.editable %}
                 <button class="btn btn-success" type="submit">
-                  <i class="fa fa-save"></i> {{ cca ? 'Save' : 'Add' }}
+                  <i class="fa fa-{{ cca ? 'save' : 'plus' }}"></i> {{ cca ? 'Save' : 'Add' }}
                 </button>
               {% endif %}
               <a class="btn btn-default" href="/cca/view">
-                <i class="fa fa-undo"></i> Back
+                <i class="fa fa-ban"></i> Cancel
               </a>
             </div>
           </form>

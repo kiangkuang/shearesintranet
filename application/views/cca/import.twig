@@ -78,8 +78,8 @@
                     <p class="help-block">CSV format only. Max 2MB file size.</p>
                       <ul>
                         <li>Sample CCA CSV file available.<br><a href="/sample/cca-sample.csv" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download</a></li>
-                        <li><code>Type</code> and <code>Classification</code> must match entries listed <a href="/ccatype/view">here</a> and <a href="/ccaclassification/view">here</a>.</li>
-                        <li>If <code>Type</code> or <code>Classification</code> is not found, it will default to <code>None</code>.</li>
+                        <li><code>Type</code> and <code>Classification</code> column entries must match entries listed in <a href="/ccatype/view">CCA Types</a> and <a href="/ccaclassification/view">CCA Classifications</a>.</li>
+                        <li>If <code>Type</code> or <code>Classification</code> entry is not found, it will default to <code>None</code>.</li>
                         <li>It is <strong>case-sensitive</strong>.</li>
                       </ul>
                   </div>
@@ -90,6 +90,9 @@
               <button class="btn btn-success" type="submit">
                 <i class="fa fa-upload"></i> Upload
               </button>
+              <a class="btn btn-default" href="/cca/view">
+                <i class="fa fa-ban"></i> Cancel
+              </a>
             </div>
           </form>
         </div><!-- /.box -->
@@ -105,14 +108,14 @@
               <div class="col-md-12">
                 <ul>
                   <li>Import CCAs from previous AY{{ lastAcadYear }}.</li>
-                  <li>No memberships will be imported.</li>
+                  <li>No membership information will be imported.</li>
                 </ul>
               </div>
             </div>
           </div><!-- /.box-body -->
           <div class="box-footer">
-            <a href="/cca/importLastYear" class="btn btn-success">
-              <i class="fa fa-history"></i> Import from AY{{ lastAcadYear }}
+            <a href="/cca/importLastYear" class="btn btn-success {{ lastAcadYearCcas ? '' : 'disabled' }}">
+              <i class="fa fa-repeat"></i> {{ lastAcadYearCcas ? 'Import' : 'No CCAs found' }} from AY{{ lastAcadYear }}
             </a>
           </div>
         </div><!-- /.box -->

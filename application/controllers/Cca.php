@@ -192,6 +192,7 @@ class Cca extends MY_Controller {
         }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
+        $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
