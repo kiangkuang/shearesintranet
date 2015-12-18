@@ -66,10 +66,7 @@ class MY_Model extends CI_Model {
 
     public function updateBatch($data)
     {
-        $this->db->trans_start();
-        $this->db->update_batch($this->db_name, $data, 'id'); 
-        $this->db->trans_complete();
-        return $this->db->trans_status(); 
+        return $this->db->update_batch($this->db_name, $data, 'id');
     }
 
     public function deleteById($id)

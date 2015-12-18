@@ -26,7 +26,16 @@
             <h3 class="box-title">CCA</h3>
             <div class="box-tools pull-right">
               {% if this.editable %}
-                <a href="/cca/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+                <div class="btn-group">
+                  <a href="/cca/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+                  <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="/cca/import"><i class="fa fa-upload"></i> Import</a></li>
+                  </ul>
+                </div>
               {% endif %}
             </div><!-- /.box-tools -->
           </div><!-- /.box-header -->

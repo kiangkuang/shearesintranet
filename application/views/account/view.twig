@@ -26,7 +26,16 @@
             <h3 class="box-title">Account</h3>
             <div class="box-tools pull-right">
               {% if this.editable %}
-                <a href="/account/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+                <div class="btn-group">
+                  <a href="/account/edit" class="btn btn-success"><i class="fa fa-plus"></i> Add</a>
+                  <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="/account/import"><i class="fa fa-upload"></i> Import</a></li>
+                  </ul>
+                </div>
               {% endif %}
             </div><!-- /.box-tools -->
           </div><!-- /.box-header -->
@@ -35,9 +44,10 @@
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Room</th>
-                  <th>Email</th>
-                  <th>Contact</th>
+                  <th class="hidden-xs hidden-sm">NUSNET ID</th>
+                  <th class="hidden-xs hidden-sm">Room</th>
+                  <th class="hidden-xs hidden-sm">Email</th>
+                  <th class="hidden-xs hidden-sm">Contact</th>
                   <th>CCAs</th>
                   <th>Total Points</th>
                   <th style="width: 110px;"></th>
@@ -47,9 +57,10 @@
                 {% for account in accounts %}
                   <tr>
                     <td>{{ account.name }}</td>
-                    <td>{{ account.room }}</td>
-                    <td>{{ account.email }}</td>
-                    <td>{{ account.contact }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.user }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.room }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.email }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.contact }}</td>
                     <td>
                       {% if account.memberships %}
                         {% for membership in account.memberships %}
@@ -76,9 +87,10 @@
               <tfoot>
                 <tr>
                   <th>Name</th>
-                  <th>Room</th>
-                  <th>Email</th>
-                  <th>Contact</th>
+                  <th class="hidden-xs hidden-sm">NUSNET ID</th>
+                  <th class="hidden-xs hidden-sm">Room</th>
+                  <th class="hidden-xs hidden-sm">Email</th>
+                  <th class="hidden-xs hidden-sm">Contact</th>
                   <th>CCAs</th>
                   <th>Total Points</th>
                   <th></th>

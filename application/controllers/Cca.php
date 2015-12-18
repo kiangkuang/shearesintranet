@@ -99,6 +99,8 @@ class Cca extends MY_Controller {
             }
         } else {
             // add
+            $input['acad_year'] = ACAD_YEAR;
+
             $result = $this->ccas_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully created!');
@@ -124,6 +126,104 @@ class Cca extends MY_Controller {
             $this->session->set_flashdata('error', 'An error has occured!');
         }
         redirect('/cca/view');
+    }
+
+    public function import()
+    {
+        if (!$this->account->is_admin || !$this->editable) {
+            redirect('/');
+        }
+
+        $input = $this->input->post();
+        if ($input) {
+            $config['upload_path']          = './uploads/';
+            $config['allowed_types']        = 'csv';
+            $config['max_size']             = 2048;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $this->session->set_flashdata('error', $this->upload->display_errors('', ''));
+                redirect('cca/import');
+            } else {
+                $ccaTypes = $this->ccatypes_model->getAll();
+                foreach ($ccaTypes as $ccaType) {
+                    $ccaTypeArray[$ccaType->id] = $ccaType->name;
+                }
+
+                $ccaClassifications = $this->ccaclassifications_model->getAll();
+                foreach ($ccaClassifications as $ccaClassification) {
+                    $ccaClassificationArray[$ccaClassification->id] = $ccaClassification->name;
+                }
+
+                $upload = $this->upload->data();
+                $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                foreach ($csvFile as $row) {
+                    // ignore header row and empty names
+                    if ($row[0] !== 'Name' && $row[1] !== 'Type' && $row[2] !== 'Classification' && $row[0] !== '') {
+                        $importRow['name'] = $row[0];
+                        $importRow['shortname'] = strtolower(str_replace(' ', '-', $row[0]));
+                        $importRow['type_id'] = array_search($row[1], $ccaTypeArray) ? : 1; // defaults to None type
+                        $importRow['classification_id'] = array_search($row[2], $ccaClassificationArray) ? : 1; // defaults to None classification
+                        $importRow['acad_year'] = ACAD_YEAR;
+                        $import[] = $importRow;
+                    }
+                }
+                $result = $this->ccas_model->insertBatch($import);
+                if ($result !== false) {
+                    $this->session->set_flashdata('success', $result . ' CCAs imported!');
+                    foreach ($import as &$row) {
+                        $row['type_name'] = $ccaTypeArray[$row['type_id']];
+                        $row['classification_name'] = $ccaClassificationArray[$row['classification_id']];
+                    }
+                    $this->session->set_flashdata('imported', $import);
+                    redirect('cca/import');
+                } else {
+                    $this->session->set_flashdata('error', 'Error updating database!');
+                    redirect('cca/import');
+                }
+            }
+        }
+
+        $data = [];
+
+        if ($this->session->imported) {
+            $data['imported'] = $this->session->imported;
+        }
+
+        $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
+        $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
+
+        $data['mainMenu'] = 'admin';
+        $data['subMenu'] = 'cca';
+        $data['this'] = $this;
+        $this->twig->display('cca/import',$data);
+    }
+
+    public function importLastYear()
+    {
+        if (!$this->account->is_admin || !$this->editable) {
+            redirect('/');
+        }
+
+        $lastAcadYear = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
+
+        $ccas = $this->ccas_model->getByAcadYear($lastAcadYear);
+
+        foreach ($ccas as $cca) {
+            unset($cca->id, $cca->updated_at, $cca->created_at);
+            $cca->acad_year = ACAD_YEAR;
+        }        
+
+        $result = $this->ccas_model->insertBatch($ccas);
+
+        if ($result !== false) {
+            $this->session->set_flashdata('success', $result . ' CCAs imported from previous year!');
+            redirect('cca/import');
+        } else {
+            $this->session->set_flashdata('error', 'Error updating database!');
+            redirect('cca/import');
+        }
     }
 
 }

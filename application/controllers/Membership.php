@@ -73,7 +73,7 @@ class Membership extends MY_Controller {
 
         $result = $this->memberships_model->updateBatch($input);
 
-        if ($result) {
+        if ($result !== false) {
             $this->session->set_flashdata('success', 'Memberships successfully updated!');
         } else {
             $this->session->set_flashdata('error', 'An error has occured!');

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5202acd3b24377af7471bb22b3edad4d",
-    "content-hash": "a06929ddd9feef7026c114927bff70d9",
+    "hash": "e6a8d25bd110bff24077f13b74ce73d9",
+    "content-hash": "6ec551e66644a2648a30dfa4752b63c5",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -96,17 +96,48 @@
             "time": "2015-07-28 21:55:03"
         },
         {
+            "name": "keboola/csv",
+            "version": "1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/keboola/php-csv.git",
+                "reference": "113735ad9f4f7e0ef5545ebfb5fcd62528035841"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/keboola/php-csv/zipball/113735ad9f4f7e0ef5545ebfb5fcd62528035841",
+                "reference": "113735ad9f4f7e0ef5545ebfb5fcd62528035841",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Keboola\\Csv": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Keboola CSV reader and writer",
+            "homepage": "http://keboola.com",
+            "time": "2014-01-31 14:10:34"
+        },
+        {
             "name": "kenjis/codeigniter-ss-twig",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kenjis/codeigniter-ss-twig.git",
-                "reference": "a675f217a2f85a699681ab793ed862a1f7c90f34"
+                "reference": "907ebb5625a66f9ead6f3a3a1e154a22b5634dbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kenjis/codeigniter-ss-twig/zipball/a675f217a2f85a699681ab793ed862a1f7c90f34",
-                "reference": "a675f217a2f85a699681ab793ed862a1f7c90f34",
+                "url": "https://api.github.com/repos/kenjis/codeigniter-ss-twig/zipball/907ebb5625a66f9ead6f3a3a1e154a22b5634dbf",
+                "reference": "907ebb5625a66f9ead6f3a3a1e154a22b5634dbf",
                 "shasum": ""
             },
             "require": {
@@ -137,7 +168,7 @@
                 "codeigniter",
                 "twig"
             ],
-            "time": "2015-10-23 06:16:15"
+            "time": "2015-11-08 12:45:54"
         },
         {
             "name": "lightopenid/lightopenid",

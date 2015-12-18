@@ -15,13 +15,15 @@
 		"almasaeed2010/adminlte": "~2.0",
 		"kenjis/codeigniter-ss-twig": "1.0.x@dev",
 		"lightopenid/lightopenid": "dev-master",
-		"fortawesome/font-awesome": "^4.4"
+		"fortawesome/font-awesome": "^4.4",
+		"keboola/csv": "^1.1"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
 	},
 	"scripts": {
         "post-install-cmd": [
+        	"php vendor/kenjis/codeigniter-ss-twig/install.php",
         	"cp vendor/almasaeed2010/adminlte/. assets/adminlte -R",
         	"cp vendor/fortawesome/font-awesome/. assets/font-awesome -R"
         ]
