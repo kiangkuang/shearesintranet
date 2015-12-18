@@ -293,4 +293,67 @@ class Account extends MY_Controller {
         redirect('/account/view');
     }
 
+    public function import()
+    {
+        if (!$this->account->is_admin || !$this->editable) {
+            redirect('/');
+        }
+
+        $input = $this->input->post();
+        if ($input) {
+            $config['upload_path']          = './uploads/';
+            $config['allowed_types']        = 'csv';
+            $config['max_size']             = 2048;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $this->session->set_flashdata('error', $this->upload->display_errors('', ''));
+                redirect('account/import');
+            } else {
+                $upload = $this->upload->data();
+                $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                foreach ($csvFile as $row) {
+                    // ignore header row and empty names
+                    if ($row[0] !== 'Name' && $row[1] !== 'NUSNET ID' && $row[0] !== '') {
+                        $importRow['user'] = $row[1];
+                        $importRow['key'] = time();
+                        $importRow['password'] = sha1(''.$importRow['key']);
+                        $importRow['has_password'] = 0;
+                        $importRow['name'] = $row[0];
+                        $importRow['room'] = $row[2];
+                        $importRow['email'] = $row[3];
+                        $importRow['contact'] = $row[4];
+                        $importRow['acad_year'] = ACAD_YEAR;
+
+                        $import[] = $importRow;
+                    }
+                }
+                $result = $this->accounts_model->insertBatch($import);
+                if ($result !== false) {
+                    $this->session->set_flashdata('success', $result . ' Accounts imported!');
+                    $this->session->set_flashdata('imported', $import);
+                    redirect('account/import');
+                } else {
+                    $this->session->set_flashdata('error', 'Error updating database!');
+                    redirect('account/import');
+                }
+            }
+        }
+
+        $data = [];
+
+        if ($this->session->imported) {
+            $data['imported'] = $this->session->imported;
+        }
+
+        $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
+        $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
+
+        $data['mainMenu'] = 'admin';
+        $data['subMenu'] = 'account';
+        $data['this'] = $this;
+        $this->twig->display('account/import',$data);
+    }
+
 }

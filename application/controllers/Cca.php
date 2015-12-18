@@ -159,14 +159,14 @@ class Cca extends MY_Controller {
                 $upload = $this->upload->data();
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 foreach ($csvFile as $row) {
-                    // ignore heading row and empty names
+                    // ignore header row and empty names
                     if ($row[0] !== 'Name' && $row[1] !== 'Type' && $row[2] !== 'Classification' && $row[0] !== '') {
-                        $temp['name'] = $row[0];
-                        $temp['shortname'] = strtolower(str_replace(' ', '-', $row[0]));
-                        $temp['type_id'] = array_search($row[1], $ccaTypeArray) ? : 1; // defaults to None type
-                        $temp['classification_id'] = array_search($row[2], $ccaClassificationArray) ? : 1; // defaults to None classification
-                        $temp['acad_year'] = ACAD_YEAR;
-                        $import[] = $temp;
+                        $importRow['name'] = $row[0];
+                        $importRow['shortname'] = strtolower(str_replace(' ', '-', $row[0]));
+                        $importRow['type_id'] = array_search($row[1], $ccaTypeArray) ? : 1; // defaults to None type
+                        $importRow['classification_id'] = array_search($row[2], $ccaClassificationArray) ? : 1; // defaults to None classification
+                        $importRow['acad_year'] = ACAD_YEAR;
+                        $import[] = $importRow;
                     }
                 }
                 $result = $this->ccas_model->insertBatch($import);
