@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e6a8d25bd110bff24077f13b74ce73d9",
-    "content-hash": "6ec551e66644a2648a30dfa4752b63c5",
+    "hash": "df72fdaaaac643b09acd9985e91dcd4e",
+    "content-hash": "47ad7874c0e1b8877636503f9aab2564",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -48,17 +48,66 @@
             "time": "2015-10-23 14:50:49"
         },
         {
-            "name": "fortawesome/font-awesome",
-            "version": "v4.4.0",
+            "name": "components/bootstrap-switch",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c"
+                "url": "https://github.com/tubssp/bootstrap-switch.git",
+                "reference": "7c2d069a98cba7e7b24ec605a761f8c0685e0be9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/e554555d73a44e0a7d11b0361ad7a5325a5f551c",
-                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "url": "https://api.github.com/repos/tubssp/bootstrap-switch/zipball/7c2d069a98cba7e7b24ec605a761f8c0685e0be9",
+                "reference": "7c2d069a98cba7e7b24ec605a761f8c0685e0be9",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "name": "bootstrap-switch",
+                    "files": [
+                        "dist/**"
+                    ],
+                    "scripts": [
+                        "dist/js/bootstrap-switch.js"
+                    ],
+                    "shim": {
+                        "exports": "BootstrapSwitch"
+                    }
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache License Version 2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Mattia Larentis",
+                    "homepage": "http://www.larentis.eu"
+                }
+            ],
+            "description": "Turn checkboxes and radio buttons in toggle switches.",
+            "homepage": "http://www.bootstrap-switch.org",
+            "keywords": [
+                "JS",
+                "bootstrap",
+                "javascript",
+                "switch"
+            ],
+            "time": "2014-06-25 18:28:03"
+        },
+        {
+            "name": "fortawesome/font-awesome",
+            "version": "v4.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "fddd2c240452e6c8990c4ef75e0265b455aa7968"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/fddd2c240452e6c8990c4ef75e0265b455aa7968",
+                "reference": "fddd2c240452e6c8990c4ef75e0265b455aa7968",
                 "shasum": ""
             },
             "require-dev": {
@@ -93,7 +142,7 @@
                 "font",
                 "icon"
             ],
-            "time": "2015-07-28 21:55:03"
+            "time": "2015-11-30 17:28:02"
         },
         {
             "name": "keboola/csv",
@@ -132,12 +181,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kenjis/codeigniter-ss-twig.git",
-                "reference": "907ebb5625a66f9ead6f3a3a1e154a22b5634dbf"
+                "reference": "47dce229fb45680ba291404f5d1534da9d151936"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kenjis/codeigniter-ss-twig/zipball/907ebb5625a66f9ead6f3a3a1e154a22b5634dbf",
-                "reference": "907ebb5625a66f9ead6f3a3a1e154a22b5634dbf",
+                "url": "https://api.github.com/repos/kenjis/codeigniter-ss-twig/zipball/47dce229fb45680ba291404f5d1534da9d151936",
+                "reference": "47dce229fb45680ba291404f5d1534da9d151936",
                 "shasum": ""
             },
             "require": {
@@ -168,7 +217,7 @@
                 "codeigniter",
                 "twig"
             ],
-            "time": "2015-11-08 12:45:54"
+            "time": "2015-11-17 03:43:39"
         },
         {
             "name": "lightopenid/lightopenid",
@@ -301,7 +350,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "kenjis/codeigniter-ss-twig": 20,
-        "lightopenid/lightopenid": 20
+        "lightopenid/lightopenid": 20,
+        "components/bootstrap-switch": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

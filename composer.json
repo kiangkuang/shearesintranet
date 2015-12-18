@@ -16,7 +16,8 @@
 		"kenjis/codeigniter-ss-twig": "1.0.x@dev",
 		"lightopenid/lightopenid": "dev-master",
 		"fortawesome/font-awesome": "^4.4",
-		"keboola/csv": "^1.1"
+		"keboola/csv": "^1.1",
+		"components/bootstrap-switch": "dev-master"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
@@ -24,8 +25,12 @@
 	"scripts": {
         "post-install-cmd": [
         	"php vendor/kenjis/codeigniter-ss-twig/install.php",
-        	"cp vendor/almasaeed2010/adminlte/. assets/adminlte -R",
-        	"cp vendor/fortawesome/font-awesome/. assets/font-awesome -R"
+            "mkdir -p assets/adminlte",
+        	"cp -a vendor/almasaeed2010/adminlte/bootstrap vendor/almasaeed2010/adminlte/dist/. vendor/almasaeed2010/adminlte/plugins assets/adminlte",
+            "mkdir -p assets/font-awesome",
+        	"cp -a vendor/fortawesome/font-awesome/css vendor/fortawesome/font-awesome/fonts assets/font-awesome",
+        	"mkdir -p assets/bootstrap-switch",
+        	"cp -a vendor/components/bootstrap-switch/dist/. assets/bootstrap-switch"
         ]
     }
 }
