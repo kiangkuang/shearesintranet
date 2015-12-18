@@ -53,7 +53,7 @@ class Account extends MY_Controller {
 
         if (!$this->settings->allow_login) {
             $this->session->set_flashdata('error', 'Login currently is disabled.');
-            redirect('/');
+            redirect('/login');
         }
 
         try {
