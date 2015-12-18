@@ -44,10 +44,10 @@
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>NUSNET ID</th>
-                  <th>Room</th>
-                  <th>Email</th>
-                  <th>Contact</th>
+                  <th class="hidden-xs hidden-sm">NUSNET ID</th>
+                  <th class="hidden-xs hidden-sm">Room</th>
+                  <th class="hidden-xs hidden-sm">Email</th>
+                  <th class="hidden-xs hidden-sm">Contact</th>
                   <th>CCAs</th>
                   <th>Total Points</th>
                   <th style="width: 110px;"></th>
@@ -57,10 +57,10 @@
                 {% for account in accounts %}
                   <tr>
                     <td>{{ account.name }}</td>
-                    <td>{{ account.user }}</td>
-                    <td>{{ account.room }}</td>
-                    <td>{{ account.email }}</td>
-                    <td>{{ account.contact }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.user }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.room }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.email }}</td>
+                    <td class="hidden-xs hidden-sm">{{ account.contact }}</td>
                     <td>
                       {% if account.memberships %}
                         {% for membership in account.memberships %}
@@ -87,10 +87,10 @@
               <tfoot>
                 <tr>
                   <th>Name</th>
-                  <th>NUSNET ID</th>
-                  <th>Room</th>
-                  <th>Email</th>
-                  <th>Contact</th>
+                  <th class="hidden-xs hidden-sm">NUSNET ID</th>
+                  <th class="hidden-xs hidden-sm">Room</th>
+                  <th class="hidden-xs hidden-sm">Email</th>
+                  <th class="hidden-xs hidden-sm">Contact</th>
                   <th>CCAs</th>
                   <th>Total Points</th>
                   <th></th>
