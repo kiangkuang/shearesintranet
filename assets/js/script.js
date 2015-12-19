@@ -17,3 +17,5 @@ $(".select2").select2();
 $(':input[type=number]').on('mousewheel', function(e) {
     $(this).blur();
 });
+
+$('.bootstrap-switch').bootstrapSwitch();
