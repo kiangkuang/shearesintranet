@@ -103,7 +103,7 @@
             <form role="form" action="/account/adminChangePassword" method="post">
               <div class="box-body">
                 <div class="row">
-                  <input type="hidden" name="account_id" value="{{ account.id }}">
+                  <input type="hidden" name="id" value="{{ account.id }}">
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>
@@ -118,7 +118,7 @@
                     <div class="col-md-6 password-fields" {{ not account.has_password ? 'style="display: none;"' }}>
                       <!-- text input -->
                       <div class="form-group">
-                        <label>Password</label>
+                        <label>New Password</label>
                         <input type="password" class="form-control" name="password" placeholder="Password" {{ account.has_password ? 'required' : 'disabled' }}>
                       </div>
                     </div>
@@ -261,8 +261,9 @@
       $('.password-fields input').prop('required', true).prop('disabled', false);
       $('.password-fields').slideDown();
     } else {
-      $('.password-fields input').prop('required', false).prop('disabled', true);
-      $('.password-fields').slideUp();
+      $('.password-fields').slideUp(400, function() {
+        $('.password-fields input').prop('required', false).prop('disabled', true);
+      });
     }
   });
   </script>
