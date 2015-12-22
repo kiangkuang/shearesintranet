@@ -53,10 +53,8 @@ class Account extends MY_Controller {
 
         if (!$this->settings->allow_login) {
             $this->session->set_flashdata('error', 'Login currently is disabled.');
-            redirect('/');
+            redirect('/login');
         }
-
-        require 'vendor/lightopenid/lightopenid/openid.php';
 
         try {
             # Change 'localhost' to your domain name.
@@ -162,22 +160,6 @@ class Account extends MY_Controller {
 
         if (isset($input['id'])) {
             // update
-            if ($input['password'] === '') {
-                // not changing password
-                unset($input['password']);
-                unset($input['password2']);
-            } elseif ($input['password'] !== $input['password2']) {
-                // password mismatch
-                $this->session->set_flashdata('error', 'The passwords do not match!');
-                redirect('/account/edit/'.$input['id']);
-            } else {
-                // changing password
-                unset($input['password2']);
-                $input['key'] = time();
-                $input['password'] = sha1($input['password'].$input['key']);
-                $input['has_password'] = 1;
-            }
-
             $result = $this->accounts_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
@@ -188,15 +170,6 @@ class Account extends MY_Controller {
             }
         } else {
             // add
-            if ($input['password'] !== $input['password2']) {
-                $this->session->set_flashdata('error', 'The passwords do not match!');
-                redirect('/account/edit/');
-            }
-
-            unset($input['password2']);
-            $input['has_password'] = $input['password'] === '' ? 0 : 1;
-            $input['key'] = time();
-            $input['password'] = sha1($input['password'].$input['key']);
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
@@ -207,6 +180,40 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/account/edit');
             }
+        }
+    }
+
+    public function adminChangePassword()
+    {
+        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->input->post() || !$this->editable) {
+            redirect('/');
+        }
+
+        $input = $this->input->post();
+
+        $input['has_password'] = isset($input['has_password']) ? 1 : 0;
+
+        if ($input['has_password']) {
+            if ($input['password'] !== $input['password2']) {
+                $this->session->set_flashdata('error', 'The passwords do not match!');
+                redirect('/account/edit/'.$input['id']);
+            }
+
+            unset($input['password2']);
+            $input['key'] = time();
+            $input['password'] = sha1($input['password'].$input['key']);
+        } else {
+            $input['key'] = '';
+            $input['password'] = '';
+        }
+
+        $result = $this->accounts_model->update($input);
+        if ($result) {
+            $this->session->set_flashdata('success', 'Account password successfully updated!');
+            redirect('/account/edit/'.$input['id']);
+        } else {
+            $this->session->set_flashdata('error', 'An error has occured!');
+            redirect('/account/edit/'.$input['id']);
         }
     }
 
@@ -226,8 +233,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('error', 'Passwords do not match!');
                 redirect('/changepassword');
             } else {
-                unset($input['currentPassword']);
-                unset($input['password2']);
+                unset($input['currentPassword'], $input['password2']);
                 $input['id'] = $this->account->id;
                 $input['key'] = time();
                 $input['password'] = sha1($input['password'].$input['key']);
@@ -293,6 +299,69 @@ class Account extends MY_Controller {
             $this->session->set_flashdata('error', 'An error has occured!');
         }
         redirect('/account/view');
+    }
+
+    public function import()
+    {
+        if (!$this->account->is_admin || !$this->editable) {
+            redirect('/');
+        }
+
+        $input = $this->input->post();
+        if ($input) {
+            $config['upload_path']          = './uploads/';
+            $config['allowed_types']        = 'csv';
+            $config['max_size']             = 2048;
+
+            $this->load->library('upload', $config);
+
+            if ( ! $this->upload->do_upload('file')) {
+                $this->session->set_flashdata('error', $this->upload->display_errors('', ''));
+                redirect('account/import');
+            } else {
+                $upload = $this->upload->data();
+                $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                foreach ($csvFile as $row) {
+                    // ignore header row and empty names
+                    if ($row[0] !== 'Name' && $row[1] !== 'NUSNET ID' && $row[0] !== '') {
+                        $importRow['user'] = $row[1];
+                        $importRow['key'] = time();
+                        $importRow['password'] = sha1(''.$importRow['key']);
+                        $importRow['has_password'] = 0;
+                        $importRow['name'] = $row[0];
+                        $importRow['room'] = $row[2];
+                        $importRow['email'] = $row[3];
+                        $importRow['contact'] = $row[4];
+                        $importRow['acad_year'] = ACAD_YEAR;
+
+                        $import[] = $importRow;
+                    }
+                }
+                $result = $this->accounts_model->insertBatch($import);
+                if ($result !== false) {
+                    $this->session->set_flashdata('success', $result . ' Accounts imported!');
+                    $this->session->set_flashdata('imported', $import);
+                    redirect('account/import');
+                } else {
+                    $this->session->set_flashdata('error', 'Error updating database!');
+                    redirect('account/import');
+                }
+            }
+        }
+
+        $data = [];
+
+        if ($this->session->imported) {
+            $data['imported'] = $this->session->imported;
+        }
+
+        $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
+        $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
+
+        $data['mainMenu'] = 'admin';
+        $data['subMenu'] = 'account';
+        $data['this'] = $this;
+        $this->twig->display('account/import',$data);
     }
 
 }

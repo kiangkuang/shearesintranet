@@ -15,8 +15,15 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /vendor/
 
 system/sessions/*
-assets/adminlte/
-assets/font-awesome/
+
+assets/*
+!assets/css/
+!assets/js/
+!assets/img/
+
+uploads/*
+!uploads/index.html
+application/libraries/Twig.php
 
 # IDE Files
 #-------------------------

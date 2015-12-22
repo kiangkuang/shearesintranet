@@ -37,7 +37,7 @@
                   <div class="form-group">
                     <label>Current Academic Year</label>
                     <input type="text" class="form-control" value="AY{{ constant('ACAD_YEAR') }}" disabled>
-                    <small>Automatically changes every 1 August.</small>
+                    <small>Automatically changes every 1<sup>st</sup> August.</small>
                   </div>
                 </div>
               </div>
@@ -45,15 +45,16 @@
                 <div class="col-xs-12">
                   <!-- select -->
                   <div class="form-group">
-                    <label>Allow Login</label>
+                    <label>Resident Login</label>
                     <select class="form-control" name="allow_login">
                       <option value="1" {{ settings.allow_login == 1 ? 'selected' }}>Allow</option>
                       <option value="0" {{ settings.allow_login == 0 ? 'selected' }}>Disallow</option>
                     </select>
                     <small>
-                      For residents only, does not affect admin.<br>
-                      If disallowed, they will receive incorrect username/password error.<br>
-                      Recommended disallow until points are ready for public viewing.
+                      Allow/disallow residents to login.<br>
+                      When disallowed, they will receive login disabled error when using NUSNET ID login, or incorrect username/password error when using alternative login.<br>
+                      Recommended to disallow until the points are ready for public viewing.<br>
+                      Does not affect admin.
                     </small>
                   </div>
                 </div>
@@ -86,10 +87,10 @@
                     <label>Change Academic Year View</label>
                     <select class="form-control" name="acad_year">
                       {% for acadYear in acadYears if acadYear.acad_year != '' %}
-                        <option value="{{ acadYear.acad_year }}" {{ acadYear.acad_year == currentAcadYearView ? 'selected' }}>AY{{ acadYear.acad_year }}{{ acadYear.acad_year == constant('ACAD_YEAR') ? ' (Current)'}}</option>
+                        <option value="{{ acadYear.acad_year }}" {{ acadYear.acad_year == currentAcadYearView ? 'selected' }}>AY{{ acadYear.acad_year }} {{ acadYear.acad_year != constant('ACAD_YEAR') ? '[Archived]'}}</option>
                       {% endfor %}
                     </select>
-                    <small>Editing is not allowed except for current year.</small>
+                    <small>Editing is disabled for archived years.</small>
                   </div>
                 </div>
               </div>

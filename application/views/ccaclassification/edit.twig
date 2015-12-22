@@ -50,10 +50,10 @@
             </div><!-- /.box-body -->
             <div class="box-footer">
               <button class="btn btn-success" type="submit">
-                <i class="fa fa-save"></i> {{ ccaclassification ? 'Save' : 'Add' }}
+                <i class="fa fa-{{ ccaclassification ? 'save' : 'plus' }}"></i> {{ ccaclassification ? 'Save' : 'Add' }}
               </button>
               <a class="btn btn-default" href="/ccaclassification/view">
-                <i class="fa fa-undo"></i> Back
+                <i class="fa fa-ban"></i> Cancel
               </a>
             </div>
           </form>

@@ -27,6 +27,20 @@ class Ccas_model extends MY_Model {
         return false;
     }
 
+    public function getByAcadYear($acad_year = ACAD_YEAR)
+    {
+        $this->db->where('acad_year', $acad_year);
+        $this->db->order_by('name', 'asc');
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
+
     // used by cca/edit
     public function getByIdAcadYear($id, $acad_year = null)
     {
