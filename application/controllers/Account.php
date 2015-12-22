@@ -53,7 +53,7 @@ class Account extends MY_Controller {
 
         if (!$this->settings->allow_login) {
             $this->session->set_flashdata('error', 'Login currently is disabled.');
-            redirect('/');
+            redirect('/login');
         }
 
         try {
@@ -160,22 +160,6 @@ class Account extends MY_Controller {
 
         if (isset($input['id'])) {
             // update
-            if ($input['password'] === '') {
-                // not changing password
-                unset($input['password']);
-                unset($input['password2']);
-            } elseif ($input['password'] !== $input['password2']) {
-                // password mismatch
-                $this->session->set_flashdata('error', 'The passwords do not match!');
-                redirect('/account/edit/'.$input['id']);
-            } else {
-                // changing password
-                unset($input['password2']);
-                $input['key'] = time();
-                $input['password'] = sha1($input['password'].$input['key']);
-                $input['has_password'] = 1;
-            }
-
             $result = $this->accounts_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
@@ -186,15 +170,6 @@ class Account extends MY_Controller {
             }
         } else {
             // add
-            if ($input['password'] !== $input['password2']) {
-                $this->session->set_flashdata('error', 'The passwords do not match!');
-                redirect('/account/edit/');
-            }
-
-            unset($input['password2']);
-            $input['has_password'] = $input['password'] === '' ? 0 : 1;
-            $input['key'] = time();
-            $input['password'] = sha1($input['password'].$input['key']);
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
@@ -205,6 +180,40 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('error', 'An error has occured!');
                 redirect('/account/edit');
             }
+        }
+    }
+
+    public function adminChangePassword()
+    {
+        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->input->post() || !$this->editable) {
+            redirect('/');
+        }
+
+        $input = $this->input->post();
+
+        $input['has_password'] = isset($input['has_password']) ? 1 : 0;
+
+        if ($input['has_password']) {
+            if ($input['password'] !== $input['password2']) {
+                $this->session->set_flashdata('error', 'The passwords do not match!');
+                redirect('/account/edit/'.$input['id']);
+            }
+
+            unset($input['password2']);
+            $input['key'] = time();
+            $input['password'] = sha1($input['password'].$input['key']);
+        } else {
+            $input['key'] = '';
+            $input['password'] = '';
+        }
+
+        $result = $this->accounts_model->update($input);
+        if ($result) {
+            $this->session->set_flashdata('success', 'Account password successfully updated!');
+            redirect('/account/edit/'.$input['id']);
+        } else {
+            $this->session->set_flashdata('error', 'An error has occured!');
+            redirect('/account/edit/'.$input['id']);
         }
     }
 
@@ -224,8 +233,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('error', 'Passwords do not match!');
                 redirect('/changepassword');
             } else {
-                unset($input['currentPassword']);
-                unset($input['password2']);
+                unset($input['currentPassword'], $input['password2']);
                 $input['id'] = $this->account->id;
                 $input['key'] = time();
                 $input['password'] = sha1($input['password'].$input['key']);

@@ -1,3 +1,10 @@
 .dataTables_wrapper.form-inline td .form-control {
   width: 100%;
 }
+
+.bootstrap-switch.bootstrap-switch-focused {
+  border-color: #3c8dbc;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+

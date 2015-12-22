@@ -77,31 +77,6 @@
                     <input type="tel" class="form-control" name="contact" placeholder="Contact" value="{{ account.contact }}" {{ this.editable ? '' : 'disabled' }}>
                   </div>
                 </div>
-
-                {% if this.editable %}
-                  <div class="col-md-6">
-                    <!-- text input -->
-                    <div class="form-group">
-                      <label>Password</label>
-                      <input type="password" class="form-control" name="password" placeholder="{{ account ? 'Leave blank if not changing' : 'Optional' }}">
-                      <small>Optional. Only set for users who have trouble logging in using NUSNET account.</small><br>
-                      {% if account.has_password %}
-                        <small class="text-yellow">Account currently has password.</small>
-                        <small>Click <a href="/account/removePassword/{{ account.id }}">here</a> to remove.</small>
-                      {% else %}
-                        <small class="text-muted">Account currently has no password.</small>
-                      {% endif %}
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <!-- text input -->
-                    <div class="form-group">
-                      <label>Confirm Password</label>
-                      <input type="password" class="form-control" name="password2" placeholder="{{ account ? 'Leave blank if not changing' : 'Optional' }}">
-                    </div>
-                  </div>
-                {% endif %}
               </div>
             </div><!-- /.box-body -->
             <div class="box-footer">
@@ -116,6 +91,58 @@
             </div>
           </form>
         </div><!-- /.box -->
+
+        {% if account and this.editable %}
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                Password
+              </h3>
+            </div><!-- /.box-header -->
+
+            <form role="form" action="/account/adminChangePassword" method="post">
+              <div class="box-body">
+                <div class="row">
+                  <input type="hidden" name="id" value="{{ account.id }}">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>
+                        Use password
+                      </label>
+                      <br>
+                      <input type="checkbox" class="bootstrap-switch" name="has_password" {{ account.has_password ? 'checked' }}>
+                      <br>
+                      <small>Optional. Only set for users who have trouble logging in using NUSNET account.</small>
+                    </div>
+                  </div>
+                    <div class="col-md-6 password-fields" {{ not account.has_password ? 'style="display: none;"' }}>
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="Password" {{ account.has_password ? 'required' : 'disabled' }}>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 password-fields" {{ not account.has_password ? 'style="display: none;"' }}>
+                      <!-- text input -->
+                      <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" class="form-control" name="password2" placeholder="Confirm Password" {{ account.has_password ? 'required' : 'disabled' }}>
+                      </div>
+                    </div>
+                </div>
+              </div><!-- /.box-body -->
+              <div class="box-footer">
+                <button class="btn btn-success" type="submit">
+                  <i class="fa fa-save"></i> Save
+                </button>
+                <a class="btn btn-default" href="/account/view">
+                  <i class="fa fa-ban"></i> Cancel
+                </a>
+              </div>
+            </form>
+          </div><!-- /.box -->
+        {% endif %}
 
         {% if account and this.editable %}
           <div class="box box-primary">
@@ -217,4 +244,27 @@
       </div><!--/.col -->
     </div>   <!-- /.row -->
   </section><!-- /.content -->
+{% endblock %}
+
+{% block javascript %}
+  {{ parent() }}
+  <script>
+  // if ($('input[name="has_password"]').bootstrapSwitch('state') === true) {
+  //   $('.password-fields input').prop('required', true).prop('disabled', false);
+  //   $('.password-fields').show();
+  // } else {
+  //   $('.password-fields input').prop('required', false).prop('disabled', true);
+  //   $('.password-fields').hide();
+  // }
+  $('input[name="has_password"]').on('switchChange.bootstrapSwitch', function(event, state) {
+    if (state === true) {
+      $('.password-fields input').prop('required', true).prop('disabled', false);
+      $('.password-fields').slideDown();
+    } else {
+      $('.password-fields').slideUp(400, function() {
+        $('.password-fields input').prop('required', false).prop('disabled', true);
+      });
+    }
+  });
+  </script>
 {% endblock %}
