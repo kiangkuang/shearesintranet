@@ -112,7 +112,7 @@ class Account extends MY_Controller {
 
         $data = [];
 
-        $accounts = $this->accounts_model->getByAcadYear();
+        $accounts = $this->accounts_model->getByAcadYear($this->session->acadYearView);
         if ($accounts) {
             $accounts = $this->account_library->appendTotalPoints($accounts);
             $accounts = $this->account_library->appendMemberships($accounts);
@@ -134,7 +134,7 @@ class Account extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['account'] = $this->accounts_model->getByIdAcadYear($id);
+            $data['account'] = $this->accounts_model->getByIdAcadYear($id, $this->session->acadYearView);
             if ($data['account'] === false) {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');

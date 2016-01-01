@@ -36,7 +36,7 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $data['ccas'] = $this->ccas_model->getAllJoinTypeNameJoinClassificationName();
+        $data['ccas'] = $this->ccas_model->getByAcadYearJoinTypeNameJoinClassificationName($this->session->acadYearView);
 
         if ($this->input->get('search')) {
             $search = $this->input->get('search');
@@ -58,7 +58,7 @@ class Cca extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['cca'] = $this->ccas_model->getByIdAcadYear($id);
+            $data['cca'] = $this->ccas_model->getByIdAcadYear($id, $this->session->acadYearView);
 
             if ($data['cca'] === false) {
                 $this->session->set_flashdata('error', 'CCA not found!');
