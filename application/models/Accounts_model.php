@@ -53,10 +53,10 @@ class Accounts_model extends MY_Model {
         return false;
     }
 
-    public function getByUser($user)
+    public function getByUserAcadYear($user, $acad_year)
     {
         $this->db->where('user', $user);
-        $this->db->where('acad_year', ACAD_YEAR);
+        $this->db->where('acad_year', $acad_year);
 
         $query = $this->db->get($this->db_name);
 

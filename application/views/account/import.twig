@@ -28,7 +28,7 @@
         {% if imported %}
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">Imported Data</h3>
+              <h3 class="box-title">Added Accounts</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
               <table class="table table-bordered table-striped data-table">
@@ -43,6 +43,47 @@
                 </thead>
                 <tbody>
                   {% for row in imported %}
+                    <tr>
+                      <td>{{ row.name }}</td>
+                      <td>{{ row.user }}</td>
+                      <td>{{ row.room }}</td>
+                      <td>{{ row.email }}</td>
+                      <td>{{ row.contact }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>NUSNET ID</th>
+                    <th>Room</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        {% endif %}
+
+        {% if updated %}
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Updated Accounts</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered table-striped data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>NUSNET ID</th>
+                    <th>Room</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in updated %}
                     <tr>
                       <td>{{ row.name }}</td>
                       <td>{{ row.user }}</td>
@@ -85,6 +126,8 @@
                       <ul>
                         <li>Sample Account CSV file available.<br><a href="/sample/account-sample.csv" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download</a></li>
                         <li><code>Name</code> and <code>NUSNET ID</code> columns are compulsory.</li>
+                        <li>It is <strong>case-sensitive</strong>.</li>
+                        <li>If <code>NUSNET ID</code> already exists, the existing account will be updated with the imported data.</li>
                       </ul>
                   </div>
                 </div>
