@@ -94,7 +94,7 @@ class Cca extends MY_Controller {
                 $this->session->set_flashdata('success', 'CCA successfully updated!');
                 redirect('/cca/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/cca/edit/'.$input['id']);
             }
         } else {
@@ -106,7 +106,7 @@ class Cca extends MY_Controller {
                 $this->session->set_flashdata('success', 'CCA successfully created!');
                 redirect('/cca/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/cca/edit');
             }
         }
@@ -123,7 +123,7 @@ class Cca extends MY_Controller {
         if ($result && $result2) {
             $this->session->set_flashdata('success', 'CCA successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/cca/view');
     }
@@ -213,7 +213,7 @@ class Cca extends MY_Controller {
         foreach ($ccas as $cca) {
             unset($cca->id, $cca->updated_at, $cca->created_at);
             $cca->acad_year = ACAD_YEAR;
-        }        
+        }
 
         $result = $this->ccas_model->insertBatch($ccas);
 

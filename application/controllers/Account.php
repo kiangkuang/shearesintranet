@@ -165,7 +165,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
                 redirect('/account/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit/'.$input['id']);
             }
         } else {
@@ -177,7 +177,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Account successfully created!');
                 redirect('/account/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit');
             }
         }
@@ -212,7 +212,7 @@ class Account extends MY_Controller {
             $this->session->set_flashdata('success', 'Account password successfully updated!');
             redirect('/account/edit/'.$input['id']);
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
             redirect('/account/edit/'.$input['id']);
         }
     }
@@ -244,7 +244,7 @@ class Account extends MY_Controller {
                     $this->session->set_flashdata('success', 'Password successfully changed!');
                     redirect('/');
                 } else {
-                    $this->session->set_flashdata('error', 'An error has occured!');
+                    $this->session->set_flashdata('error', 'An error has occurred!');
                     redirect('/changepassword');
                 }
             }
@@ -279,7 +279,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Password successfully removed!');
                 redirect('/account/edit/'.$id);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit/'.$id);
             }
         }
@@ -296,7 +296,7 @@ class Account extends MY_Controller {
         if ($result && $result2) {
             $this->session->set_flashdata('success', 'Account successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/account/view');
     }

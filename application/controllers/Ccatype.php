@@ -66,7 +66,7 @@ class Ccatype extends MY_Controller {
                 $this->session->set_flashdata('success', 'CCA Type successfully updated!');
                 redirect('/ccatype/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/ccatype/edit/'.$input['id']);
             }
         } else {
@@ -76,7 +76,7 @@ class Ccatype extends MY_Controller {
                 $this->session->set_flashdata('success', 'CCA Type successfully created!');
                 redirect('/ccatype/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/ccatype/edit');
             }
         }
@@ -92,7 +92,7 @@ class Ccatype extends MY_Controller {
         if ($result) {
             $this->session->set_flashdata('success', 'CCA Type successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/ccatype/view');
     }

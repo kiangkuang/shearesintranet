@@ -40,7 +40,7 @@ class Settings extends MY_Controller {
             $this->session->set_flashdata('success', 'Settings successfully updated!');
             redirect('/settings');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
             redirect('/settings');
         }
     }

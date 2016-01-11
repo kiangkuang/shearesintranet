@@ -66,7 +66,7 @@ class Ccaclassification extends MY_Controller {
                 $this->session->set_flashdata('success', 'CCA Classification successfully updated!');
                 redirect('/ccaclassification/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/ccaclassification/edit/'.$input['id']);
             }
         } else {
@@ -76,7 +76,7 @@ class Ccaclassification extends MY_Controller {
                 $this->session->set_flashdata('success', 'CCA Classification successfully created!');
                 redirect('/ccaclassification/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/ccaclassification/edit');
             }
         }
@@ -92,7 +92,7 @@ class Ccaclassification extends MY_Controller {
         if ($result) {
             $this->session->set_flashdata('success', 'CCA Classification successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/ccaclassification/view');
     }
