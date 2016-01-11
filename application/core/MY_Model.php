@@ -52,6 +52,21 @@ class MY_Model extends CI_Model {
         return false;
     }
 
+    // used by import
+    public function getByNameAcadYear($name, $acad_year)
+    {
+        $this->db->where('name', $name);
+        $this->db->where('acad_year', $acad_year);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->first_row();
+        }
+
+        return false;
+    }
+
     public function getByAcadYear($acad_year = ACAD_YEAR)
     {
         $this->db->where('acad_year', $acad_year);

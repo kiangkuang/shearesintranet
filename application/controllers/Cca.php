@@ -158,6 +158,8 @@ class Cca extends MY_Controller {
 
                 $upload = $this->upload->data();
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                $import = [];
+                $update = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
                     if ($row[0] !== 'Name' && $row[1] !== 'Type' && $row[2] !== 'Classification' && $row[0] !== '') {
@@ -166,20 +168,43 @@ class Cca extends MY_Controller {
                         $importRow['type_id'] = array_search($row[1], $ccaTypeArray) ? : 1; // defaults to None type
                         $importRow['classification_id'] = array_search($row[2], $ccaClassificationArray) ? : 1; // defaults to None classification
                         $importRow['acad_year'] = ACAD_YEAR;
-                        $import[] = $importRow;
+
+                        $existingRow = $this->ccas_model->getByNameAcadYear($importRow['name'], ACAD_YEAR);
+                        if ($existingRow) {
+                            $importRow['id'] = $existingRow->id;
+                            $update[] = $importRow;
+                        } else {
+                            unset($importRow['id']);
+                            $import[] = $importRow;
+                        }
                     }
                 }
-                $result = $this->ccas_model->insertBatch($import);
-                if ($result !== false) {
-                    $this->session->set_flashdata('success', $result . ' CCAs imported!');
+
+                if ($import) {
+                    $importResult = $this->ccas_model->insertBatch($import);
+                }
+                if ($update) {
+                    $updateResult = $this->ccas_model->updateBatch($update);
+                }
+
+                if (isset($importResult) && $importResult !== false || isset($updateResult) && $updateResult !== false) {
+                    $successMsg = count($import) ? count($import) . ' new CCAs added!<br>' : '';
+                    $successMsg .= count($update) ? count($update) . ' existing CCAs updated!' : '';
+
+                    $this->session->set_flashdata('success', $successMsg);
                     foreach ($import as &$row) {
                         $row['type_name'] = $ccaTypeArray[$row['type_id']];
                         $row['classification_name'] = $ccaClassificationArray[$row['classification_id']];
                     }
+                    foreach ($update as &$row) {
+                        $row['type_name'] = $ccaTypeArray[$row['type_id']];
+                        $row['classification_name'] = $ccaClassificationArray[$row['classification_id']];
+                    }
                     $this->session->set_flashdata('imported', $import);
+                    $this->session->set_flashdata('updated', $update);
                     redirect('cca/import');
                 } else {
-                    $this->session->set_flashdata('error', 'Error updating database!');
+                    $this->session->set_flashdata('error', 'Nothing imported!');
                     redirect('cca/import');
                 }
             }
@@ -189,6 +214,9 @@ class Cca extends MY_Controller {
 
         if ($this->session->imported) {
             $data['imported'] = $this->session->imported;
+        }
+        if ($this->session->updated) {
+            $data['updated'] = $this->session->updated;
         }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
