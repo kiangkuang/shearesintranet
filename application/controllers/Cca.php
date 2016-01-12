@@ -16,16 +16,17 @@ class Cca extends MY_Controller {
         $this->load->library('cca_library');
     }
 
-    public function userCca()
+    public function points()
     {
         $data = [];
 
         $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
         $data['totalPoints'] = $this->memberships_model->getTotalPointsByAccountId($this->account->id);
 
-        //$data['mainMenu'] = 'myCca';
+        $data['mainMenu'] = 'myCca';
+        $data['subMenu'] = 'points';
         $data['this'] = $this;
-        $this->twig->display('cca/userCca',$data);
+        $this->twig->display('cca/points',$data);
     }
 
     public function view($search = null)

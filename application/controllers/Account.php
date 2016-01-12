@@ -10,6 +10,17 @@ class Account extends MY_Controller {
         $this->load->library('account_library');
     }
 
+    public function index()
+    {
+        if (!$this->isLoggedIn) {
+            $this->login();
+        } elseif ($this->account->is_admin) {
+            redirect('/account/view');
+        } else {
+            redirect('/cca/points');
+        }
+    }
+
     public function login()
     {
         if ($this->isLoggedIn) {
