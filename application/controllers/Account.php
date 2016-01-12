@@ -17,7 +17,8 @@ class Account extends MY_Controller {
         } elseif ($this->account->is_admin) {
             redirect('/account/view');
         } else {
-            redirect('/cca/points');
+            $data['this'] = $this;
+            $this->twig->display('account/home', $data);
         }
     }
 
