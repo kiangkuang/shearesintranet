@@ -21,6 +21,11 @@ class Cca extends MY_Controller {
     {
         if ($this->account->is_admin) {
             redirect('/');
+        } else if (!$this->settings->allow_points) {
+            $data['mainMenu'] = 'myCca';
+            $data['subMenu'] = 'points';
+            $data['this'] = $this;
+            return $this->twig->display('settings/disabled', $data);
         }
 
         $data = [];
@@ -31,13 +36,18 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'myCca';
         $data['subMenu'] = 'points';
         $data['this'] = $this;
-        $this->twig->display('cca/points',$data);
+        $this->twig->display('cca/points', $data);
     }
 
     public function ranking()
     {
-        if ($this->account->is_admin || !$this->settings->allow_ranking) {
+        if ($this->account->is_admin) {
             redirect('/');
+        } else if (!$this->settings->allow_ranking) {
+            $data['mainMenu'] = 'myCca';
+            $data['subMenu'] = 'ranking';
+            $data['this'] = $this;
+            return $this->twig->display('settings/disabled', $data);
         }
 
         $input = $this->input->post();
@@ -76,7 +86,7 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'myCca';
         $data['subMenu'] = 'ranking';
         $data['this'] = $this;
-        $this->twig->display('cca/ranking',$data);
+        $this->twig->display('cca/ranking', $data);
     }
 
     public function view($search = null)
@@ -98,7 +108,7 @@ class Cca extends MY_Controller {
         $data['subMenu'] = 'cca';
         $data['subSubMenu'] = 'viewCca';
         $data['this'] = $this;
-        $this->twig->display('cca/view',$data);
+        $this->twig->display('cca/view', $data);
     }
 
     public function edit($id = null)
@@ -126,7 +136,7 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['this'] = $this;
-        $this->twig->display('cca/edit',$data);
+        $this->twig->display('cca/edit', $data);
     }
 
     public function update()
@@ -276,7 +286,7 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['this'] = $this;
-        $this->twig->display('cca/import',$data);
+        $this->twig->display('cca/import', $data);
     }
 
     public function importLastYear()

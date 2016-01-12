@@ -39,6 +39,7 @@ class Settings extends MY_Controller {
 
         $input['allow_login'] = isset($input['allow_login']) ? 1 : 0;
         $input['allow_ranking'] = isset($input['allow_ranking']) ? 1 : 0;
+        $input['allow_points'] = isset($input['allow_points']) ? 1 : 0;
 
         $result = $this->settings_model->update($input);
         if ($result) {

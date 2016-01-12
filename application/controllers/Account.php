@@ -30,7 +30,7 @@ class Account extends MY_Controller {
         $data = [];
 
         $data['this'] = $this;
-        $this->twig->display('account/login',$data);
+        $this->twig->display('account/login', $data);
     }
 
     public function processLogin()
@@ -395,7 +395,7 @@ class Account extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
         $data['this'] = $this;
-        $this->twig->display('account/import',$data);
+        $this->twig->display('account/import', $data);
     }
 
 }

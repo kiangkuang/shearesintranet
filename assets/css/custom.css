@@ -8,3 +8,8 @@
   box-shadow: none;
 }
 
+@media (max-width: 991px) {
+  .error-page>.error-content>p {
+    text-align: center;
+  }
+}

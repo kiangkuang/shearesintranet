@@ -41,6 +41,8 @@
                 {% endfor %}
               </ul>
               <p class="lead text-light-blue"><b>Total Points <span class="pull-right">{{ totalPoints.points }}</span></b></p>
+            {% else %}
+              <center><p class="lead text-muted"><b>No CCA</b></p></center>
             {% endif %}
           </div><!-- /.box-body -->
         </div><!-- /.box -->
