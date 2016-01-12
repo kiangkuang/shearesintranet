@@ -13,7 +13,7 @@ class Cca extends MY_Controller {
         $this->load->model('ccatypes_model');
         $this->load->model('ccaclassifications_model');
         $this->load->model('memberships_model');
-        $this->load->model('rankings_model');
+        $this->load->model('preferences_model');
         $this->load->library('cca_library');
     }
 
@@ -39,13 +39,13 @@ class Cca extends MY_Controller {
         $this->twig->display('cca/points', $data);
     }
 
-    public function ranking()
+    public function preference()
     {
         if ($this->account->is_admin) {
             redirect('/');
-        } else if (!$this->settings->allow_ranking) {
+        } else if (!$this->settings->allow_preference) {
             $data['mainMenu'] = 'myCca';
-            $data['subMenu'] = 'ranking';
+            $data['subMenu'] = 'preference';
             $data['this'] = $this;
             return $this->twig->display('settings/disabled', $data);
         }
@@ -54,26 +54,26 @@ class Cca extends MY_Controller {
 
         if ($input && isset($input['id'])) {
             // update
-            $result = $this->rankings_model->update($input);
+            $result = $this->preferences_model->update($input);
             if ($result) {
-                $this->session->set_flashdata('success', 'Ranking saved!');
-                redirect('/cca/ranking');
+                $this->session->set_flashdata('success', 'Preference saved!');
+                redirect('/cca/preference');
             } else {
                 $this->session->set_flashdata('error', 'An error has occurred!');
-                redirect('/cca/ranking');
+                redirect('/cca/preference');
             }
         } elseif ($input) {
             // add
             $input['account_id'] = $this->account->id;
             $input['acad_year'] = ACAD_YEAR;
 
-            $result = $this->rankings_model->insert($input);
+            $result = $this->preferences_model->insert($input);
             if ($result) {
-                $this->session->set_flashdata('success', 'Ranking saved!');
-                redirect('/cca/ranking');
+                $this->session->set_flashdata('success', 'Preference saved!');
+                redirect('/cca/preference');
             } else {
                 $this->session->set_flashdata('error', 'An error has occurred!');
-                redirect('/cca/ranking');
+                redirect('/cca/preference');
             }
         }
 
@@ -81,12 +81,12 @@ class Cca extends MY_Controller {
 
         // committee type_id = 2
         $data['ccas'] = $this->ccas_model->getByTypeIdAcadYear(2, ACAD_YEAR);
-        $data['ranking'] = $this->rankings_model->getByAccountId($this->account->id)[0];
+        $data['preference'] = $this->preferences_model->getByAccountId($this->account->id)[0];
 
         $data['mainMenu'] = 'myCca';
-        $data['subMenu'] = 'ranking';
+        $data['subMenu'] = 'preference';
         $data['this'] = $this;
-        $this->twig->display('cca/ranking', $data);
+        $this->twig->display('cca/preference', $data);
     }
 
     public function view($search = null)

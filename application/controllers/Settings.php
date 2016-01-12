@@ -8,7 +8,7 @@ class Settings extends MY_Controller {
         $this->load->model('accounts_model');
         $this->load->model('ccas_model');
         $this->load->model('settings_model');
-        $this->load->model('rankings_model');
+        $this->load->model('preferences_model');
     }
 
     public function index()
@@ -38,7 +38,7 @@ class Settings extends MY_Controller {
         $input = $this->input->post();
 
         $input['allow_login'] = isset($input['allow_login']) ? 1 : 0;
-        $input['allow_ranking'] = isset($input['allow_ranking']) ? 1 : 0;
+        $input['allow_preference'] = isset($input['allow_preference']) ? 1 : 0;
         $input['allow_points'] = isset($input['allow_points']) ? 1 : 0;
 
         $result = $this->settings_model->update($input);
@@ -63,13 +63,13 @@ class Settings extends MY_Controller {
         redirect('/account/view');
     }
 
-    public function exportRanking()
+    public function export()
     {
-        $csvFile = new Keboola\Csv\CsvFile('downloads/test-output.csv');
+        $csvFile = new Keboola\Csv\CsvFile('downloads/committee_preference.csv');
 
         // committee type_id = 2
         $ccas = $this->ccas_model->getByTypeIdAcadYear(2, ACAD_YEAR);
-        $rankings = $this->rankings_model->getByAcadYearJoinAccountName(ACAD_YEAR);
+        $preferences = $this->preferences_model->getByAcadYearJoinAccountName(ACAD_YEAR);
 
         $ccasArray[0] = '-';
         foreach ($ccas as $cca) {
@@ -77,18 +77,18 @@ class Settings extends MY_Controller {
         }
 
         $csvFile->writeRow(['Name', '1st Choice', '2nd Choice', '3rd Choice', '4th Choice', '5th Choice']);
-        foreach ($rankings as $ranking) {
+        foreach ($preferences as $preference) {
             $csvFile->writeRow([
-                $ranking->account_name,
-                $ccasArray[$ranking->rank_1],
-                $ccasArray[$ranking->rank_2],
-                $ccasArray[$ranking->rank_3],
-                $ccasArray[$ranking->rank_4],
-                $ccasArray[$ranking->rank_5]
+                $preference->account_name,
+                $ccasArray[$preference->rank_1],
+                $ccasArray[$preference->rank_2],
+                $ccasArray[$preference->rank_3],
+                $ccasArray[$preference->rank_4],
+                $ccasArray[$preference->rank_5]
             ]);
         }
 
-        force_download('downloads/test-output.csv', NULL);
+        force_download('downloads/committee_preference.csv', NULL);
     }
 
 }
