@@ -36,6 +36,19 @@ class MY_Model extends CI_Model {
 
         return false;
     }
+    
+    public function getByAccountId($account_id)
+    {
+        $this->db->where('account_id', $account_id);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
 
     // used by account/edit and cca/edit
     public function getByIdAcadYear($id, $acad_year)

@@ -115,21 +115,22 @@
                       <small>Optional. Only set for users who have trouble logging in using NUSNET account.</small>
                     </div>
                   </div>
-                    <div class="col-md-6 password-fields" {{ not account.has_password ? 'style="display: none;"' }}>
-                      <!-- text input -->
-                      <div class="form-group">
-                        <label>New Password</label>
-                        <input type="password" class="form-control" name="password" placeholder="Password" {{ account.has_password ? 'required' : 'disabled' }}>
-                      </div>
-                    </div>
 
-                    <div class="col-md-6 password-fields" {{ not account.has_password ? 'style="display: none;"' }}>
-                      <!-- text input -->
-                      <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" class="form-control" name="password2" placeholder="Confirm Password" {{ account.has_password ? 'required' : 'disabled' }}>
-                      </div>
+                  <div class="col-md-6 password-fields" {{ not account.has_password ? 'style="display: none;"' }}>
+                    <!-- text input -->
+                    <div class="form-group">
+                      <label>New Password</label>
+                      <input type="password" class="form-control" name="password" placeholder="Password" {{ account.has_password ? 'required' : 'disabled' }}>
                     </div>
+                  </div>
+
+                  <div class="col-md-6 password-fields" {{ not account.has_password ? 'style="display: none;"' }}>
+                    <!-- text input -->
+                    <div class="form-group">
+                      <label>Confirm Password</label>
+                      <input type="password" class="form-control" name="password2" placeholder="Confirm Password" {{ account.has_password ? 'required' : 'disabled' }}>
+                    </div>
+                  </div>
                 </div>
               </div><!-- /.box-body -->
               <div class="box-footer">

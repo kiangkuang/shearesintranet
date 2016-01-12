@@ -1,0 +1,124 @@
+{% extends '_layouts/template.twig' %}
+
+{% block content_header %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      My CCA
+      <small>
+        Committee Ranking
+      </small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="/cca/view">My CCA</a></li>
+      <li class="active">
+        Committee Ranking
+      </li>
+    </ol>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- column -->
+      <div class="col-xs-12">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Committee Ranking
+            </h3>
+          </div><!-- /.box-header -->
+
+          <form role="form" action="/cca/ranking" method="post">
+            <div class="box-body">
+              {% if ranking %}
+                <input type="hidden" name="id" value="{{ ranking.id }}">
+              {% endif %}
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>1st Choice</label>
+                    <select class="form-control" name="rank_1">
+                      <option value="0">-</option>
+                      {% for cca in ccas %}
+                        <option value="{{ cca.id }}" {{ cca.id == ranking.rank_1 ? 'selected' }}>{{ cca.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>2nd Choice</label>
+                    <select class="form-control" name="rank_2">
+                      <option value="0">-</option>
+                      {% for cca in ccas %}
+                        <option value="{{ cca.id }}" {{ cca.id == ranking.rank_2 ? 'selected' }}>{{ cca.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>3rd Choice</label>
+                    <select class="form-control" name="rank_3">
+                      <option value="0">-</option>
+                      {% for cca in ccas %}
+                        <option value="{{ cca.id }}" {{ cca.id == ranking.rank_3 ? 'selected' }}>{{ cca.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>4th Choice</label>
+                    <select class="form-control" name="rank_4">
+                      <option value="0">-</option>
+                      {% for cca in ccas %}
+                        <option value="{{ cca.id }}" {{ cca.id == ranking.rank_4 ? 'selected' }}>{{ cca.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- select -->
+                  <div class="form-group">
+                    <label>5th Choice</label>
+                    <select class="form-control" name="rank_5">
+                      <option value="0">-</option>
+                      {% for cca in ccas %}
+                        <option value="{{ cca.id }}" {{ cca.id == ranking.rank_5 ? 'selected' }}>{{ cca.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button class="btn btn-success" type="submit">
+                <i class="fa fa-save"></i> Save
+              </button>
+              <a class="btn btn-default" href="/cca/view">
+                <i class="fa fa-ban"></i> Cancel
+              </a>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div><!--/.col -->
+    </div>   <!-- /.row -->
+  </section><!-- /.content -->
+{% endblock %}

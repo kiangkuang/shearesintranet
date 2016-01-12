@@ -23,6 +23,10 @@ assets/*
 
 uploads/*
 !uploads/index.html
+
+downloads/*
+!downloads/index.html
+
 application/libraries/Twig.php
 
 # IDE Files

@@ -13,11 +13,16 @@ class Cca extends MY_Controller {
         $this->load->model('ccatypes_model');
         $this->load->model('ccaclassifications_model');
         $this->load->model('memberships_model');
+        $this->load->model('rankings_model');
         $this->load->library('cca_library');
     }
 
     public function points()
     {
+        if ($this->account->is_admin) {
+            redirect('/');
+        }
+
         $data = [];
 
         $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
@@ -27,6 +32,51 @@ class Cca extends MY_Controller {
         $data['subMenu'] = 'points';
         $data['this'] = $this;
         $this->twig->display('cca/points',$data);
+    }
+
+    public function ranking()
+    {
+        if ($this->account->is_admin || !$this->settings->allow_ranking) {
+            redirect('/');
+        }
+
+        $input = $this->input->post();
+
+        if ($input && isset($input['id'])) {
+            // update
+            $result = $this->rankings_model->update($input);
+            if ($result) {
+                $this->session->set_flashdata('success', 'Ranking saved!');
+                redirect('/cca/ranking');
+            } else {
+                $this->session->set_flashdata('error', 'An error has occurred!');
+                redirect('/cca/ranking');
+            }
+        } elseif ($input) {
+            // add
+            $input['account_id'] = $this->account->id;
+            $input['acad_year'] = ACAD_YEAR;
+
+            $result = $this->rankings_model->insert($input);
+            if ($result) {
+                $this->session->set_flashdata('success', 'Ranking saved!');
+                redirect('/cca/ranking');
+            } else {
+                $this->session->set_flashdata('error', 'An error has occurred!');
+                redirect('/cca/ranking');
+            }
+        }
+
+        $data = [];
+
+        // committee type_id = 2
+        $data['ccas'] = $this->ccas_model->getByTypeIdAcadYear(2, ACAD_YEAR);
+        $data['ranking'] = $this->rankings_model->getByAccountId($this->account->id)[0];
+
+        $data['mainMenu'] = 'myCca';
+        $data['subMenu'] = 'ranking';
+        $data['this'] = $this;
+        $this->twig->display('cca/ranking',$data);
     }
 
     public function view($search = null)
