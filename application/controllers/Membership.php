@@ -49,7 +49,7 @@ class Membership extends MY_Controller {
         if ($result) {
             $this->session->set_flashdata('success', count($input).' membership successfully added!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         if ($type === 'cca') {
             redirect('/cca/edit/'.$this->input->post('cca_id'));
@@ -76,7 +76,7 @@ class Membership extends MY_Controller {
         if ($result !== false) {
             $this->session->set_flashdata('success', 'Memberships successfully updated!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         
         if ($type === 'cca') {
@@ -98,7 +98,7 @@ class Membership extends MY_Controller {
         if ($result) {
             $this->session->set_flashdata('success', 'Membership successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
 
         redirect($redirect);

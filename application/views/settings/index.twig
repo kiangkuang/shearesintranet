@@ -40,22 +40,44 @@
                     <small>Automatically changes every 1<sup>st</sup> August.</small>
                   </div>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-xs-12">
                   <!-- select -->
                   <div class="form-group">
                     <label>Resident Login</label>
-                    <select class="form-control" name="allow_login">
-                      <option value="1" {{ settings.allow_login == 1 ? 'selected' }}>Allow</option>
-                      <option value="0" {{ settings.allow_login == 0 ? 'selected' }}>Disallow</option>
-                    </select>
+                    <br>
+                    <input type="checkbox" class="bootstrap-switch" name="allow_login" {{ settings.allow_login ? 'checked' }}>
+                    <br>
                     <small>
                       Allow/disallow residents to login.<br>
                       When disallowed, they will receive login disabled error when using NUSNET ID login, or incorrect username/password error when using alternative login.<br>
                       Recommended to disallow until the points are ready for public viewing.<br>
                       Does not affect admin.
                     </small>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Committee Preference</label>
+                    <br>
+                    <input type="checkbox" class="bootstrap-switch" name="allow_preference" {{ settings.allow_preference ? 'checked' }}>
+                    <br>
+                    <small>Allows/disallow residents to rank their committee allocation preference.</small>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Export Committee Preference to CSV file</label>
+                    <br>
+                    <a href="/settings/export" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Export</a>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Points Release</label>
+                    <br>
+                    <input type="checkbox" class="bootstrap-switch" name="allow_points" {{ settings.allow_points ? 'checked' }}>
+                    <br>
+                    <small>Allows/disallow residents to view their points.</small>
                   </div>
                 </div>
               </div>

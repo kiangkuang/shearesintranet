@@ -28,7 +28,7 @@
         {% if imported %}
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">Imported Data</h3>
+              <h3 class="box-title">Added CCAs</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
               <table class="table table-bordered table-striped data-table">
@@ -41,6 +41,41 @@
                 </thead>
                 <tbody>
                   {% for row in imported %}
+                    <tr>
+                      <td>{{ row.name }}</td>
+                      <td>{{ row.type_name }}</td>
+                      <td>{{ row.classification_name }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Classification</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        {% endif %}
+
+        {% if updated %}
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Updated CCAs</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered table-striped data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Classification</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in updated %}
                     <tr>
                       <td>{{ row.name }}</td>
                       <td>{{ row.type_name }}</td>
@@ -77,10 +112,11 @@
                     <input type="file" id="exampleInputFile" name="file">
                     <p class="help-block">CSV format only. Max 2MB file size.</p>
                       <ul>
-                        <li>Sample CCA CSV file available.<br><a href="/sample/cca-sample.csv" class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download</a></li>
+                        <li>Sample CCA CSV file available.<br><a href="/sample/cca-sample.csv" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Download</a></li>
                         <li><code>Type</code> and <code>Classification</code> column entries must match entries listed in <a href="/ccatype/view">CCA Types</a> and <a href="/ccaclassification/view">CCA Classifications</a>.</li>
                         <li>If <code>Type</code> or <code>Classification</code> entry is not found, it will default to <code>None</code>.</li>
                         <li>It is <strong>case-sensitive</strong>.</li>
+                        <li>If <code>Name</code> already exists, the existing CCA will be updated with the imported data.</li>
                       </ul>
                   </div>
                 </div>

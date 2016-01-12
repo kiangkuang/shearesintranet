@@ -4,15 +4,16 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      CCA
+      My CCA
       <small>
-        {{ this.account.name }}
+        Points
       </small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="/cca/view">My CCA</a></li>
       <li class="active">
-        CCA
+        Points
       </li>
     </ol>
         </section>
@@ -41,6 +42,8 @@
                 {% endfor %}
               </ul>
               <p class="lead text-light-blue"><b>Total Points <span class="pull-right">{{ totalPoints.points }}</span></b></p>
+            {% else %}
+              <center><p class="lead text-muted"><b>No CCA</b></p></center>
             {% endif %}
           </div><!-- /.box-body -->
         </div><!-- /.box -->

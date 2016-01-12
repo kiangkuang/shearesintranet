@@ -10,6 +10,17 @@ class Account extends MY_Controller {
         $this->load->library('account_library');
     }
 
+    public function index()
+    {
+        if (!$this->isLoggedIn) {
+            $this->login();
+        } elseif ($this->account->is_admin) {
+            redirect('/account/view');
+        } else {
+            redirect('/cca/points');
+        }
+    }
+
     public function login()
     {
         if ($this->isLoggedIn) {
@@ -19,7 +30,7 @@ class Account extends MY_Controller {
         $data = [];
 
         $data['this'] = $this;
-        $this->twig->display('account/login',$data);
+        $this->twig->display('account/login', $data);
     }
 
     public function processLogin()
@@ -77,7 +88,7 @@ class Account extends MY_Controller {
             else {
                 if ($openid->validate()) {
                     $openIdAttributes = $openid->getAttributes();
-                    $account = $this->accounts_model->getByUser($openIdAttributes['namePerson/friendly']);
+                    $account = $this->accounts_model->getByUserAcadYear($openIdAttributes['namePerson/friendly'], ACAD_YEAR);
 
                     if ($account) {
                         $this->session->set_userdata('accountId', $account->id);
@@ -112,7 +123,7 @@ class Account extends MY_Controller {
 
         $data = [];
 
-        $accounts = $this->accounts_model->getByAcadYear();
+        $accounts = $this->accounts_model->getByAcadYear($this->session->acadYearView);
         if ($accounts) {
             $accounts = $this->account_library->appendTotalPoints($accounts);
             $accounts = $this->account_library->appendMemberships($accounts);
@@ -134,7 +145,7 @@ class Account extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['account'] = $this->accounts_model->getByIdAcadYear($id);
+            $data['account'] = $this->accounts_model->getByIdAcadYear($id, $this->session->acadYearView);
             if ($data['account'] === false) {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');
@@ -165,7 +176,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
                 redirect('/account/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit/'.$input['id']);
             }
         } else {
@@ -177,7 +188,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Account successfully created!');
                 redirect('/account/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit');
             }
         }
@@ -212,7 +223,7 @@ class Account extends MY_Controller {
             $this->session->set_flashdata('success', 'Account password successfully updated!');
             redirect('/account/edit/'.$input['id']);
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
             redirect('/account/edit/'.$input['id']);
         }
     }
@@ -244,7 +255,7 @@ class Account extends MY_Controller {
                     $this->session->set_flashdata('success', 'Password successfully changed!');
                     redirect('/');
                 } else {
-                    $this->session->set_flashdata('error', 'An error has occured!');
+                    $this->session->set_flashdata('error', 'An error has occurred!');
                     redirect('/changepassword');
                 }
             }
@@ -279,7 +290,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Password successfully removed!');
                 redirect('/account/edit/'.$id);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit/'.$id);
             }
         }
@@ -296,7 +307,7 @@ class Account extends MY_Controller {
         if ($result && $result2) {
             $this->session->set_flashdata('success', 'Account successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/account/view');
     }
@@ -321,6 +332,8 @@ class Account extends MY_Controller {
             } else {
                 $upload = $this->upload->data();
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                $import = [];
+                $update = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
                     if ($row[0] !== 'Name' && $row[1] !== 'NUSNET ID' && $row[0] !== '') {
@@ -334,16 +347,34 @@ class Account extends MY_Controller {
                         $importRow['contact'] = $row[4];
                         $importRow['acad_year'] = ACAD_YEAR;
 
-                        $import[] = $importRow;
+                        $existingRow = $this->accounts_model->getByUserAcadYear($importRow['user'], ACAD_YEAR);
+                        if ($existingRow) {
+                            $importRow['id'] = $existingRow->id;
+                            $update[] = $importRow;
+                        } else {
+                            unset($importRow['id']);
+                            $import[] = $importRow;
+                        }
                     }
                 }
-                $result = $this->accounts_model->insertBatch($import);
-                if ($result !== false) {
-                    $this->session->set_flashdata('success', $result . ' Accounts imported!');
+
+                if ($import) {
+                    $importResult = $this->accounts_model->insertBatch($import);
+                }
+                if ($update) {
+                    $updateResult = $this->accounts_model->updateBatch($update);
+                }
+
+                if (isset($importResult) && $importResult !== false || isset($updateResult) && $updateResult !== false) {
+                    $successMsg = count($import) ? count($import) . ' new accounts added!<br>' : '';
+                    $successMsg .= count($update) ? count($update) . ' existing accounts updated!' : '';
+
+                    $this->session->set_flashdata('success', $successMsg);
                     $this->session->set_flashdata('imported', $import);
+                    $this->session->set_flashdata('updated', $update);
                     redirect('account/import');
                 } else {
-                    $this->session->set_flashdata('error', 'Error updating database!');
+                    $this->session->set_flashdata('error', 'Nothing imported!');
                     redirect('account/import');
                 }
             }
@@ -354,6 +385,9 @@ class Account extends MY_Controller {
         if ($this->session->imported) {
             $data['imported'] = $this->session->imported;
         }
+        if ($this->session->updated) {
+            $data['updated'] = $this->session->updated;
+        }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
@@ -361,7 +395,7 @@ class Account extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
         $data['this'] = $this;
-        $this->twig->display('account/import',$data);
+        $this->twig->display('account/import', $data);
     }
 
 }

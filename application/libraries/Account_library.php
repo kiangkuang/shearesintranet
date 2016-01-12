@@ -44,7 +44,7 @@ class Account_library
     public function getUnjoinedCcas($memberships)
     {
         $joinedCcaIds = $memberships? pluck($memberships, 'cca_id') : [];
-        $ccas = $this->CI->ccas_model->getAllOrderedByName();
+        $ccas = $this->CI->ccas_model->getByAcadYearOrderedByName(ACAD_YEAR);
 
         // remove joined CCAs from array
         if ($ccas) {
