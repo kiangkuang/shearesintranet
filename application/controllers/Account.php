@@ -169,6 +169,9 @@ class Account extends MY_Controller {
         }
 
         $input = $this->input->post();
+        foreach ($input as &$row) {
+            $row = trim($row);
+        }
 
         if (isset($input['id'])) {
             // update
@@ -337,15 +340,15 @@ class Account extends MY_Controller {
                 $update = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
-                    if ($row[0] !== 'Name' && $row[1] !== 'NUSNET ID' && $row[0] !== '') {
-                        $importRow['user'] = $row[1];
+                    if (trim($row[0]) !== 'Name' && trim($row[1]) !== 'NUSNET ID' && trim($row[0]) !== '') {
+                        $importRow['user'] = trim($row[1]);
                         $importRow['key'] = time();
                         $importRow['password'] = sha1(''.$importRow['key']);
                         $importRow['has_password'] = 0;
-                        $importRow['name'] = $row[0];
-                        $importRow['room'] = $row[2];
-                        $importRow['email'] = $row[3];
-                        $importRow['contact'] = $row[4];
+                        $importRow['name'] = trim($row[0]);
+                        $importRow['room'] = trim($row[2]);
+                        $importRow['email'] = trim($row[3]);
+                        $importRow['contact'] = trim($row[4]);
                         $importRow['acad_year'] = ACAD_YEAR;
 
                         $existingRow = $this->accounts_model->getByUserAcadYear($importRow['user'], ACAD_YEAR);

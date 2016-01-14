@@ -1,0 +1,143 @@
+{% extends '_layouts/template.twig' %}
+
+{% block content_header %}
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Membership
+      <small>
+        Import
+      </small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="#">Membership</a></li>
+      <li class="active">
+        Import
+      </li>
+    </ol>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- column -->
+      <div class="col-xs-12">
+        {% if imported %}
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Added Memberships</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered table-striped data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Cca</th>
+                    <th>Role</th>
+                    <th>Points</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in imported %}
+                    <tr>
+                      <td>{{ row.account_name }}</td>
+                      <td>{{ row.cca_name }}</td>
+                      <td>{{ row.role }}</td>
+                      <td>{{ row.points }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Cca</th>
+                    <th>Role</th>
+                    <th>Points</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        {% endif %}
+
+        {% if updated %}
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Updated Memberships</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered table-striped data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Cca</th>
+                    <th>Role</th>
+                    <th>Points</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in updated %}
+                    <tr>
+                      <td>{{ row.account_name }}</td>
+                      <td>{{ row.cca_name }}</td>
+                      <td>{{ row.role }}</td>
+                      <td>{{ row.points }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Cca</th>
+                    <th>Role</th>
+                    <th>Points</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        {% endif %}
+
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Import from File
+            </h3>
+          </div><!-- /.box-header -->
+          <form role="form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="submit">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- file upload -->
+                  <div class="form-group">
+                    <label for="exampleInputFile">File input</label>
+                    <input type="file" id="exampleInputFile" name="file">
+                    <p class="help-block">CSV format only. Max 2MB file size.</p>
+                      <ul>
+                        <li>Sample Membership CSV file available.<br><a href="/sample/membership-sample.csv" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Download</a></li>
+                        <li><code>Name</code> and <code>CCA</code> column entries must match entries listed in <a href="/account/view">Accounts</a> and <a href="/cca/view">CCAs</a>.</li>
+                        <li>It is <strong>case-sensitive</strong>.</li>
+                        <li>If <code>Name</code> and <code>CCA</code> pair already exists, the existing membership will be updated with the imported data.</li>
+                      </ul>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <button class="btn btn-success" type="submit">
+                <i class="fa fa-upload"></i> Upload
+              </button>
+              <a class="btn btn-default" href="/cca/view">
+                <i class="fa fa-ban"></i> Cancel
+              </a>
+            </div>
+          </form>
+        </div><!-- /.box -->
+      </div><!--/.col -->
+    </div>   <!-- /.row -->
+  </section><!-- /.content -->
+{% endblock %}
