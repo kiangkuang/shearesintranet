@@ -131,7 +131,7 @@ class Membership extends MY_Controller {
             } else {
                 $accounts = $this->accounts_model->getByAcadYear(ACAD_YEAR);
                 foreach ($accounts as $account) {
-                    $accountArray[$account->id] = $account->name;
+                    $accountArray[$account->id] = $account->user;
                 }
 
                 $ccas = $this->ccas_model->getByAcadYear(ACAD_YEAR);
@@ -145,7 +145,7 @@ class Membership extends MY_Controller {
                 $update = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
-                    if (trim($row[0]) !== 'CCA' && trim($row[1]) !== 'Name' && trim($row[2]) !== 'Role' && trim($row[3]) !== 'Points' && trim($row[0]) !== '') {
+                    if (trim($row[0]) !== 'CCA' && trim($row[1]) !== 'NUSNET ID' && trim($row[2]) !== 'Role' && trim($row[3]) !== 'Points' && trim($row[0]) !== '') {
                         $importRow['cca_id'] = array_search(trim($row[0]), $ccaArray) ? : null; // defaults to None type
                         $importRow['account_id'] = array_search(trim($row[1]), $accountArray) ? : null;
                         $importRow['role'] = trim($row[2]);
@@ -181,11 +181,11 @@ class Membership extends MY_Controller {
 
                     $this->session->set_flashdata('success', $successMsg);
                     foreach ($import as &$row) {
-                        $row['account_name'] = $accountArray[$row['account_id']];
+                        $row['account_user'] = $accountArray[$row['account_id']];
                         $row['cca_name'] = $ccaArray[$row['cca_id']];
                     }
                     foreach ($update as &$row) {
-                        $row['account_name'] = $accountArray[$row['account_id']];
+                        $row['account_user'] = $accountArray[$row['account_id']];
                         $row['cca_name'] = $ccaArray[$row['cca_id']];
                     }
                     $this->session->set_flashdata('imported', $import);
