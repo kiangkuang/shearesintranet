@@ -152,6 +152,12 @@ class Cca extends MY_Controller {
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->ccas_model->getByNameAcadYear($input['name'], ACAD_YEAR);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/cca/edit/'.$input['id']);
+            }
+
             $result = $this->ccas_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully updated!');
@@ -162,6 +168,12 @@ class Cca extends MY_Controller {
             }
         } else {
             // add
+            $exist = $this->ccas_model->getByNameAcadYear($input['name'], ACAD_YEAR);
+            if ($exist){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/cca/edit');
+            }
+
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->ccas_model->insert($input);

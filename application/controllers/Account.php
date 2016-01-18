@@ -175,6 +175,12 @@ class Account extends MY_Controller {
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'NUSNET ID already exists!');
+                redirect('/account/edit/'.$input['id']);
+            }
+
             $result = $this->accounts_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
@@ -185,6 +191,12 @@ class Account extends MY_Controller {
             }
         } else {
             // add
+            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+            if ($exist){
+                $this->session->set_flashdata('error', 'NUSNET ID already exists!');
+                redirect('/account/edit');
+            }
+
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
