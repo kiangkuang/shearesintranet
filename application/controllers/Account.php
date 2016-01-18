@@ -350,9 +350,11 @@ class Account extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $processedUsers = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
                     if (trim($row[0]) !== 'Name' && trim($row[1]) !== 'NUSNET ID' && trim($row[0]) !== '') {
+                        $importRow = [];
                         $importRow['user'] = trim($row[1]);
                         $importRow['key'] = time();
                         $importRow['password'] = sha1(''.$importRow['key']);
@@ -363,14 +365,19 @@ class Account extends MY_Controller {
                         $importRow['contact'] = trim($row[4]);
                         $importRow['acad_year'] = ACAD_YEAR;
 
+                        if (array_search($importRow['user'], $processedUsers) !== false) {
+                            break;
+                        }
+
                         $existingRow = $this->accounts_model->getByUserAcadYear($importRow['user'], ACAD_YEAR);
                         if ($existingRow) {
                             $importRow['id'] = $existingRow->id;
                             $update[] = $importRow;
                         } else {
-                            unset($importRow['id']);
                             $import[] = $importRow;
                         }
+
+                        $processedUsers[] = $importRow['user'];
                     }
                 }
 

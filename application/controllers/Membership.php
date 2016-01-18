@@ -143,9 +143,11 @@ class Membership extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $processedMemberships = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
                     if (trim($row[0]) !== 'CCA' && trim($row[1]) !== 'NUSNET ID' && trim($row[2]) !== 'Role' && trim($row[3]) !== 'Points' && trim($row[0]) !== '') {
+                        $importRow = [];
                         $importRow['cca_id'] = array_search(trim($row[0]), $ccaArray) ? : null; // defaults to None type
                         $importRow['account_id'] = array_search(trim($row[1]), $accountArray) ? : null;
                         $importRow['role'] = trim($row[2]);
@@ -156,15 +158,20 @@ class Membership extends MY_Controller {
                             break;
                         }
 
+                        if (array_search($importRow['cca_id'] + ',' + $importRow['account_id'], $processedMemberships) !== false) {
+                            break;
+                        }
+
                         $existingRow = $this->memberships_model->getByAccountIdCcaIdAcadYear($importRow['account_id'], $importRow['cca_id'], ACAD_YEAR);
 
                         if ($existingRow) {
                             $importRow['id'] = $existingRow->id;
                             $update[] = $importRow;
                         } else {
-                            unset($importRow['id']);
                             $import[] = $importRow;
                         }
+
+                        $processedMemberships[] = $importRow['cca_id'] + ',' + $importRow['account_id'];
                     }
                 }
 

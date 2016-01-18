@@ -235,22 +235,29 @@ class Cca extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $processedNames = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
                     if (trim($row[0]) !== 'Name' && trim($row[1]) !== 'Type' && trim($row[2]) !== 'Classification' && trim($row[0]) !== '') {
+                        $importRow = [];
                         $importRow['name'] = trim($row[0]);
                         $importRow['type_id'] = array_search(trim($row[1]), $ccaTypeArray) ? : 1; // defaults to None type
                         $importRow['classification_id'] = array_search(trim($row[2]), $ccaClassificationArray) ? : 1; // defaults to None classification
                         $importRow['acad_year'] = ACAD_YEAR;
+
+                        if (array_search($importRow['name'], $processedNames) !== false) {
+                            break;
+                        }
 
                         $existingRow = $this->ccas_model->getByNameAcadYear($importRow['name'], ACAD_YEAR);
                         if ($existingRow) {
                             $importRow['id'] = $existingRow->id;
                             $update[] = $importRow;
                         } else {
-                            unset($importRow['id']);
                             $import[] = $importRow;
                         }
+
+                        $processedNames[] = $importRow['name'];
                     }
                 }
 
