@@ -9,6 +9,7 @@ class Settings extends MY_Controller {
         $this->load->model('ccas_model');
         $this->load->model('settings_model');
         $this->load->model('preferences_model');
+        $this->load->library('account_library');
     }
 
     public function index()
@@ -63,7 +64,18 @@ class Settings extends MY_Controller {
         redirect('/account/view');
     }
 
-    public function export()
+    public function export($type = null)
+    {
+        if ($type === 'preference') {
+            $this->exportPreference();
+        } elseif ($type === 'points') {
+            $this->exportPoints();
+        } else {
+            redirect('/');
+        }
+    }
+
+    public function exportPreference()
     {
         $csvFile = new Keboola\Csv\CsvFile('downloads/committee_preference.csv');
 
@@ -89,6 +101,31 @@ class Settings extends MY_Controller {
         }
 
         force_download('downloads/committee_preference.csv', NULL);
+    }
+
+    public function exportPoints()
+    {
+        $csvFile = new Keboola\Csv\CsvFile('downloads/points.csv');
+
+        $accounts = $this->accounts_model->getByAcadYear(ACAD_YEAR);
+        if ($accounts) {
+            $accounts = $this->account_library->appendTotalPoints($accounts);
+            $accounts = $this->account_library->appendMemberships($accounts);
+        }
+
+        $csvFile->writeRow(['Name', 'CCA', 'Points', 'Total Points']);
+        foreach ($accounts as $account) {
+            foreach ($account->memberships as $membership) {
+                $csvFile->writeRow([
+                    $account->name,
+                    $membership->cca_name,
+                    $membership->points,
+                    $account->totalPoints->points
+                ]);
+            }
+        }
+
+        force_download('downloads/points.csv', NULL);
     }
 
 }

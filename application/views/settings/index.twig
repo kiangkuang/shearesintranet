@@ -66,13 +66,6 @@
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label>Export Committee Preference to CSV file</label>
-                    <br>
-                    <a href="/settings/export" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Export</a>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
                     <label>Points Release</label>
                     <br>
                     <input type="checkbox" class="bootstrap-switch" name="allow_points" {{ settings.allow_points ? 'checked' }}>
@@ -123,6 +116,35 @@
               </button>
             </div>
           </form>
+        </div><!-- /.box -->
+      </div><!--/.col -->
+
+      <!-- column -->
+      <div class="col-md-6">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Export
+            </h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Export Committee Preference to CSV file</label>
+                  <br>
+                  <a href="/settings/export/preference" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Export</a>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Export all Points to CSV file</label>
+                  <br>
+                  <a href="/settings/export/points" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Export</a>
+                </div>
+              </div>
+            </div>
+          </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div><!--/.col -->
     </div>   <!-- /.row -->

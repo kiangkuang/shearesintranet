@@ -17,7 +17,8 @@ class Account extends MY_Controller {
         } elseif ($this->account->is_admin) {
             redirect('/account/view');
         } else {
-            redirect('/cca/points');
+            $data['this'] = $this;
+            $this->twig->display('account/home', $data);
         }
     }
 
@@ -168,9 +169,18 @@ class Account extends MY_Controller {
         }
 
         $input = $this->input->post();
+        foreach ($input as &$row) {
+            $row = trim($row);
+        }
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'NUSNET ID already exists!');
+                redirect('/account/edit/'.$input['id']);
+            }
+
             $result = $this->accounts_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
@@ -181,6 +191,12 @@ class Account extends MY_Controller {
             }
         } else {
             // add
+            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+            if ($exist){
+                $this->session->set_flashdata('error', 'NUSNET ID already exists!');
+                redirect('/account/edit');
+            }
+
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
@@ -334,27 +350,34 @@ class Account extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $processedUsers = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
-                    if ($row[0] !== 'Name' && $row[1] !== 'NUSNET ID' && $row[0] !== '') {
-                        $importRow['user'] = $row[1];
+                    if (trim($row[0]) !== 'Name' && trim($row[1]) !== 'NUSNET ID' && trim($row[0]) !== '') {
+                        $importRow = [];
+                        $importRow['user'] = trim($row[1]);
                         $importRow['key'] = time();
                         $importRow['password'] = sha1(''.$importRow['key']);
                         $importRow['has_password'] = 0;
-                        $importRow['name'] = $row[0];
-                        $importRow['room'] = $row[2];
-                        $importRow['email'] = $row[3];
-                        $importRow['contact'] = $row[4];
+                        $importRow['name'] = trim($row[0]);
+                        $importRow['room'] = trim($row[2]);
+                        $importRow['email'] = trim($row[3]);
+                        $importRow['contact'] = trim($row[4]);
                         $importRow['acad_year'] = ACAD_YEAR;
+
+                        if (array_search($importRow['user'], $processedUsers) !== false) {
+                            break;
+                        }
 
                         $existingRow = $this->accounts_model->getByUserAcadYear($importRow['user'], ACAD_YEAR);
                         if ($existingRow) {
                             $importRow['id'] = $existingRow->id;
                             $update[] = $importRow;
                         } else {
-                            unset($importRow['id']);
                             $import[] = $importRow;
                         }
+
+                        $processedUsers[] = $importRow['user'];
                     }
                 }
 

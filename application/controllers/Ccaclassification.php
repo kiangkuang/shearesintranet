@@ -57,10 +57,15 @@ class Ccaclassification extends MY_Controller {
         }
 
         $input = $this->input->post();
-        $input['shortname'] = strtolower(str_replace(' ', '-', $input['name']));
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->ccaclassifications_model->getByName($input['name']);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/ccaclassification/edit/'.$input['id']);
+            }
+
             $result = $this->ccaclassifications_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully updated!');
@@ -71,6 +76,12 @@ class Ccaclassification extends MY_Controller {
             }
         } else {
             // add
+            $exist = $this->ccaclassifications_model->getByName($input['name']);
+            if ($exist){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/ccaclassification/edit');
+            }
+
             $result = $this->ccaclassifications_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully created!');

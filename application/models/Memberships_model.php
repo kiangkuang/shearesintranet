@@ -9,14 +9,16 @@ class Memberships_model extends MY_Model {
         $this->db_name = 'memberships';
     }
     
-    public function getByCcaId($cca_id)
+    public function getByAccountIdCcaIdAcadYear($account_id, $cca_id, $acad_year)
     {
+        $this->db->where('account_id', $account_id);
         $this->db->where('cca_id', $cca_id);
+        $this->db->where('acad_year', $acad_year);
 
         $query = $this->db->get($this->db_name);
 
         if ($query->num_rows() > 0) {
-            return $query->result();
+            return $query->first_row();
         }
 
         return false;

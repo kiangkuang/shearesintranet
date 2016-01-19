@@ -146,10 +146,18 @@ class Cca extends MY_Controller {
         }
 
         $input = $this->input->post();
-        $input['shortname'] = strtolower(str_replace(' ', '-', $input['name']));
+        foreach ($input as &$row) {
+            $row = trim($row);
+        }
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->ccas_model->getByNameAcadYear($input['name'], ACAD_YEAR);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/cca/edit/'.$input['id']);
+            }
+
             $result = $this->ccas_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully updated!');
@@ -160,6 +168,12 @@ class Cca extends MY_Controller {
             }
         } else {
             // add
+            $exist = $this->ccas_model->getByNameAcadYear($input['name'], ACAD_YEAR);
+            if ($exist){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/cca/edit');
+            }
+
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->ccas_model->insert($input);
@@ -221,23 +235,29 @@ class Cca extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $processedNames = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
-                    if ($row[0] !== 'Name' && $row[1] !== 'Type' && $row[2] !== 'Classification' && $row[0] !== '') {
-                        $importRow['name'] = $row[0];
-                        $importRow['shortname'] = strtolower(str_replace(' ', '-', $row[0]));
-                        $importRow['type_id'] = array_search($row[1], $ccaTypeArray) ? : 1; // defaults to None type
-                        $importRow['classification_id'] = array_search($row[2], $ccaClassificationArray) ? : 1; // defaults to None classification
+                    if (trim($row[0]) !== 'Name' && trim($row[1]) !== 'Type' && trim($row[2]) !== 'Classification' && trim($row[0]) !== '') {
+                        $importRow = [];
+                        $importRow['name'] = trim($row[0]);
+                        $importRow['type_id'] = array_search(trim($row[1]), $ccaTypeArray) ? : 1; // defaults to None type
+                        $importRow['classification_id'] = array_search(trim($row[2]), $ccaClassificationArray) ? : 1; // defaults to None classification
                         $importRow['acad_year'] = ACAD_YEAR;
+
+                        if (array_search($importRow['name'], $processedNames) !== false) {
+                            break;
+                        }
 
                         $existingRow = $this->ccas_model->getByNameAcadYear($importRow['name'], ACAD_YEAR);
                         if ($existingRow) {
                             $importRow['id'] = $existingRow->id;
                             $update[] = $importRow;
                         } else {
-                            unset($importRow['id']);
                             $import[] = $importRow;
                         }
+
+                        $processedNames[] = $importRow['name'];
                     }
                 }
 

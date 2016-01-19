@@ -57,10 +57,15 @@ class Ccatype extends MY_Controller {
         }
 
         $input = $this->input->post();
-        $input['shortname'] = strtolower(str_replace(' ', '-', $input['name']));
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->ccatypes_model->getByName($input['name']);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/ccatype/edit/'.$input['id']);
+            }
+
             $result = $this->ccatypes_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Type successfully updated!');
@@ -71,6 +76,12 @@ class Ccatype extends MY_Controller {
             }
         } else {
             // add
+            $exist = $this->ccatypes_model->getByName($input['name']);
+            if ($exist){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/ccatype/edit');
+            }
+
             $result = $this->ccatypes_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Type successfully created!');
