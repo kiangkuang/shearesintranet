@@ -4,14 +4,14 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Account
+      Membership
       <small>
         Import
       </small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-      <li><a href="/account/view">Account</a></li>
+      <li><a href="#">Membership</a></li>
       <li class="active">
         Import
       </li>
@@ -28,37 +28,34 @@
         {% if imported %}
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">Added Accounts</h3>
+              <h3 class="box-title">Added Memberships</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
               <table class="table table-bordered table-striped data-table">
                 <thead>
                   <tr>
-                    <th>Name</th>
+                    <th>Cca</th>
                     <th>NUSNET ID</th>
-                    <th>Room</th>
-                    <th>Email</th>
-                    <th>Contact</th>
+                    <th>Role</th>
+                    <th>Points</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for row in imported %}
                     <tr>
-                      <td>{{ row.name }}</td>
-                      <td>{{ row.user }}</td>
-                      <td>{{ row.room }}</td>
-                      <td>{{ row.email }}</td>
-                      <td>{{ row.contact }}</td>
+                      <td>{{ row.cca_name }}</td>
+                      <td>{{ row.account_user }}</td>
+                      <td>{{ row.role }}</td>
+                      <td>{{ row.points }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th>Name</th>
+                    <th>Cca</th>
                     <th>NUSNET ID</th>
-                    <th>Room</th>
-                    <th>Email</th>
-                    <th>Contact</th>
+                    <th>Role</th>
+                    <th>Points</th>
                   </tr>
                 </tfoot>
               </table>
@@ -69,37 +66,34 @@
         {% if updated %}
           <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title">Updated Accounts</h3>
+              <h3 class="box-title">Updated Memberships</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
               <table class="table table-bordered table-striped data-table">
                 <thead>
                   <tr>
-                    <th>Name</th>
+                    <th>Cca</th>
                     <th>NUSNET ID</th>
-                    <th>Room</th>
-                    <th>Email</th>
-                    <th>Contact</th>
+                    <th>Role</th>
+                    <th>Points</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for row in updated %}
                     <tr>
-                      <td>{{ row.name }}</td>
-                      <td>{{ row.user }}</td>
-                      <td>{{ row.room }}</td>
-                      <td>{{ row.email }}</td>
-                      <td>{{ row.contact }}</td>
+                      <td>{{ row.cca_name }}</td>
+                      <td>{{ row.account_user }}</td>
+                      <td>{{ row.role }}</td>
+                      <td>{{ row.points }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th>Name</th>
+                    <th>Cca</th>
                     <th>NUSNET ID</th>
-                    <th>Room</th>
-                    <th>Email</th>
-                    <th>Contact</th>
+                    <th>Role</th>
+                    <th>Points</th>
                   </tr>
                 </tfoot>
               </table>
@@ -124,11 +118,11 @@
                     <input type="file" id="exampleInputFile" name="file">
                     <p class="help-block">CSV format only. Max 2MB file size.</p>
                       <ul>
-                        <li>Sample Account CSV file available.<br><a href="/sample/account-sample.csv" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Download</a></li>
-                        <li><code>Name</code> and <code>NUSNET ID</code> columns are compulsory.</li>
+                        <li>Sample Membership CSV file available.<br><a href="/sample/membership-sample.csv" class="btn btn-warning btn-sm"><i class="fa fa-download"></i> Download</a></li>
+                        <li><code>Name</code> and <code>CCA</code> column entries must match entries listed in <a href="/account/view">Accounts</a> and <a href="/cca/view">CCAs</a>.</li>
                         <li>It is <strong>case-sensitive</strong>.</li>
-                        <li>If <code>NUSNET ID</code> already exists, the existing account will be updated with the imported data.</li>
-                        <li>If there are rows with repeated <code>NUSNET ID</code>, only the first row will be imported.</li>
+                        <li>If <code>Name</code> and <code>CCA</code> pair already exists, the existing membership will be updated with the imported data.</li>
+                        <li>If there are rows with repeated <code>Name</code> and <code>CCA</code> pair, only the first row will be imported.</li>
                       </ul>
                   </div>
                 </div>
@@ -138,7 +132,7 @@
               <button class="btn btn-success" type="submit">
                 <i class="fa fa-upload"></i> Upload
               </button>
-              <a class="btn btn-default" href="/account/view">
+              <a class="btn btn-default" href="/cca/view">
                 <i class="fa fa-ban"></i> Cancel
               </a>
             </div>

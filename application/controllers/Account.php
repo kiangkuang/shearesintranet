@@ -10,6 +10,18 @@ class Account extends MY_Controller {
         $this->load->library('account_library');
     }
 
+    public function index()
+    {
+        if (!$this->isLoggedIn) {
+            $this->login();
+        } elseif ($this->account->is_admin) {
+            redirect('/account/view');
+        } else {
+            $data['this'] = $this;
+            $this->twig->display('account/home', $data);
+        }
+    }
+
     public function login()
     {
         if ($this->isLoggedIn) {
@@ -19,7 +31,7 @@ class Account extends MY_Controller {
         $data = [];
 
         $data['this'] = $this;
-        $this->twig->display('account/login',$data);
+        $this->twig->display('account/login', $data);
     }
 
     public function processLogin()
@@ -77,7 +89,7 @@ class Account extends MY_Controller {
             else {
                 if ($openid->validate()) {
                     $openIdAttributes = $openid->getAttributes();
-                    $account = $this->accounts_model->getByUser($openIdAttributes['namePerson/friendly']);
+                    $account = $this->accounts_model->getByUserAcadYear($openIdAttributes['namePerson/friendly'], ACAD_YEAR);
 
                     if ($account) {
                         $this->session->set_userdata('accountId', $account->id);
@@ -112,7 +124,7 @@ class Account extends MY_Controller {
 
         $data = [];
 
-        $accounts = $this->accounts_model->getByAcadYear();
+        $accounts = $this->accounts_model->getByAcadYear($this->session->acadYearView);
         if ($accounts) {
             $accounts = $this->account_library->appendTotalPoints($accounts);
             $accounts = $this->account_library->appendMemberships($accounts);
@@ -134,7 +146,7 @@ class Account extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['account'] = $this->accounts_model->getByIdAcadYear($id);
+            $data['account'] = $this->accounts_model->getByIdAcadYear($id, $this->session->acadYearView);
             if ($data['account'] === false) {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');
@@ -157,19 +169,34 @@ class Account extends MY_Controller {
         }
 
         $input = $this->input->post();
+        foreach ($input as &$row) {
+            $row = trim($row);
+        }
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'NUSNET ID already exists!');
+                redirect('/account/edit/'.$input['id']);
+            }
+
             $result = $this->accounts_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
                 redirect('/account/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit/'.$input['id']);
             }
         } else {
             // add
+            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+            if ($exist){
+                $this->session->set_flashdata('error', 'NUSNET ID already exists!');
+                redirect('/account/edit');
+            }
+
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
@@ -177,7 +204,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Account successfully created!');
                 redirect('/account/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit');
             }
         }
@@ -212,7 +239,7 @@ class Account extends MY_Controller {
             $this->session->set_flashdata('success', 'Account password successfully updated!');
             redirect('/account/edit/'.$input['id']);
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
             redirect('/account/edit/'.$input['id']);
         }
     }
@@ -244,7 +271,7 @@ class Account extends MY_Controller {
                     $this->session->set_flashdata('success', 'Password successfully changed!');
                     redirect('/');
                 } else {
-                    $this->session->set_flashdata('error', 'An error has occured!');
+                    $this->session->set_flashdata('error', 'An error has occurred!');
                     redirect('/changepassword');
                 }
             }
@@ -279,7 +306,7 @@ class Account extends MY_Controller {
                 $this->session->set_flashdata('success', 'Password successfully removed!');
                 redirect('/account/edit/'.$id);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/account/edit/'.$id);
             }
         }
@@ -296,7 +323,7 @@ class Account extends MY_Controller {
         if ($result && $result2) {
             $this->session->set_flashdata('success', 'Account successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/account/view');
     }
@@ -321,29 +348,56 @@ class Account extends MY_Controller {
             } else {
                 $upload = $this->upload->data();
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                $import = [];
+                $update = [];
+                $processedUsers = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
-                    if ($row[0] !== 'Name' && $row[1] !== 'NUSNET ID' && $row[0] !== '') {
-                        $importRow['user'] = $row[1];
+                    if (trim($row[0]) !== 'Name' && trim($row[1]) !== 'NUSNET ID' && trim($row[0]) !== '') {
+                        $importRow = [];
+                        $importRow['user'] = trim($row[1]);
                         $importRow['key'] = time();
                         $importRow['password'] = sha1(''.$importRow['key']);
                         $importRow['has_password'] = 0;
-                        $importRow['name'] = $row[0];
-                        $importRow['room'] = $row[2];
-                        $importRow['email'] = $row[3];
-                        $importRow['contact'] = $row[4];
+                        $importRow['name'] = trim($row[0]);
+                        $importRow['room'] = trim($row[2]);
+                        $importRow['email'] = trim($row[3]);
+                        $importRow['contact'] = trim($row[4]);
                         $importRow['acad_year'] = ACAD_YEAR;
 
-                        $import[] = $importRow;
+                        if (array_search($importRow['user'], $processedUsers) !== false) {
+                            break;
+                        }
+
+                        $existingRow = $this->accounts_model->getByUserAcadYear($importRow['user'], ACAD_YEAR);
+                        if ($existingRow) {
+                            $importRow['id'] = $existingRow->id;
+                            $update[] = $importRow;
+                        } else {
+                            $import[] = $importRow;
+                        }
+
+                        $processedUsers[] = $importRow['user'];
                     }
                 }
-                $result = $this->accounts_model->insertBatch($import);
-                if ($result !== false) {
-                    $this->session->set_flashdata('success', $result . ' Accounts imported!');
+
+                if ($import) {
+                    $importResult = $this->accounts_model->insertBatch($import);
+                }
+                if ($update) {
+                    $updateResult = $this->accounts_model->updateBatch($update);
+                }
+
+                if (isset($importResult) && $importResult !== false || isset($updateResult) && $updateResult !== false) {
+                    $successMsg = count($import) ? count($import) . ' new accounts added!<br>' : '';
+                    $successMsg .= count($update) ? count($update) . ' existing accounts updated!' : '';
+
+                    $this->session->set_flashdata('success', $successMsg);
                     $this->session->set_flashdata('imported', $import);
+                    $this->session->set_flashdata('updated', $update);
                     redirect('account/import');
                 } else {
-                    $this->session->set_flashdata('error', 'Error updating database!');
+                    $this->session->set_flashdata('error', 'Nothing imported!');
                     redirect('account/import');
                 }
             }
@@ -354,6 +408,9 @@ class Account extends MY_Controller {
         if ($this->session->imported) {
             $data['imported'] = $this->session->imported;
         }
+        if ($this->session->updated) {
+            $data['updated'] = $this->session->updated;
+        }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
@@ -361,7 +418,7 @@ class Account extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
         $data['this'] = $this;
-        $this->twig->display('account/import',$data);
+        $this->twig->display('account/import', $data);
     }
 
 }

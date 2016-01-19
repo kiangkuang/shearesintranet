@@ -9,10 +9,8 @@ class Ccas_model extends MY_Model {
         $this->db_name = 'ccas';
     }
     
-    public function getAllJoinTypeNameJoinClassificationName()
+    public function getByAcadYearJoinTypeNameJoinClassificationName($acad_year)
     {
-        $acad_year = $this->session->acadYearView;
-
         $this->db->select('ccas.*, ccatypes.name AS type_name, ccaclassifications.name AS classification_name');
         $this->db->where('acad_year', $acad_year);
         $this->db->join('ccatypes', 'ccas.type_id = ccatypes.id');
@@ -26,35 +24,17 @@ class Ccas_model extends MY_Model {
 
         return false;
     }
-
-    public function getByAcadYear($acad_year = ACAD_YEAR)
+    
+    public function getByTypeIdAcadYear($type_id, $acad_year)
     {
+        $this->db->where('type_id', $type_id);
         $this->db->where('acad_year', $acad_year);
-        $this->db->order_by('name', 'asc');
+        $this->db->order_by('name');
 
         $query = $this->db->get($this->db_name);
 
         if ($query->num_rows() > 0) {
             return $query->result();
-        }
-
-        return false;
-    }
-
-    // used by cca/edit
-    public function getByIdAcadYear($id, $acad_year = null)
-    {
-        if ($acad_year === null) {
-            $acad_year = $this->session->acadYearView;
-        }
-
-        $this->db->where('id', $id);
-        $this->db->where('acad_year', $acad_year);
-
-        $query = $this->db->get($this->db_name);
-
-        if ($query->num_rows() > 0) {
-            return $query->first_row();
         }
 
         return false;

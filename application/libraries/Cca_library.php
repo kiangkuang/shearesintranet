@@ -26,7 +26,7 @@ class Cca_library
     public function getUnjoinedAccounts($memberships)
     {
         $joinedAccountIds = $memberships? pluck($memberships, 'account_id') : [];
-        $accounts = $this->CI->accounts_model->getAllOrderedByName();
+        $accounts = $this->CI->accounts_model->getByAcadYearOrderedByName(ACAD_YEAR);
 
         // remove joined accounts from array
         if ($accounts) {

@@ -13,19 +13,80 @@ class Cca extends MY_Controller {
         $this->load->model('ccatypes_model');
         $this->load->model('ccaclassifications_model');
         $this->load->model('memberships_model');
+        $this->load->model('preferences_model');
         $this->load->library('cca_library');
     }
 
-    public function userCca()
+    public function points()
     {
+        if ($this->account->is_admin) {
+            redirect('/');
+        } else if (!$this->settings->allow_points) {
+            $data['mainMenu'] = 'myCca';
+            $data['subMenu'] = 'points';
+            $data['this'] = $this;
+            return $this->twig->display('settings/disabled', $data);
+        }
+
         $data = [];
 
         $data['memberships'] = $this->memberships_model->getByAccountIdJoinCcaName($this->account->id);
         $data['totalPoints'] = $this->memberships_model->getTotalPointsByAccountId($this->account->id);
 
-        //$data['mainMenu'] = 'myCca';
+        $data['mainMenu'] = 'myCca';
+        $data['subMenu'] = 'points';
         $data['this'] = $this;
-        $this->twig->display('cca/userCca',$data);
+        $this->twig->display('cca/points', $data);
+    }
+
+    public function preference()
+    {
+        if ($this->account->is_admin) {
+            redirect('/');
+        } else if (!$this->settings->allow_preference) {
+            $data['mainMenu'] = 'myCca';
+            $data['subMenu'] = 'preference';
+            $data['this'] = $this;
+            return $this->twig->display('settings/disabled', $data);
+        }
+
+        $input = $this->input->post();
+
+        if ($input && isset($input['id'])) {
+            // update
+            $result = $this->preferences_model->update($input);
+            if ($result) {
+                $this->session->set_flashdata('success', 'Preference saved!');
+                redirect('/cca/preference');
+            } else {
+                $this->session->set_flashdata('error', 'An error has occurred!');
+                redirect('/cca/preference');
+            }
+        } elseif ($input) {
+            // add
+            $input['account_id'] = $this->account->id;
+            $input['acad_year'] = ACAD_YEAR;
+
+            $result = $this->preferences_model->insert($input);
+            if ($result) {
+                $this->session->set_flashdata('success', 'Preference saved!');
+                redirect('/cca/preference');
+            } else {
+                $this->session->set_flashdata('error', 'An error has occurred!');
+                redirect('/cca/preference');
+            }
+        }
+
+        $data = [];
+
+        // committee type_id = 2
+        $data['ccas'] = $this->ccas_model->getByTypeIdAcadYear(2, ACAD_YEAR);
+        $data['preference'] = $this->preferences_model->getByAccountId($this->account->id)[0];
+
+        $data['mainMenu'] = 'myCca';
+        $data['subMenu'] = 'preference';
+        $data['this'] = $this;
+        $this->twig->display('cca/preference', $data);
     }
 
     public function view($search = null)
@@ -36,7 +97,7 @@ class Cca extends MY_Controller {
 
         $data = [];
 
-        $data['ccas'] = $this->ccas_model->getAllJoinTypeNameJoinClassificationName();
+        $data['ccas'] = $this->ccas_model->getByAcadYearJoinTypeNameJoinClassificationName($this->session->acadYearView);
 
         if ($this->input->get('search')) {
             $search = $this->input->get('search');
@@ -47,7 +108,7 @@ class Cca extends MY_Controller {
         $data['subMenu'] = 'cca';
         $data['subSubMenu'] = 'viewCca';
         $data['this'] = $this;
-        $this->twig->display('cca/view',$data);
+        $this->twig->display('cca/view', $data);
     }
 
     public function edit($id = null)
@@ -58,7 +119,7 @@ class Cca extends MY_Controller {
 
         $data = [];
         if ($id) {
-            $data['cca'] = $this->ccas_model->getByIdAcadYear($id);
+            $data['cca'] = $this->ccas_model->getByIdAcadYear($id, $this->session->acadYearView);
 
             if ($data['cca'] === false) {
                 $this->session->set_flashdata('error', 'CCA not found!');
@@ -75,7 +136,7 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['this'] = $this;
-        $this->twig->display('cca/edit',$data);
+        $this->twig->display('cca/edit', $data);
     }
 
     public function update()
@@ -85,20 +146,34 @@ class Cca extends MY_Controller {
         }
 
         $input = $this->input->post();
-        $input['shortname'] = strtolower(str_replace(' ', '-', $input['name']));
+        foreach ($input as &$row) {
+            $row = trim($row);
+        }
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->ccas_model->getByNameAcadYear($input['name'], ACAD_YEAR);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/cca/edit/'.$input['id']);
+            }
+
             $result = $this->ccas_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA successfully updated!');
                 redirect('/cca/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/cca/edit/'.$input['id']);
             }
         } else {
             // add
+            $exist = $this->ccas_model->getByNameAcadYear($input['name'], ACAD_YEAR);
+            if ($exist){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/cca/edit');
+            }
+
             $input['acad_year'] = ACAD_YEAR;
 
             $result = $this->ccas_model->insert($input);
@@ -106,7 +181,7 @@ class Cca extends MY_Controller {
                 $this->session->set_flashdata('success', 'CCA successfully created!');
                 redirect('/cca/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/cca/edit');
             }
         }
@@ -123,7 +198,7 @@ class Cca extends MY_Controller {
         if ($result && $result2) {
             $this->session->set_flashdata('success', 'CCA successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/cca/view');
     }
@@ -158,28 +233,59 @@ class Cca extends MY_Controller {
 
                 $upload = $this->upload->data();
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
+                $import = [];
+                $update = [];
+                $processedNames = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
-                    if ($row[0] !== 'Name' && $row[1] !== 'Type' && $row[2] !== 'Classification' && $row[0] !== '') {
-                        $importRow['name'] = $row[0];
-                        $importRow['shortname'] = strtolower(str_replace(' ', '-', $row[0]));
-                        $importRow['type_id'] = array_search($row[1], $ccaTypeArray) ? : 1; // defaults to None type
-                        $importRow['classification_id'] = array_search($row[2], $ccaClassificationArray) ? : 1; // defaults to None classification
+                    if (trim($row[0]) !== 'Name' && trim($row[1]) !== 'Type' && trim($row[2]) !== 'Classification' && trim($row[0]) !== '') {
+                        $importRow = [];
+                        $importRow['name'] = trim($row[0]);
+                        $importRow['type_id'] = array_search(trim($row[1]), $ccaTypeArray) ? : 1; // defaults to None type
+                        $importRow['classification_id'] = array_search(trim($row[2]), $ccaClassificationArray) ? : 1; // defaults to None classification
                         $importRow['acad_year'] = ACAD_YEAR;
-                        $import[] = $importRow;
+
+                        if (array_search($importRow['name'], $processedNames) !== false) {
+                            break;
+                        }
+
+                        $existingRow = $this->ccas_model->getByNameAcadYear($importRow['name'], ACAD_YEAR);
+                        if ($existingRow) {
+                            $importRow['id'] = $existingRow->id;
+                            $update[] = $importRow;
+                        } else {
+                            $import[] = $importRow;
+                        }
+
+                        $processedNames[] = $importRow['name'];
                     }
                 }
-                $result = $this->ccas_model->insertBatch($import);
-                if ($result !== false) {
-                    $this->session->set_flashdata('success', $result . ' CCAs imported!');
+
+                if ($import) {
+                    $importResult = $this->ccas_model->insertBatch($import);
+                }
+                if ($update) {
+                    $updateResult = $this->ccas_model->updateBatch($update);
+                }
+
+                if (isset($importResult) && $importResult !== false || isset($updateResult) && $updateResult !== false) {
+                    $successMsg = count($import) ? count($import) . ' new CCAs added!<br>' : '';
+                    $successMsg .= count($update) ? count($update) . ' existing CCAs updated!' : '';
+
+                    $this->session->set_flashdata('success', $successMsg);
                     foreach ($import as &$row) {
                         $row['type_name'] = $ccaTypeArray[$row['type_id']];
                         $row['classification_name'] = $ccaClassificationArray[$row['classification_id']];
                     }
+                    foreach ($update as &$row) {
+                        $row['type_name'] = $ccaTypeArray[$row['type_id']];
+                        $row['classification_name'] = $ccaClassificationArray[$row['classification_id']];
+                    }
                     $this->session->set_flashdata('imported', $import);
+                    $this->session->set_flashdata('updated', $update);
                     redirect('cca/import');
                 } else {
-                    $this->session->set_flashdata('error', 'Error updating database!');
+                    $this->session->set_flashdata('error', 'Nothing imported!');
                     redirect('cca/import');
                 }
             }
@@ -190,6 +296,9 @@ class Cca extends MY_Controller {
         if ($this->session->imported) {
             $data['imported'] = $this->session->imported;
         }
+        if ($this->session->updated) {
+            $data['updated'] = $this->session->updated;
+        }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
@@ -197,7 +306,7 @@ class Cca extends MY_Controller {
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['this'] = $this;
-        $this->twig->display('cca/import',$data);
+        $this->twig->display('cca/import', $data);
     }
 
     public function importLastYear()
@@ -213,7 +322,7 @@ class Cca extends MY_Controller {
         foreach ($ccas as $cca) {
             unset($cca->id, $cca->updated_at, $cca->created_at);
             $cca->acad_year = ACAD_YEAR;
-        }        
+        }
 
         $result = $this->ccas_model->insertBatch($ccas);
 

@@ -20,7 +20,15 @@
       <li class="header">NAVIGATION</li>
       <!-- Optionally, you can add icons to the links -->
       <li class="{{ mainMenu == 'home' ? 'active' }}"><a href="/"><i class="fa fa-home"></i> <span>Home</span></a></li>
-      <li class="{{ mainMenu == 'myCca' ? 'active' }}"><a href="/cca"><i class="fa fa-soccer-ball-o"></i> <span>My CCA</span></a></li>
+      {% if not this.account.is_admin %}
+        <li class="treeview {{ mainMenu == 'myCca' ? 'active' }}">
+          <a href="#"><i class="fa fa-soccer-ball-o"></i> <span>My CCA</span> <i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+            <li class="{{ subMenu == 'preference' ? 'active' }}"><a href="/cca/preference" {% if not this.settings.allow_preference %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-sort-numeric-asc"></i> Committee Preference</a></li>
+            <li class="{{ subMenu == 'points' ? 'active' }}"><a href="/cca/points" {% if not this.settings.allow_points %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-tachometer"></i> Points</a></li>
+          </ul>
+        </li>
+      {% endif %}
       <li class="treeview {{ mainMenu == 'account' ? 'active' }}">
         <a href="#"><i class="fa fa-user"></i> <span>My Account</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">

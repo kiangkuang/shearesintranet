@@ -57,26 +57,37 @@ class Ccaclassification extends MY_Controller {
         }
 
         $input = $this->input->post();
-        $input['shortname'] = strtolower(str_replace(' ', '-', $input['name']));
 
         if (isset($input['id'])) {
             // update
+            $exist = $this->ccaclassifications_model->getByName($input['name']);
+            if ($exist && $exist->id !== $input['id']){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/ccaclassification/edit/'.$input['id']);
+            }
+
             $result = $this->ccaclassifications_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully updated!');
                 redirect('/ccaclassification/edit/'.$input['id']);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/ccaclassification/edit/'.$input['id']);
             }
         } else {
             // add
+            $exist = $this->ccaclassifications_model->getByName($input['name']);
+            if ($exist){
+                $this->session->set_flashdata('error', 'Name already exists!');
+                redirect('/ccaclassification/edit');
+            }
+
             $result = $this->ccaclassifications_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'CCA Classification successfully created!');
                 redirect('/ccaclassification/edit/'.$result);
             } else {
-                $this->session->set_flashdata('error', 'An error has occured!');
+                $this->session->set_flashdata('error', 'An error has occurred!');
                 redirect('/ccaclassification/edit');
             }
         }
@@ -92,7 +103,7 @@ class Ccaclassification extends MY_Controller {
         if ($result) {
             $this->session->set_flashdata('success', 'CCA Classification successfully deleted!');
         } else {
-            $this->session->set_flashdata('error', 'An error has occured!');
+            $this->session->set_flashdata('error', 'An error has occurred!');
         }
         redirect('/ccaclassification/view');
     }

@@ -13,8 +13,9 @@ class MY_Model extends CI_Model {
         return false;
     }
 
-    public function getAllOrderedByName()
+    public function getByAcadYearOrderedByName($acad_year)
     {
+        $this->db->where('acad_year', $acad_year);
         $this->db->order_by('name');
         $query = $this->db->get($this->db_name);
 
@@ -35,13 +36,71 @@ class MY_Model extends CI_Model {
 
         return false;
     }
-
-    public function getByShortname($shortname)
+    
+    public function getByAccountId($account_id)
     {
-        $query = $this->db->get_where($this->db_name, ['shortname' => $shortname]);
+        $this->db->where('account_id', $account_id);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
+
+    // used by account/edit and cca/edit
+    public function getByIdAcadYear($id, $acad_year)
+    {
+        $this->db->where('id', $id);
+        $this->db->where('acad_year', $acad_year);
+
+        $query = $this->db->get($this->db_name);
 
         if ($query->num_rows() > 0) {
             return $query->first_row();
+        }
+
+        return false;
+    }
+
+    public function getByName($name)
+    {
+        $this->db->where('name', $name);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->first_row();
+        }
+
+        return false;
+    }
+
+    public function getByNameAcadYear($name, $acad_year)
+    {
+        $this->db->where('name', $name);
+        $this->db->where('acad_year', $acad_year);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->first_row();
+        }
+
+        return false;
+    }
+
+    public function getByAcadYear($acad_year = ACAD_YEAR)
+    {
+        $this->db->where('acad_year', $acad_year);
+        $this->db->order_by('name', 'asc');
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
         }
 
         return false;
