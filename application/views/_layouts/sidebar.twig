@@ -32,7 +32,7 @@
       <li class="treeview {{ mainMenu == 'account' ? 'active' }}">
         <a href="#"><i class="fa fa-user"></i> <span>My Account</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">
-          <li class="{{ subMenu == 'profile' ? 'active' }}"><a href="#"><i class="fa fa-circle-o"></i> View Profile</a></li>
+          {# <li class="{{ subMenu == 'profile' ? 'active' }}"><a href="#"><i class="fa fa-circle-o"></i> View Profile</a></li> #}
           {% if this.account.has_password %}
             <li class="{{ subMenu == 'changePassword' ? 'active' }}"><a href="/changepassword"><i class="fa fa-circle-o"></i> Change Password</a></li>
           {% endif %}
