@@ -82,4 +82,31 @@ class Accounts_model extends MY_Model {
         return false;
     }
 
+    public function getByAdmin()
+    {
+        $this->db->where('is_admin', 1);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
+
+    public function getAdminUser($user)
+    {
+        $this->db->where('is_admin', 1);
+        $this->db->where('user', $user);
+
+        $query = $this->db->get($this->db_name);
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+
+        return false;
+    }
+
 }
