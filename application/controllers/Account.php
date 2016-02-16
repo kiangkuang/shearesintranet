@@ -138,6 +138,25 @@ class Account extends MY_Controller {
         $this->twig->display('account/view', $data);
     }
 
+    public function viewAdmin()
+    {
+        if (!$this->isLoggedIn || !$this->account->is_admin) {
+            redirect('/');
+        }
+
+        $data = [];
+
+        $accounts = $this->accounts_model->getByAdmin();
+        $data['accounts'] = $accounts;
+
+        $data['admin'] = 1;
+
+        $data['mainMenu'] = 'admin';
+        $data['subMenu'] = 'account';
+        $data['this'] = $this;
+        $this->twig->display('account/view', $data);
+    }
+
     public function edit($id = null)
     {
         if (!$this->isLoggedIn || !$this->account->is_admin) {
@@ -162,6 +181,29 @@ class Account extends MY_Controller {
         $this->twig->display('account/edit', $data);
     }
 
+    public function editAdmin($id = null)
+    {
+        if (!$this->isLoggedIn || !$this->account->is_admin) {
+            redirect('/');
+        }
+
+        $data = [];
+        if ($id) {
+            $data['account'] = $this->accounts_model->getById($id);
+            if ($data['account'] === false) {
+                $this->session->set_flashdata('error', 'Account not found!');
+                redirect('/account/view');
+            }
+        }
+
+        $data['admin'] = 1;
+
+        $data['mainMenu'] = 'admin';
+        $data['subMenu'] = 'account';
+        $data['this'] = $this;
+        $this->twig->display('account/edit', $data);
+    }
+
     public function update()
     {
         if (!$this->isLoggedIn || !$this->account->is_admin || !$this->input->post() || !$this->editable) {
@@ -173,39 +215,45 @@ class Account extends MY_Controller {
             $row = trim($row);
         }
 
+        $admin = isset($input['is_admin']) ? 'Admin' : '';
+
         if (isset($input['id'])) {
             // update
-            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
-            if ($exist && $exist->id !== $input['id']){
+            $exist1 = $this->accounts_model->getAdminUser($input['user']);
+            $exist2 = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+
+            if (($exist1 && $exist1->id !== $input['id']) || ($exist2 && $exist2->id !== $input['id'])){
                 $this->session->set_flashdata('error', 'NUSNET ID already exists!');
-                redirect('/account/edit/'.$input['id']);
+                redirect('/account/edit'.$admin.'/'.$input['id']);
             }
 
             $result = $this->accounts_model->update($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully updated!');
-                redirect('/account/edit/'.$input['id']);
+                redirect('/account/edit'.$admin.'/'.$input['id']);
             } else {
                 $this->session->set_flashdata('error', 'An error has occurred!');
-                redirect('/account/edit/'.$input['id']);
+                redirect('/account/edit'.$admin.'/'.$input['id']);
             }
         } else {
             // add
-            $exist = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
-            if ($exist){
+            $exist1 = $this->accounts_model->getAdminUser($input['user']);
+            $exist2 = $this->accounts_model->getByUserAcadYear($input['user'], ACAD_YEAR);
+
+            if ($exist1 || $exist2){
                 $this->session->set_flashdata('error', 'NUSNET ID already exists!');
-                redirect('/account/edit');
+                redirect('/account/edit'.$admin);
             }
 
-            $input['acad_year'] = ACAD_YEAR;
+            $input['acad_year'] = !isset($input['is_admin']) ? ACAD_YEAR : '';
 
             $result = $this->accounts_model->insert($input);
             if ($result) {
                 $this->session->set_flashdata('success', 'Account successfully created!');
-                redirect('/account/edit/'.$result);
+                redirect('/account/edit'.$admin.'/'.$result);
             } else {
                 $this->session->set_flashdata('error', 'An error has occurred!');
-                redirect('/account/edit');
+                redirect('/account/edit'.$admin);
             }
         }
     }
@@ -219,11 +267,12 @@ class Account extends MY_Controller {
         $input = $this->input->post();
 
         $input['has_password'] = isset($input['has_password']) ? 1 : 0;
+        $admin = isset($input['is_admin']) ? 'Admin' : '';
 
         if ($input['has_password']) {
             if ($input['password'] !== $input['password2']) {
                 $this->session->set_flashdata('error', 'The passwords do not match!');
-                redirect('/account/edit/'.$input['id']);
+                redirect('/account/edit'.$admin.'/'.$input['id']);
             }
 
             unset($input['password2']);
@@ -237,10 +286,10 @@ class Account extends MY_Controller {
         $result = $this->accounts_model->update($input);
         if ($result) {
             $this->session->set_flashdata('success', 'Account password successfully updated!');
-            redirect('/account/edit/'.$input['id']);
+            redirect('/account/edit'.$admin.'/'.$input['id']);
         } else {
             $this->session->set_flashdata('error', 'An error has occurred!');
-            redirect('/account/edit/'.$input['id']);
+            redirect('/account/edit'.$admin.'/'.$input['id']);
         }
     }
 

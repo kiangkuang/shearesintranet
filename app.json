@@ -1,6 +1,25 @@
 {
   "name":"Sheares-Intranet",
   "scripts":{},
-  "env":{},
+  "env":{
+    "CI_ENV": {
+      "required": true
+    },
+    "JAWSDB_DB": {
+      "required": true
+    },
+    "JAWSDB_PW": {
+      "required": true
+    },
+    "JAWSDB_URL": {
+      "required": true
+    },
+    "JAWSDB_USER": {
+      "required": true
+    },
+    "TZ": {
+      "required": true
+    }
+  },
   "addons":[]
 }
