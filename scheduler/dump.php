@@ -1,11 +1,11 @@
 <?php
 
-require '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 use Ifsnop\Mysqldump as IMysqldump;
 
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'local');
 if (ENVIRONMENT === 'local') {
-    require '../application/config/local/database.php';
+    require __DIR__ . '/../application/config/local/database.php';
 }
 
 date_default_timezone_set('Asia/Singapore');
@@ -24,7 +24,7 @@ if (ENVIRONMENT !== 'local') {
 function dump($db_url, $db_name, $db_user, $db_pw, $date) {
     try {
         $dump = new IMysqldump\Mysqldump('mysql:host='.$db_url.';dbname='.$db_name, $db_user, $db_pw, ['add-drop-table' => true]);
-        $dump->start('../dump/' . ENVIRONMENT . ' ' . $date . '.sql');
+        $dump->start(__DIR__ . '/../dump/' . ENVIRONMENT . ' ' . $date . '.sql');
     } catch (\Exception $e) {
         echo 'mysqldump-php error: ' . $e->getMessage();
     }
@@ -39,7 +39,7 @@ function email($date) {
             ->setFrom('backup@shearesintranet.nus.edu.sg')
             ->setFromName('Sheares Intranet Backup')
             ->setSubject('Database Backup: ' . ENVIRONMENT . ' ' . $date)
-            ->addAttachment('../dump/' . ENVIRONMENT . ' ' . $date . '.sql')
+            ->addAttachment(__DIR__ . '/../dump/' . ENVIRONMENT . ' ' . $date . '.sql')
             ->setText(ENVIRONMENT . ' ' . $date)
             ->setHtml(ENVIRONMENT . ' ' . $date);
     try {
