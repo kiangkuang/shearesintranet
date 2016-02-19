@@ -17,7 +17,9 @@
 		"lightopenid/lightopenid": "dev-master",
 		"fortawesome/font-awesome": "^4.4",
 		"keboola/csv": "^1.1",
-		"components/bootstrap-switch": "dev-master"
+		"components/bootstrap-switch": "dev-master",
+		"ifsnop/mysqldump-php": "2.*",
+		"sendgrid/sendgrid": "2.0.5"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"

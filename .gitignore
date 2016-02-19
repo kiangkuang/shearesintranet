@@ -27,6 +27,9 @@ uploads/*
 downloads/*
 !downloads/index.html
 
+dump/*
+!dump/index.html
+
 application/libraries/Twig.php
 
 # IDE Files
