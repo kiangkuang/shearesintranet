@@ -3,29 +3,28 @@
 require '../vendor/autoload.php';
 use Ifsnop\Mysqldump as IMysqldump;
 
-$local = !isset($_SERVER['CI_ENV']) || $_SERVER['CI_ENV'] === 'local';
-if ($local) {
-    define('ENVIRONMENT', 'local');
+define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'local');
+if (ENVIRONMENT === 'local') {
     require '../application/config/local/database.php';
 }
 
 date_default_timezone_set('Asia/Singapore');
 $date = date("Y-m-d His");
 
-$db_url = $local ? $db['default']['hostname'] : $_SERVER['JAWSDB_URL'];
-$db_name = $local ? $db['default']['database'] : $_SERVER['JAWSDB_DB'];
-$db_user = $local ? $db['default']['username'] : $_SERVER['JAWSDB_USER'];
-$db_pw = $local ? $db['default']['password'] : $_SERVER['JAWSDB_PW'];
+$db_url = ENVIRONMENT === 'local' ? $db['default']['hostname'] : $_SERVER['JAWSDB_URL'];
+$db_name = ENVIRONMENT === 'local' ? $db['default']['database'] : $_SERVER['JAWSDB_DB'];
+$db_user = ENVIRONMENT === 'local' ? $db['default']['username'] : $_SERVER['JAWSDB_USER'];
+$db_pw = ENVIRONMENT === 'local' ? $db['default']['password'] : $_SERVER['JAWSDB_PW'];
 
 dump($db_url, $db_name, $db_user, $db_pw, $date);
-if (!$local) {
+if (ENVIRONMENT !== 'local') {
     email($date);
 }
 
 function dump($db_url, $db_name, $db_user, $db_pw, $date) {
     try {
         $dump = new IMysqldump\Mysqldump('mysql:host='.$db_url.';dbname='.$db_name, $db_user, $db_pw, ['add-drop-table' => true]);
-        $dump->start('../dump/' . $date . '.sql');
+        $dump->start('../dump/' . ENVIRONMENT . ' ' . $date . '.sql');
     } catch (\Exception $e) {
         echo 'mysqldump-php error: ' . $e->getMessage();
     }
@@ -39,10 +38,10 @@ function email($date) {
     $message->addTo($_SERVER['BACKUP_EMAIL'])
             ->setFrom('backup@shearesintranet.nus.edu.sg')
             ->setFromName('Sheares Intranet Backup')
-            ->setSubject('Database Backup ' . $date)
-            ->addAttachment('../dump/' . $date . '.sql')
-            ->setText($date)
-            ->setHtml($date);
+            ->setSubject('Database Backup: ' . ENVIRONMENT . ' ' . $date)
+            ->addAttachment('../dump/' . ENVIRONMENT . ' ' . $date . '.sql')
+            ->setText(ENVIRONMENT . ' ' . $date)
+            ->setHtml(ENVIRONMENT . ' ' . $date);
     try {
         $response = $sendgrid->send($message);
     } catch(\SendGrid\Exception $e) {
