@@ -2,14 +2,18 @@
 
 class Home extends MY_Controller {
 
-    public function index()
+    public function __construct()
     {
-        if (!$this->isLoggedIn){
+        parent::__construct();
+
+        if (!$this->isLoggedIn) {
             redirect('/');
         }
+    }
 
+    public function index()
+    {
         $data = [];
-
         $data['this'] = $this;
         $this->twig->display('home/index', $data);
     }

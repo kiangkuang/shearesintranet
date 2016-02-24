@@ -6,7 +6,7 @@ class Ccatype extends MY_Controller {
     {
         parent::__construct();
 
-        if (!$this->isLoggedIn) {
+        if (!$this->isLoggedIn || !$this->account->is_admin) {
             redirect('/');
         }
         $this->load->model('ccatypes_model');
@@ -14,10 +14,6 @@ class Ccatype extends MY_Controller {
 
     public function view($search = null)
     {
-        if (!$this->account->is_admin) {
-            redirect('/');
-        }
-
         $data = [];
         $data['ccatypes'] = $this->ccatypes_model->getAll();
 
@@ -30,10 +26,6 @@ class Ccatype extends MY_Controller {
 
     public function edit($id = null)
     {
-        if (!$this->account->is_admin) {
-            redirect('/');
-        }
-
         $data = [];
         if ($id) {
             // editing existing cca
@@ -52,7 +44,7 @@ class Ccatype extends MY_Controller {
 
     public function update()
     {
-        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
+        if (!$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
@@ -95,7 +87,7 @@ class Ccatype extends MY_Controller {
 
     public function delete($id = null)
     {
-        if (!$this->account->is_admin || !$this->editable || !$id) {
+        if (!$this->editable || !$id) {
             redirect('/');
         }
 
