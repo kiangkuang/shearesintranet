@@ -7,6 +7,7 @@ class Account extends MY_Controller {
         parent::__construct();
         $this->load->model('accounts_model');
         $this->load->model('memberships_model');
+        $this->load->model('preferences_model');
         $this->load->library('account_library');
     }
 
@@ -369,7 +370,8 @@ class Account extends MY_Controller {
 
         $result = $this->accounts_model->deleteById($id);
         $result2 = $this->memberships_model->deleteByAccountId($id);
-        if ($result && $result2) {
+        $result3 = $this->preferences_model->deleteByAccountId($id);
+        if ($result && $result2 && $result3) {
             $this->session->set_flashdata('success', 'Account successfully deleted!');
         } else {
             $this->session->set_flashdata('error', 'An error has occurred!');
