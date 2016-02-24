@@ -7,7 +7,7 @@ class Cca extends MY_Controller {
         parent::__construct();
 
         if (!$this->isLoggedIn) {
-            redirect('/login');
+            redirect('/');
         }
         $this->load->model('ccas_model');
         $this->load->model('ccatypes_model');
