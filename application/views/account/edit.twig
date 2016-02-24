@@ -25,7 +25,7 @@
     <div class="row">
       <!-- column -->
       <div class="col-xs-12">
-        <div class="box box-primary">
+        <div class="box box-warning">
           <div class="box-header with-border">
             <h3 class="box-title">
               {{ account ? (this.editable ? 'Edit' : 'View') ~ ' Information' : 'Add New Account' }}
@@ -97,7 +97,7 @@
         </div><!-- /.box -->
 
         {% if account and this.editable %}
-          <div class="box box-primary">
+          <div class="box box-warning">
             <div class="box-header with-border">
               <h3 class="box-title">
                 Password
@@ -153,7 +153,7 @@
         {% endif %}
 
         {% if account and this.editable and not admin %}
-          <div class="box box-primary">
+          <div class="box box-warning">
             <div class="box-header with-border">
               <h3 class="box-title">
                 Add CCAs
@@ -195,7 +195,7 @@
         {% endif %}
 
         {% if account and not admin %}
-          <div class="box box-primary">
+          <div class="box box-warning">
             <div class="box-header with-border">
               <h3 class="box-title">
                 Membership
