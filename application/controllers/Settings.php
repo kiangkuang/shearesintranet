@@ -5,6 +5,11 @@ class Settings extends MY_Controller {
     public function __construct()
     {
         parent::__construct();
+
+        if (!$this->isLoggedIn || !$this->account->is_admin){
+            redirect('/');
+        }
+
         $this->load->model('accounts_model');
         $this->load->model('ccas_model');
         $this->load->model('settings_model');
@@ -14,10 +19,6 @@ class Settings extends MY_Controller {
 
     public function index()
     {
-        if (!$this->isLoggedIn) {
-            redirect('/');
-        }
-
         $data = [];
 
         $data['settings'] = $this->settings;
@@ -32,7 +33,7 @@ class Settings extends MY_Controller {
 
     public function general()
     {
-        if (!$this->account->is_admin || !$this->input->post()) {
+        if (!$this->input->post()) {
             redirect('/');
         }
 
@@ -54,7 +55,7 @@ class Settings extends MY_Controller {
 
     public function archive()
     {
-        if (!$this->account->is_admin || !$this->input->post()) {
+        if (!$this->input->post()) {
             redirect('/');
         }
 
