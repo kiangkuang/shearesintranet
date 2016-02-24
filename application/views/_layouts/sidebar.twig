@@ -21,7 +21,7 @@
       <!-- Optionally, you can add icons to the links -->
       <li class="{{ mainMenu == 'home' ? 'active' }}"><a href="/"><i class="fa fa-home"></i> <span>Home</span></a></li>
       {% if not this.account.is_admin %}
-        <li class="treeview {{ mainMenu == 'myCca' ? 'active' }}">
+        <li class="treeview active">
           <a href="#"><i class="fa fa-soccer-ball-o"></i> <span>My CCA</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">
             <li class="{{ subMenu == 'preference' ? 'active' }}"><a href="/cca/preference" {% if not this.settings.allow_preference %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-sort-numeric-asc"></i> Committee Preference</a></li>
