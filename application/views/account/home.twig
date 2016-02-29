@@ -16,44 +16,29 @@
   <!-- Main content -->
   <section class="content">
     <div class="row">
-      <div class="col-xs-6">
-        <!-- small box -->
-        <div class="small-box {% if this.settings.allow_preference %}bg-yellow{% else %}bg-gray{% endif %}">
-          <div class="inner">
-            <h3 {% if not this.settings.allow_preference %}class="text-muted"{% endif %}>Committee<br>Preference</h3>
-            <p {% if not this.settings.allow_preference %}class="text-muted"{% endif %}>Indicate and rank your preferred committee!</p>
+      {% for feature in features %}
+        <div class="col-xs-12 col-sm-6">
+          <!-- small box -->
+          <div class="small-box {% if feature.enabled %}bg-yellow{% else %}bg-gray{% endif %}">
+            <div class="inner">
+              <h3 {% if not feature.enabled %}class="text-muted"{% endif %}>{{ feature.name|raw }}</h3>
+              <p {% if not feature.enabled %}class="text-muted"{% endif %}>{{ feature.description }}
+            </div>
+            <div class="icon">
+              <i class="fa fa-sort-numeric-asc"></i>
+            </div>
+            {% if feature.enabled %}
+              <a href="{{ feature.url }}" class="small-box-footer">
+                  Go <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            {% else %}
+              <a class="small-box-footer" {% if not feature.enabled %}data-toggle="tooltip" data-placement="top" title="This feature is currently disabled!"{% endif %}>
+                Disabled <i class="fa fa-times-circle"></i>
+              </a>
+            {% endif %}
           </div>
-          <div class="icon">
-            <i class="fa fa-sort-numeric-asc"></i>
-          </div>
-            <a href="/cca/preference" class="small-box-footer">
-              {% if this.settings.allow_preference %}
-                Go <i class="fa fa-arrow-circle-right"></i>
-              {% else %}
-                Currently Disabled <i class="fa fa-times-circle"></i>
-              {% endif %}
-            </a>
-        </div>
-      </div><!--/.col -->
-      <div class="col-xs-6">
-        <!-- small box -->
-        <div class="small-box {% if this.settings.allow_points %}bg-yellow{% else %}bg-gray{% endif %}">
-          <div class="inner">
-            <h3 {% if not this.settings.allow_points %}class="text-muted"{% endif %}>CCA<br>Points</h3>
-            <p {% if not this.settings.allow_points %}class="text-muted"{% endif %}>View your CCA points for the year!</p>
-          </div>
-          <div class="icon">
-            <i class="fa fa-bar-chart"></i>
-          </div>
-            <a href="/cca/points" class="small-box-footer">
-              {% if this.settings.allow_points %}
-                Go <i class="fa fa-arrow-circle-right"></i>
-              {% else %}
-                Currently Disabled <i class="fa fa-times-circle"></i>
-              {% endif %}
-            </a>
-        </div>
-      </div><!--/.col -->
+        </div><!--/.col -->
+      {% endfor %}
     </div>   <!-- /.row -->
   </section><!-- /.content -->
 {% endblock %}

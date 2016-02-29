@@ -24,8 +24,8 @@
         <li class="treeview active">
           <a href="#"><i class="fa fa-soccer-ball-o"></i> <span>My CCA</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">
-            <li class="{{ subMenu == 'preference' ? 'active' }}"><a href="/cca/preference" {% if not this.settings.allow_preference %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-sort-numeric-asc"></i> Committee Preference</a></li>
-            <li class="{{ subMenu == 'points' ? 'active' }}"><a href="/cca/points" {% if not this.settings.allow_points %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-bar-chart"></i> CCA Points</a></li>
+            <li class="{{ subMenu == 'preference' ? 'active' }}"><a {% if this.settings.allow_preference %}href="/cca/preference"{% else %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-sort-numeric-asc"></i> Committee Preference</a></li>
+            <li class="{{ subMenu == 'points' ? 'active' }}"><a {% if this.settings.allow_points %}href="/cca/points"{% else %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-bar-chart"></i> CCA Points</a></li>
           </ul>
         </li>
       {% endif %}

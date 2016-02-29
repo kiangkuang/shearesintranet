@@ -18,6 +18,23 @@ class Account extends MY_Controller {
         } elseif ($this->account->is_admin) {
             redirect('/account/view');
         } else {
+            $data = [];
+            $data['features'] = [
+                [
+                    'name' => 'Committee<br>Preference',
+                    'description' => 'Indicate and rank your preferred committees',
+                    'url' => '/cca/preference',
+                    'enabled' => $this->settings->allow_preference,
+                ],
+                [
+                    'name' => 'CCA<br>Points',
+                    'description' => 'View your CCA points for the year',
+                    'url' => '/cca/points',
+                    'enabled' => $this->settings->allow_points,
+                ]
+            ];
+            usort($data['features'], "featuresCmp");
+
             $data['this'] = $this;
             $this->twig->display('account/home', $data);
         }
