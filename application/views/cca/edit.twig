@@ -33,6 +33,7 @@
           </div><!-- /.box-header -->
 
           <form role="form" action="/cca/update" method="post">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <div class="box-body">
               <div class="row">
                 {% if cca %}
@@ -93,6 +94,7 @@
             </div><!-- /.box-header -->
 
             <form role="form" action="/membership/addMembership" method="post">
+              <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
               <div class="box-body">
                 <div class="row">
                   <input type="hidden" name="cca_id" value="{{ cca.id }}">
@@ -126,7 +128,7 @@
           </div><!-- /.box -->
         {% endif %}
 
-        {% if cca %}
+        {% if cca and memberships %}
           <div class="box box-warning">
             <div class="box-header with-border">
               <h3 class="box-title">
@@ -134,6 +136,7 @@
               </h3>
             </div><!-- /.box-header -->
             <form role="form" action="/membership/updateMemberships" method="post">
+              <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
               <input type="hidden" name="cca_id" value="{{ cca.id }}">
               <div class="box-body">
                 <table class="table table-bordered table-striped data-table hidden">
@@ -146,29 +149,27 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% if memberships %}
-                      {% for membership in memberships %}
-                        <tr>
-                          <td>
-                            <a href="/account/edit/{{ membership.account_id }}">{{ membership.account_name }}</a>
-                            <input type="hidden" name="memberships[{{ membership.id }}][id]" value="{{ membership.id }}">
-                          </td>
-                          <td>
-                            <input type="text" class="form-control" name="memberships[{{ membership.id }}][role]" placeholder="Role" value="{{ membership.role }}" {{ this.editable ? '' : 'disabled' }}>
-                          </td>
-                          <td>
-                            <input type="number" class="form-control" name="memberships[{{ membership.id }}][points]" placeholder="Points" value="{{ membership.points }}" {{ this.editable ? '' : 'disabled' }}>
-                          </td>
-                          <th class="text-center">
-                            {% if this.editable %}
-                              <a href="/membership/delete/{{ membership.id }}?redirect={{ this.uri.uri_string()|url_encode }}" class="btn btn-sm btn-default">
-                                <i class="fa fa-trash"></i> Delete
-                              </a>
-                            {% endif %}
-                          </th>
-                        </tr>
-                      {% endfor %}
-                    {% endif %}
+                    {% for membership in memberships %}
+                      <tr>
+                        <td>
+                          <a href="/account/edit/{{ membership.account_id }}">{{ membership.account_name }}</a>
+                          <input type="hidden" name="memberships[{{ membership.id }}][id]" value="{{ membership.id }}">
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" name="memberships[{{ membership.id }}][role]" placeholder="Role" value="{{ membership.role }}" {{ this.editable ? '' : 'disabled' }}>
+                        </td>
+                        <td>
+                          <input type="number" class="form-control" name="memberships[{{ membership.id }}][points]" placeholder="Points" value="{{ membership.points }}" {{ this.editable ? '' : 'disabled' }}>
+                        </td>
+                        <th class="text-center">
+                          {% if this.editable %}
+                            <a class="btn btn-sm btn-default delMember" data-action="/membership/delete" data-id="{{ membership.id }}" data-redirect="{{ this.uri.uri_string() }}">
+                              <i class="fa fa-trash"></i> Delete
+                            </a>
+                          {% endif %}
+                        </th>
+                      </tr>
+                    {% endfor %}
                   </tbody>
                   <tfoot>
                     <tr>
@@ -193,4 +194,21 @@
       </div><!--/.col -->
     </div>   <!-- /.row -->
   </section><!-- /.content -->
+{% endblock %}
+
+{% block javascript %}
+  {{ parent() }}
+  <script>
+  $(".delMember").click(function(e){
+    $.post($(e.target).data('action'),
+    {
+      id: $(e.target).data('id'),
+      redirect: $(e.target).data('redirect'),
+      {{ csrf['name'] }}: '{{ csrf['hash'] }}' 
+    },
+    function(data){
+      $('body').html(data).scrollTop(0);
+    });
+  });
+  </script>
 {% endblock %}

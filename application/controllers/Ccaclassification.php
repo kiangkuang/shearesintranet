@@ -17,6 +17,11 @@ class Ccaclassification extends MY_Controller {
         $data = [];
         $data['ccaclassifications'] = $this->ccaclassifications_model->getAll();
 
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
+
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
         $data['subSubMenu'] = 'viewCcaclassification';
@@ -35,6 +40,11 @@ class Ccaclassification extends MY_Controller {
                 redirect('/ccaclassification/view');
             }
         }
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
@@ -85,11 +95,13 @@ class Ccaclassification extends MY_Controller {
         }
     }
 
-    public function delete($id = null)
+    public function delete()
     {
-        if (!$this->editable || !$id) {
+        if (!$this->input->post() || !$this->editable) {
             redirect('/');
         }
+
+        $id = $this->input->post('id');
 
         $result = $this->ccaclassifications_model->deleteById($id);
         if ($result) {

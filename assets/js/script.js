@@ -18,7 +18,7 @@ $(':input[type=number]').on('mousewheel', function(e) {
 
 $('.bootstrap-switch').bootstrapSwitch();
 
-$(".data-table").DataTable({
+var dataTable = $(".data-table").DataTable({
     "stateSave": true,
 });
 $(".data-table").removeClass("hidden");

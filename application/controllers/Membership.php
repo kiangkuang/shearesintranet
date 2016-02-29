@@ -93,13 +93,14 @@ class Membership extends MY_Controller {
         }
     }
 
-    public function delete($id = null)
+    public function delete()
     {
-        if (!$this->account->is_admin || !$this->editable || !$id) {
+        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
-        $redirect = $this->input->get('redirect') ? : '/';
+        $id = $this->input->post('id');
+        $redirect = $this->input->post('redirect');
         $membership = $this->memberships_model->getById($id);
         $result = $this->memberships_model->deleteById($id);
         if ($result) {
@@ -216,6 +217,11 @@ class Membership extends MY_Controller {
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
