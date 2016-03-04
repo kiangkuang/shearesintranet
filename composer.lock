@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e8044a1d7d0aaa2e3beeb74b538c8239",
-    "content-hash": "c73340192d3775400ee2d76955bf9420",
+    "hash": "037287a079f8d4d33f786efa5a1359e4",
+    "content-hash": "9ad3dcf6f2ef066f4127c712bd810d30",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -46,55 +46,6 @@
                 "web"
             ],
             "time": "2015-10-23 14:50:49"
-        },
-        {
-            "name": "components/bootstrap-switch",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tubssp/bootstrap-switch.git",
-                "reference": "7c2d069a98cba7e7b24ec605a761f8c0685e0be9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tubssp/bootstrap-switch/zipball/7c2d069a98cba7e7b24ec605a761f8c0685e0be9",
-                "reference": "7c2d069a98cba7e7b24ec605a761f8c0685e0be9",
-                "shasum": ""
-            },
-            "type": "component",
-            "extra": {
-                "component": {
-                    "name": "bootstrap-switch",
-                    "files": [
-                        "dist/**"
-                    ],
-                    "scripts": [
-                        "dist/js/bootstrap-switch.js"
-                    ],
-                    "shim": {
-                        "exports": "BootstrapSwitch"
-                    }
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache License Version 2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Mattia Larentis",
-                    "homepage": "http://www.larentis.eu"
-                }
-            ],
-            "description": "Turn checkboxes and radio buttons in toggle switches.",
-            "homepage": "http://www.bootstrap-switch.org",
-            "keywords": [
-                "JS",
-                "bootstrap",
-                "javascript",
-                "switch"
-            ],
-            "time": "2014-06-25 18:28:03"
         },
         {
             "name": "fortawesome/font-awesome",
@@ -354,6 +305,55 @@
             "time": "2014-04-05 23:28:21"
         },
         {
+            "name": "nostalgiaz/bootstrap-switch",
+            "version": "3.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nostalgiaz/bootstrap-switch.git",
+                "reference": "ec69b5dd914dacb19cf1fa8e1be7eea6bcc7b083"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nostalgiaz/bootstrap-switch/zipball/ec69b5dd914dacb19cf1fa8e1be7eea6bcc7b083",
+                "reference": "ec69b5dd914dacb19cf1fa8e1be7eea6bcc7b083",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "name": "bootstrap-switch",
+                    "files": [
+                        "dist/**"
+                    ],
+                    "scripts": [
+                        "dist/js/bootstrap-switch.js"
+                    ],
+                    "shim": {
+                        "exports": "BootstrapSwitch"
+                    }
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache License Version 2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Mattia Larentis",
+                    "homepage": "http://www.larentis.eu"
+                }
+            ],
+            "description": "Turn checkboxes and radio buttons in toggle switches.",
+            "homepage": "http://www.bootstrap-switch.org",
+            "keywords": [
+                "JS",
+                "bootstrap",
+                "javascript",
+                "switch"
+            ],
+            "time": "2015-01-25 13:46:30"
+        },
+        {
             "name": "sendgrid/sendgrid",
             "version": "2.0.5",
             "source": {
@@ -545,8 +545,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "kenjis/codeigniter-ss-twig": 20,
-        "lightopenid/lightopenid": 20,
-        "components/bootstrap-switch": 20
+        "lightopenid/lightopenid": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
