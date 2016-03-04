@@ -25,25 +25,28 @@ class Membership extends MY_Controller {
             $type = 'account';
         }
 
+        $input = [];
         if ($type === 'cca') {
             // cca adding members
-            foreach ($this->input->post('account_ids') as $account_id) {
-                $input[] = [
-                    'cca_id' => $this->input->post('cca_id'),
-                    'account_id' => $account_id,
-                    'acad_year' => ACAD_YEAR, 
-                ];
+            if ($this->input->post('account_ids')) {
+                foreach ($this->input->post('account_ids') as $account_id) {
+                    $input[] = [
+                        'cca_id' => $this->input->post('cca_id'),
+                        'account_id' => $account_id,
+                        'acad_year' => ACAD_YEAR, 
+                    ];
+                }
             }
-        }
-
-        if ($type === 'account') {
+        } elseif ($type === 'account') {
             // accounts joining ccas
-            foreach ($this->input->post('cca_ids') as $cca_id) {
-                $input[] = [
-                    'account_id' => $this->input->post('account_id'),
-                    'cca_id' => $cca_id,
-                    'acad_year' => ACAD_YEAR, 
-                ];
+            if ($this->input->post('cca_ids')) {
+                foreach ($this->input->post('cca_ids') as $cca_id) {
+                    $input[] = [
+                        'account_id' => $this->input->post('account_id'),
+                        'cca_id' => $cca_id,
+                        'acad_year' => ACAD_YEAR, 
+                    ];
+                }
             }
         }
 
