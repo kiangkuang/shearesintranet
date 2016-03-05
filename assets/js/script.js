@@ -1,4 +1,4 @@
-$('.login-box-body form').hide();
+$('.login-box-body form').hide().removeClass('hidden');
 
 $('.js-toggle').click(function() {
     $('.js-user').slideToggle();
@@ -6,11 +6,11 @@ $('.js-toggle').click(function() {
 });
 
 $('.js-confirm-delete').click(function() {
-    return confirm("Confirm deletion? Process is irreversible!");
+    return confirm('Confirm deletion? Process is irreversible!');
 });
 
 //Initialize Select2 Elements
-$(".select2").select2();
+$('.select2').select2();
 
 $(':input[type=number]').on('mousewheel', function(e) {
     $(this).blur();
@@ -18,8 +18,8 @@ $(':input[type=number]').on('mousewheel', function(e) {
 
 $('.bootstrap-switch').bootstrapSwitch();
 
-var dataTable = $(".data-table").DataTable({
-    "stateSave": true,
+var dataTable = $('.data-table').DataTable({
+    'stateSave': true,
 });
-$(".data-table").removeClass("hidden");
-$(".loader-table").addClass("hidden");
+$('.data-table').removeClass('hidden');
+$('.loader-table').addClass('hidden');

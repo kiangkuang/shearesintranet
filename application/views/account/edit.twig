@@ -233,7 +233,7 @@
                         </td>
                         <th class="text-center">
                           {% if this.editable %}
-                            <a class="btn btn-sm btn-default delMember" data-action="/membership/delete" data-id="{{ membership.id }}" data-redirect="{{ this.uri.uri_string() }}">
+                            <a class="btn btn-sm btn-default delete-member" data-action="/membership/delete" data-id="{{ membership.id }}" data-redirect="{{ this.uri.uri_string() }}">
                               <i class="fa fa-trash"></i> Delete
                             </a>
                             <div class="loader loader-delete hidden">Loading...</div>
@@ -281,13 +281,13 @@
     }
   });
 
-  $(".delMember").click(function(e){
-    $(e.target).addClass("hidden").next(".loader-delete").removeClass("hidden");
+  $('.delete-member').click(function(e){
+    $(e.target).addClass('hidden').next('.loader-delete').removeClass('hidden');
     $.post($(e.target).data('action'),
     {
       id: $(e.target).data('id'),
       redirect: $(e.target).data('redirect'),
-      {{ csrf['name'] }}: '{{ csrf['hash'] }}' 
+      {{ csrf['name'] }}: '{{ csrf["hash"] }}' 
     },
     function(data){
       $('body').html(data).scrollTop(0);
