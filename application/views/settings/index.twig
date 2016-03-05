@@ -29,6 +29,7 @@
           </div><!-- /.box-header -->
 
           <form role="form" action="settings/general" method="post">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <div class="box-body">
               <div class="row">
                 <input type="hidden" name="id" value="{{ settings.id }}">
@@ -94,6 +95,7 @@
           </div><!-- /.box-header -->
 
           <form role="form" action="/settings/archive" method="post">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <div class="box-body">
               <div class="row">
                 <div class="col-xs-12">

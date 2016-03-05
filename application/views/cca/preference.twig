@@ -33,6 +33,7 @@
           </div><!-- /.box-header -->
 
           <form role="form" action="/cca/preference" method="post">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <div class="box-body">
               {% if preference %}
                 <input type="hidden" name="id" value="{{ preference.id }}">

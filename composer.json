@@ -17,7 +17,7 @@
 		"lightopenid/lightopenid": "dev-master",
 		"fortawesome/font-awesome": "^4.4",
 		"keboola/csv": "^1.1",
-		"components/bootstrap-switch": "dev-master",
+		"nostalgiaz/bootstrap-switch": "^3.3",
 		"ifsnop/mysqldump-php": "2.*",
 		"sendgrid/sendgrid": "2.0.5"
 	},
@@ -32,7 +32,7 @@
             "mkdir -p assets/font-awesome",
         	"cp -a vendor/fortawesome/font-awesome/css vendor/fortawesome/font-awesome/fonts assets/font-awesome",
         	"mkdir -p assets/bootstrap-switch",
-        	"cp -a vendor/components/bootstrap-switch/dist/. assets/bootstrap-switch"
+        	"cp -a vendor/nostalgiaz/bootstrap-switch/dist/. assets/bootstrap-switch"
         ]
     }
 }

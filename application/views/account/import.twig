@@ -31,7 +31,7 @@
               <h3 class="box-title">Added Accounts</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
-              <table class="table table-bordered table-striped data-table">
+              <table class="table table-bordered table-striped data-table hidden">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -62,6 +62,7 @@
                   </tr>
                 </tfoot>
               </table>
+              <div class="loader loader-table">Loading...</div>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
         {% endif %}
@@ -72,7 +73,7 @@
               <h3 class="box-title">Updated Accounts</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
-              <table class="table table-bordered table-striped data-table">
+              <table class="table table-bordered table-striped data-table hidden">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -103,6 +104,7 @@
                   </tr>
                 </tfoot>
               </table>
+              <div class="loader loader-table">Loading...</div>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
         {% endif %}
@@ -114,6 +116,7 @@
             </h3>
           </div><!-- /.box-header -->
           <form role="form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <input type="hidden" name="submit">
             <div class="box-body">
               <div class="row">

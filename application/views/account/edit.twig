@@ -33,6 +33,7 @@
           </div><!-- /.box-header -->
 
           <form role="form" action="/account/update" method="post">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <div class="box-body">
               <div class="row">
                 {% if account %}
@@ -105,6 +106,7 @@
             </div><!-- /.box-header -->
 
             <form role="form" action="/account/adminChangePassword" method="post">
+              <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
               <div class="box-body">
                 <div class="row">
                   <input type="hidden" name="id" value="{{ account.id }}">
@@ -161,13 +163,14 @@
             </div><!-- /.box-header -->
 
             <form role="form" action="/membership/addMembership" method="post">
+              <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
               <div class="box-body">
                 <div class="row">
                   <input type="hidden" name="account_id" value="{{ account.id }}">
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>CCA Names</label>
-                      <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="cca_ids[]">
+                      <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="cca_ids[]" required>
                         {% for cca in ccas %}
                           <option value="{{ cca.id }}">{{ cca.name }}</option>
                         {% endfor %}
@@ -194,7 +197,7 @@
           </div><!-- /.box -->
         {% endif %}
 
-        {% if account and not admin %}
+        {% if account and not admin and memberships %}
           <div class="box box-warning">
             <div class="box-header with-border">
               <h3 class="box-title">
@@ -202,9 +205,10 @@
               </h3>
             </div><!-- /.box-header -->
             <form role="form" action="/membership/updateMemberships" method="post">
+              <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
               <input type="hidden" name="account_id" value="{{ account.id }}">
               <div class="box-body">
-                <table class="table table-bordered table-striped data-table">
+                <table class="table table-bordered table-striped data-table hidden">
                   <thead>
                     <tr>
                       <th>CCA</th>
@@ -214,29 +218,28 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% if memberships %}
-                      {% for membership in memberships %}
-                        <tr>
-                          <td>
-                            <a href="/cca/edit/{{ membership.cca_id }}">{{ membership.cca_name }}</a>
-                            <input type="hidden" name="memberships[{{ membership.id }}][id]" value="{{ membership.id }}">
-                          </td>
-                          <td>
-                            <input type="text" class="form-control" name="memberships[{{ membership.id }}][role]" placeholder="Role" value="{{ membership.role }}" {{ this.editable ? '' : 'disabled' }}>
-                          </td>
-                          <td>
-                            <input type="number" class="form-control" name="memberships[{{ membership.id }}][points]" placeholder="Points" value="{{ membership.points }}" {{ this.editable ? '' : 'disabled' }}>
-                          </td>
-                          <th class="text-center">
-                            {% if this.editable %}
-                              <a href="/membership/delete/{{ membership.id }}?redirect={{ this.uri.uri_string()|url_encode }}" class="btn btn-sm btn-default {{ this.editable ? '' : 'disabled' }}">
-                                <i class="fa fa-trash"></i> Delete
-                              </a>
-                            {% endif %}
-                          </th>
-                        </tr>
-                      {% endfor %}
-                    {% endif %}
+                    {% for membership in memberships %}
+                      <tr>
+                        <td>
+                          <a href="/cca/edit/{{ membership.cca_id }}">{{ membership.cca_name }}</a>
+                          <input type="hidden" name="memberships[{{ membership.id }}][id]" value="{{ membership.id }}">
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" name="memberships[{{ membership.id }}][role]" placeholder="Role" value="{{ membership.role }}" {{ this.editable ? '' : 'disabled' }}>
+                        </td>
+                        <td>
+                          <input type="number" class="form-control" name="memberships[{{ membership.id }}][points]" placeholder="Points" value="{{ membership.points }}" {{ this.editable ? '' : 'disabled' }}>
+                        </td>
+                        <th class="text-center">
+                          {% if this.editable %}
+                            <a class="btn btn-sm btn-default delMember" data-action="/membership/delete" data-id="{{ membership.id }}" data-redirect="{{ this.uri.uri_string() }}">
+                              <i class="fa fa-trash"></i> Delete
+                            </a>
+                            <div class="loader loader-delete hidden">Loading...</div>
+                          {% endif %}
+                        </th>
+                      </tr>
+                    {% endfor %}
                   </tbody>
                   <tfoot>
                     <tr>
@@ -247,6 +250,7 @@
                     </tr>
                   </tfoot>
                 </table>
+                <div class="loader loader-table">Loading...</div>
               </div><!-- /.box-body -->
               <div class="box-footer">
                 {% if this.editable %}
@@ -266,13 +270,6 @@
 {% block javascript %}
   {{ parent() }}
   <script>
-  // if ($('input[name="has_password"]').bootstrapSwitch('state') === true) {
-  //   $('.password-fields input').prop('required', true).prop('disabled', false);
-  //   $('.password-fields').show();
-  // } else {
-  //   $('.password-fields input').prop('required', false).prop('disabled', true);
-  //   $('.password-fields').hide();
-  // }
   $('input[name="has_password"]').on('switchChange.bootstrapSwitch', function(event, state) {
     if (state === true) {
       $('.password-fields input').prop('required', true).prop('disabled', false);
@@ -282,6 +279,19 @@
         $('.password-fields input').prop('required', false).prop('disabled', true);
       });
     }
+  });
+
+  $(".delMember").click(function(e){
+    $(e.target).addClass("hidden").next(".loader-delete").removeClass("hidden");
+    $.post($(e.target).data('action'),
+    {
+      id: $(e.target).data('id'),
+      redirect: $(e.target).data('redirect'),
+      {{ csrf['name'] }}: '{{ csrf['hash'] }}' 
+    },
+    function(data){
+      $('body').html(data).scrollTop(0);
+    });
   });
   </script>
 {% endblock %}

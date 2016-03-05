@@ -33,6 +33,7 @@
           </div><!-- /.box-header -->
 
           <form role="form" action="/ccatype/update" method="post">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <div class="box-body">
               <div class="row">
                 {% if ccatype %}
@@ -42,7 +43,7 @@
                   <!-- text input -->
                   <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ ccatype.name }}">
+                    <input type="text" class="form-control" name="name" placeholder="Name" value="{{ ccatype.name }}" required>
                     <small>CCA Type name is shared across all academic years! Changes will affect past archived records.</small>
                   </div>
                 </div>
