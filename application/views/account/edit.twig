@@ -208,6 +208,7 @@
               <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
               <input type="hidden" name="account_id" value="{{ account.id }}">
               <div class="box-body">
+                <div class="loader loader-table">Loading...</div>
                 <table class="table table-bordered table-striped data-table hidden">
                   <thead>
                     <tr>
@@ -250,7 +251,6 @@
                     </tr>
                   </tfoot>
                 </table>
-                <div class="loader loader-table">Loading...</div>
               </div><!-- /.box-body -->
               <div class="box-footer">
                 {% if this.editable %}
