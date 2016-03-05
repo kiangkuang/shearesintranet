@@ -171,7 +171,7 @@ class Membership extends MY_Controller {
                         }
 
                         if (array_search($importRow['cca_id'] . ',' . $importRow['account_id'], $processedMemberships) !== false) {
-                            $skipped[] = ['row' => implode($row,', '), 'reason' => 'Repeated Account/CCA membership in imported file'];
+                            $skipped[] = ['row' => implode($row,', '), 'reason' => 'Repeated Account/CCA membership in this imported file'];
                             continue;
                         }
 
