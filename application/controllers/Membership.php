@@ -26,36 +26,37 @@ class Membership extends MY_Controller {
         }
 
         $input = [];
-        if ($type === 'cca') {
+        if ($type === 'cca' && $this->input->post('account_ids')) {
             // cca adding members
-            if ($this->input->post('account_ids')) {
-                foreach ($this->input->post('account_ids') as $account_id) {
-                    $input[] = [
-                        'cca_id' => $this->input->post('cca_id'),
-                        'account_id' => $account_id,
-                        'acad_year' => ACAD_YEAR, 
-                    ];
-                }
+            foreach ($this->input->post('account_ids') as $account_id) {
+                $input[] = [
+                    'cca_id' => $this->input->post('cca_id'),
+                    'account_id' => $account_id,
+                    'acad_year' => ACAD_YEAR, 
+                ];
             }
-        } elseif ($type === 'account') {
+        } elseif ($type === 'account' && $this->input->post('cca_ids')) {
             // accounts joining ccas
-            if ($this->input->post('cca_ids')) {
-                foreach ($this->input->post('cca_ids') as $cca_id) {
-                    $input[] = [
-                        'account_id' => $this->input->post('account_id'),
-                        'cca_id' => $cca_id,
-                        'acad_year' => ACAD_YEAR, 
-                    ];
-                }
+            foreach ($this->input->post('cca_ids') as $cca_id) {
+                $input[] = [
+                    'account_id' => $this->input->post('account_id'),
+                    'cca_id' => $cca_id,
+                    'acad_year' => ACAD_YEAR, 
+                ];
             }
         }
 
-        $result = $this->memberships_model->insertBatch($input);
-        if ($result) {
-            $this->session->set_flashdata('success', count($input).' membership successfully added!');
+        if ($input) {
+            $result = $this->memberships_model->insertBatch($input);
+            if ($result) {
+                $this->session->set_flashdata('success', count($input).' membership successfully added!');
+            } else {
+                $this->session->set_flashdata('error', 'An error has occurred!');
+            }
         } else {
-            $this->session->set_flashdata('error', 'An error has occurred!');
+            $this->session->set_flashdata('error', 'Nothing to add!');
         }
+
         if ($type === 'cca') {
             redirect('/cca/edit/'.$this->input->post('cca_id'));
         } elseif ($type === 'account') {

@@ -170,7 +170,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>CCA Names</label>
-                      <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="cca_ids[]">
+                      <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="cca_ids[]" required>
                         {% for cca in ccas %}
                           <option value="{{ cca.id }}">{{ cca.name }}</option>
                         {% endfor %}

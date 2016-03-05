@@ -101,7 +101,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Names</label>
-                      <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="account_ids[]">
+                      <select class="form-control select2" multiple="multiple" data-placeholder="Names of new members" name="account_ids[]" required>
                         {% for account in accounts %}
                           <option value="{{ account.id }}">{{ account.name }}</option>
                         {% endfor %}
