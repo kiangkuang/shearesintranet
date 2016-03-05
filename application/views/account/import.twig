@@ -11,9 +11,9 @@
     </h1>
     <ol class="breadcrumb">
       <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-      <li><a href="/account/view">Account</a></li>
+      <li><a href="#">Import</a></li>
       <li class="active">
-        Import
+        Account
       </li>
     </ol>
   </section>
@@ -102,6 +102,39 @@
                     <th>Room</th>
                     <th>Email</th>
                     <th>Contact</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        {% endif %}
+
+        {% if skipped %}
+          <div class="box box-warning">
+            <div class="box-header">
+              <h3 class="box-title">Skipped Rows</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <div class="loader loader-table">Loading...</div>
+              <table class="table table-bordered table-striped data-table hidden">
+                <thead>
+                  <tr>
+                    <th>Row</th>
+                    <th>Reason</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in skipped %}
+                    <tr>
+                      <td>{{ row.row }}</td>
+                      <td>{{ row.reason }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Row</th>
+                    <th>Reason</th>
                   </tr>
                 </tfoot>
               </table>

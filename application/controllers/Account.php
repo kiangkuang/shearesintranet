@@ -24,12 +24,14 @@ class Account extends MY_Controller {
                     'name' => 'Committee<br>Preference',
                     'description' => 'Indicate and rank your preferred committees',
                     'url' => '/cca/preference',
+                    'icon' => 'fa-sort-numeric-asc',
                     'enabled' => $this->settings->allow_preference,
                 ],
                 [
                     'name' => 'CCA<br>Points',
                     'description' => 'View your CCA points for the year',
                     'url' => '/cca/points',
+                    'icon' => 'fa-bar-chart',
                     'enabled' => $this->settings->allow_points,
                 ]
             ];
@@ -423,6 +425,7 @@ class Account extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $skipped = [];
                 $processedUsers = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
@@ -439,7 +442,8 @@ class Account extends MY_Controller {
                         $importRow['acad_year'] = ACAD_YEAR;
 
                         if (array_search($importRow['user'], $processedUsers) !== false) {
-                            break;
+                            $skipped[] = ['row' => implode($row,', '), 'reason' => 'Repeated Account in this imported file'];
+                            continue;
                         }
 
                         $existingRow = $this->accounts_model->getByUserAcadYear($importRow['user'], ACAD_YEAR);
@@ -464,10 +468,13 @@ class Account extends MY_Controller {
                 if (isset($importResult) && $importResult !== false || isset($updateResult) && $updateResult !== false) {
                     $successMsg = count($import) ? count($import) . ' new accounts added!<br>' : '';
                     $successMsg .= count($update) ? count($update) . ' existing accounts updated!' : '';
+                    $warningMsg = count($skipped) ? count($skipped) . ' rows not imported!' : '';
 
                     $this->session->set_flashdata('success', $successMsg);
+                    $this->session->set_flashdata('warning', $warningMsg);
                     $this->session->set_flashdata('imported', $import);
                     $this->session->set_flashdata('updated', $update);
+                    $this->session->set_flashdata('skipped', $skipped);
                     redirect('account/import');
                 } else {
                     $this->session->set_flashdata('error', 'Nothing imported!');
@@ -484,6 +491,9 @@ class Account extends MY_Controller {
         if ($this->session->updated) {
             $data['updated'] = $this->session->updated;
         }
+        if ($this->session->skipped) {
+            $data['skipped'] = $this->session->skipped;
+        }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
@@ -494,7 +504,8 @@ class Account extends MY_Controller {
         ];
 
         $data['mainMenu'] = 'admin';
-        $data['subMenu'] = 'account';
+        $data['subMenu'] = 'import';
+        $data['subSubMenu'] = 'importAccount';
         $data['this'] = $this;
         $this->twig->display('account/import', $data);
     }

@@ -24,8 +24,8 @@
         <li class="treeview active">
           <a href="#"><i class="fa fa-soccer-ball-o"></i> <span>My CCA</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">
-            <li class="{{ subMenu == 'preference' ? 'active' }}"><a {% if this.settings.allow_preference %}href="/cca/preference"{% else %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-sort-numeric-asc"></i> Committee Preference</a></li>
-            <li class="{{ subMenu == 'points' ? 'active' }}"><a {% if this.settings.allow_points %}href="/cca/points"{% else %}data-toggle="tooltip" data-placement="right" title="Currently Disabled!"{% endif %}><i class="fa fa-bar-chart"></i> CCA Points</a></li>
+            <li class="{{ subMenu == 'preference' ? 'active' }}"><a {% if this.settings.allow_preference %}href="/cca/preference"{% else %}href="#" data-toggle="tooltip" data-placement="right" title="Disabled"{% endif %}><i class="fa fa-sort-numeric-asc"></i> Committee Preference</a></li>
+            <li class="{{ subMenu == 'points' ? 'active' }}"><a {% if this.settings.allow_points %}href="/cca/points"{% else %}href="#" data-toggle="tooltip" data-placement="right" title="Disabled"{% endif %}><i class="fa fa-bar-chart"></i> CCA Points</a></li>
           </ul>
         </li>
       {% endif %}
@@ -45,6 +45,14 @@
                 <li class="{{ subSubMenu == 'viewCca' ? 'active' }}"><a href="/cca/view"><i class="fa fa-caret-right"></i> View all CCAs</a></li>
                 <li class="{{ subSubMenu == 'viewCcatype' ? 'active' }}"><a href="/ccatype/view"><i class="fa fa-caret-right"></i> View all CCA Types</a></li>
                 <li class="{{ subSubMenu == 'viewCcaclassification' ? 'active' }}"><a href="/ccaclassification/view"><i class="fa fa-caret-right"></i> View all CCA Classifications</a></li>
+              </ul>
+            </li>
+            <li class="{{ subMenu == 'import' ? 'active' }}">
+              <a href="#"><i class="fa fa-circle-o"></i> <span>Import</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li class="{{ subSubMenu == 'importAccount' ? 'active' }}"><a href="/account/import"><i class="fa fa-caret-right"></i> Import Accounts</a></li>
+                <li class="{{ subSubMenu == 'importCca' ? 'active' }}"><a href="/cca/import"><i class="fa fa-caret-right"></i> Import CCAs</a></li>
+                <li class="{{ subSubMenu == 'importMembership' ? 'active' }}"><a href="/membership/import"><i class="fa fa-caret-right"></i> Import Memberships</a></li>
               </ul>
             </li>
             <li class="{{ subMenu == 'settings' ? 'active' }}"><a href="/settings"><i class="fa fa-cogs"></i> Settings</a></li>

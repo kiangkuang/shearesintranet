@@ -252,6 +252,7 @@ class Cca extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $skipped = [];
                 $processedNames = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
@@ -263,7 +264,8 @@ class Cca extends MY_Controller {
                         $importRow['acad_year'] = ACAD_YEAR;
 
                         if (array_search($importRow['name'], $processedNames) !== false) {
-                            break;
+                            $skipped[] = ['row' => implode($row,', '), 'reason' => 'Repeated CCA in this imported file'];
+                            continue;
                         }
 
                         $existingRow = $this->ccas_model->getByNameAcadYear($importRow['name'], ACAD_YEAR);
@@ -288,8 +290,10 @@ class Cca extends MY_Controller {
                 if (isset($importResult) && $importResult !== false || isset($updateResult) && $updateResult !== false) {
                     $successMsg = count($import) ? count($import) . ' new CCAs added!<br>' : '';
                     $successMsg .= count($update) ? count($update) . ' existing CCAs updated!' : '';
+                    $warningMsg = count($skipped) ? count($skipped) . ' rows not imported!' : '';
 
                     $this->session->set_flashdata('success', $successMsg);
+                    $this->session->set_flashdata('warning', $warningMsg);
                     foreach ($import as &$row) {
                         $row['type_name'] = $ccaTypeArray[$row['type_id']];
                         $row['classification_name'] = $ccaClassificationArray[$row['classification_id']];
@@ -300,6 +304,7 @@ class Cca extends MY_Controller {
                     }
                     $this->session->set_flashdata('imported', $import);
                     $this->session->set_flashdata('updated', $update);
+                    $this->session->set_flashdata('skipped', $skipped);
                     redirect('cca/import');
                 } else {
                     $this->session->set_flashdata('error', 'Nothing imported!');
@@ -316,6 +321,9 @@ class Cca extends MY_Controller {
         if ($this->session->updated) {
             $data['updated'] = $this->session->updated;
         }
+        if ($this->session->skipped) {
+            $data['skipped'] = $this->session->skipped;
+        }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
@@ -326,7 +334,8 @@ class Cca extends MY_Controller {
         ];
 
         $data['mainMenu'] = 'admin';
-        $data['subMenu'] = 'cca';
+        $data['subMenu'] = 'import';
+        $data['subSubMenu'] = 'importCca';
         $data['this'] = $this;
         $this->twig->display('cca/import', $data);
     }
