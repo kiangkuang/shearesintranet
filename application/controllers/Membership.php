@@ -148,23 +148,31 @@ class Membership extends MY_Controller {
                 $csvFile = new Keboola\Csv\CsvFile($upload['full_path']);
                 $import = [];
                 $update = [];
+                $skipped = [];
                 $processedMemberships = [];
                 foreach ($csvFile as $row) {
                     // ignore header row and empty names
                     if (trim($row[0]) !== 'CCA' && trim($row[1]) !== 'NUSNET ID' && trim($row[2]) !== 'Role' && trim($row[3]) !== 'Points' && trim($row[0]) !== '') {
                         $importRow = [];
-                        $importRow['cca_id'] = array_search(trim($row[0]), $ccaArray) ? : null; // defaults to None type
+                        $importRow['cca_id'] = array_search(trim($row[0]), $ccaArray) ? : null;
                         $importRow['account_id'] = array_search(trim($row[1]), $accountArray) ? : null;
                         $importRow['role'] = trim($row[2]);
                         $importRow['points'] = (int)$row[3];
                         $importRow['acad_year'] = ACAD_YEAR;
 
-                        if ($importRow['account_id'] === null || $importRow['cca_id'] === null) {
-                            break;
+                        if ($importRow['account_id'] === null) {
+                            $skipped[] = ['row' => implode($row,', '), 'reason' => 'Account not found'];
+                            continue;
                         }
 
-                        if (array_search($importRow['cca_id'] + ',' + $importRow['account_id'], $processedMemberships) !== false) {
-                            break;
+                        if ($importRow['cca_id'] === null) {
+                            $skipped[] = ['row' => implode($row,', '), 'reason' => 'CCA not found'];
+                            continue;
+                        }
+
+                        if (array_search($importRow['cca_id'] . ',' . $importRow['account_id'], $processedMemberships) !== false) {
+                            $skipped[] = ['row' => implode($row,', '), 'reason' => 'Repeated Account/CCA membership in this imported file'];
+                            continue;
                         }
 
                         $existingRow = $this->memberships_model->getByAccountIdCcaIdAcadYear($importRow['account_id'], $importRow['cca_id'], ACAD_YEAR);
@@ -176,7 +184,7 @@ class Membership extends MY_Controller {
                             $import[] = $importRow;
                         }
 
-                        $processedMemberships[] = $importRow['cca_id'] + ',' + $importRow['account_id'];
+                        $processedMemberships[] = $importRow['cca_id'] . ',' . $importRow['account_id'];
                     }
                 }
 
@@ -190,8 +198,10 @@ class Membership extends MY_Controller {
                 if (isset($importResult) && $importResult !== false || isset($updateResult) && $updateResult !== false) {
                     $successMsg = count($import) ? count($import) . ' new Memberships added!<br>' : '';
                     $successMsg .= count($update) ? count($update) . ' existing Memberships updated!' : '';
-
+                    $warningMsg = count($skipped) ? count($skipped) . ' rows not imported!' : '';
                     $this->session->set_flashdata('success', $successMsg);
+                    $this->session->set_flashdata('warning', $warningMsg);
+
                     foreach ($import as &$row) {
                         $row['account_user'] = $accountArray[$row['account_id']];
                         $row['cca_name'] = $ccaArray[$row['cca_id']];
@@ -200,8 +210,10 @@ class Membership extends MY_Controller {
                         $row['account_user'] = $accountArray[$row['account_id']];
                         $row['cca_name'] = $ccaArray[$row['cca_id']];
                     }
+
                     $this->session->set_flashdata('imported', $import);
                     $this->session->set_flashdata('updated', $update);
+                    $this->session->set_flashdata('skipped', $skipped);
                     redirect('membership/import');
                 } else {
                     $this->session->set_flashdata('error', 'Nothing imported!');
@@ -218,6 +230,9 @@ class Membership extends MY_Controller {
         if ($this->session->updated) {
             $data['updated'] = $this->session->updated;
         }
+        if ($this->session->skipped) {
+            $data['skipped'] = $this->session->skipped;
+        }
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
@@ -228,7 +243,8 @@ class Membership extends MY_Controller {
         ];
 
         $data['mainMenu'] = 'admin';
-        $data['subMenu'] = 'cca';
+        $data['subMenu'] = 'import';
+        $data['subSubMenu'] = 'importMembership';
         $data['this'] = $this;
         $this->twig->display('membership/import', $data);
     }
