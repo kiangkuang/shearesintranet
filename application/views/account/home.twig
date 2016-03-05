@@ -25,17 +25,11 @@
               <p {% if not feature.enabled %}class="text-muted"{% endif %}>{{ feature.description }}
             </div>
             <div class="icon">
-              <i class="fa fa-sort-numeric-asc"></i>
+              <i class="fa {{ feature.icon }}"></i>
             </div>
-            {% if feature.enabled %}
-              <a href="{{ feature.url }}" class="small-box-footer">
-                  Go <i class="fa fa-arrow-circle-right"></i>
-              </a>
-            {% else %}
-              <a class="small-box-footer" {% if not feature.enabled %}data-toggle="tooltip" data-placement="top" title="This feature is currently disabled!"{% endif %}>
-                Disabled <i class="fa fa-times-circle"></i>
-              </a>
-            {% endif %}
+            <a href="{% if feature.enabled %}{{ feature.url }}{% else %}#{% endif %}" class="small-box-footer">
+              {% if feature.enabled %}Go <i class="fa fa-arrow-circle-right"></i>{% else %}Disabled <i class="fa fa-times-circle"></i>{% endif %}
+            </a>
           </div>
         </div><!--/.col -->
       {% endfor %}

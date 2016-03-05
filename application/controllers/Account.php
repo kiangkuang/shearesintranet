@@ -24,12 +24,14 @@ class Account extends MY_Controller {
                     'name' => 'Committee<br>Preference',
                     'description' => 'Indicate and rank your preferred committees',
                     'url' => '/cca/preference',
+                    'icon' => 'fa-sort-numeric-asc',
                     'enabled' => $this->settings->allow_preference,
                 ],
                 [
                     'name' => 'CCA<br>Points',
                     'description' => 'View your CCA points for the year',
                     'url' => '/cca/points',
+                    'icon' => 'fa-bar-chart',
                     'enabled' => $this->settings->allow_points,
                 ]
             ];
@@ -502,7 +504,8 @@ class Account extends MY_Controller {
         ];
 
         $data['mainMenu'] = 'admin';
-        $data['subMenu'] = 'account';
+        $data['subMenu'] = 'import';
+        $data['subSubMenu'] = 'importAccount';
         $data['this'] = $this;
         $this->twig->display('account/import', $data);
     }

@@ -243,7 +243,8 @@ class Membership extends MY_Controller {
         ];
 
         $data['mainMenu'] = 'admin';
-        $data['subMenu'] = 'cca';
+        $data['subMenu'] = 'import';
+        $data['subSubMenu'] = 'importMembership';
         $data['this'] = $this;
         $this->twig->display('membership/import', $data);
     }

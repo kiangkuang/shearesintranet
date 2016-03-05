@@ -334,7 +334,8 @@ class Cca extends MY_Controller {
         ];
 
         $data['mainMenu'] = 'admin';
-        $data['subMenu'] = 'cca';
+        $data['subMenu'] = 'import';
+        $data['subSubMenu'] = 'importCca';
         $data['this'] = $this;
         $this->twig->display('cca/import', $data);
     }
