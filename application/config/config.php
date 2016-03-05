@@ -17,7 +17,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = '';
+
+if (!empty($_SERVER['HTTPS'])) {
+        $config['base_url'] = 'https://'.$_SERVER['HTTP_HOST'];
+} else {
+        $config['base_url'] = 'http://'.$_SERVER['HTTP_HOST'];
+}
 
 /*
 |--------------------------------------------------------------------------
