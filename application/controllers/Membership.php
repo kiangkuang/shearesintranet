@@ -25,7 +25,8 @@ class Membership extends MY_Controller {
             $type = 'account';
         }
 
-        if ($type === 'cca') {
+        $input = [];
+        if ($type === 'cca' && $this->input->post('account_ids')) {
             // cca adding members
             foreach ($this->input->post('account_ids') as $account_id) {
                 $input[] = [
@@ -34,9 +35,7 @@ class Membership extends MY_Controller {
                     'acad_year' => ACAD_YEAR, 
                 ];
             }
-        }
-
-        if ($type === 'account') {
+        } elseif ($type === 'account' && $this->input->post('cca_ids')) {
             // accounts joining ccas
             foreach ($this->input->post('cca_ids') as $cca_id) {
                 $input[] = [
@@ -47,12 +46,17 @@ class Membership extends MY_Controller {
             }
         }
 
-        $result = $this->memberships_model->insertBatch($input);
-        if ($result) {
-            $this->session->set_flashdata('success', count($input).' membership successfully added!');
+        if ($input) {
+            $result = $this->memberships_model->insertBatch($input);
+            if ($result) {
+                $this->session->set_flashdata('success', count($input).' membership successfully added!');
+            } else {
+                $this->session->set_flashdata('error', 'An error has occurred!');
+            }
         } else {
-            $this->session->set_flashdata('error', 'An error has occurred!');
+            $this->session->set_flashdata('error', 'Nothing to add!');
         }
+
         if ($type === 'cca') {
             redirect('/cca/edit/'.$this->input->post('cca_id'));
         } elseif ($type === 'account') {
@@ -93,13 +97,14 @@ class Membership extends MY_Controller {
         }
     }
 
-    public function delete($id = null)
+    public function delete()
     {
-        if (!$this->account->is_admin || !$this->editable || !$id) {
+        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
-        $redirect = $this->input->get('redirect') ? : '/';
+        $id = $this->input->post('id');
+        $redirect = $this->input->post('redirect');
         $membership = $this->memberships_model->getById($id);
         $result = $this->memberships_model->deleteById($id);
         if ($result) {
@@ -216,6 +221,11 @@ class Membership extends MY_Controller {
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';

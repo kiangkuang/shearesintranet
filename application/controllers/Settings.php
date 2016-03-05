@@ -25,6 +25,11 @@ class Settings extends MY_Controller {
         $data['acadYears'] = $this->accounts_model->getAcadYears();
         $data['currentAcadYearView'] = $this->session->acadYearView;
 
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
+
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'settings';
         $data['this'] = $this;

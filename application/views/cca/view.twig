@@ -40,7 +40,8 @@
             </div><!-- /.box-tools -->
           </div><!-- /.box-header -->
           <div class="box-body">
-            <table class="table table-bordered table-striped data-table">
+            <div class="loader loader-table">Loading...</div>
+            <table class="table table-bordered table-striped data-table hidden">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -56,14 +57,18 @@
                     <td><a href="/cca/view/{{ cca.type_name|lower|url_encode }}">{{ cca.type_name }}</a></td>
                     <td><a href="/cca/view/{{ cca.classification_name|lower|url_encode }}">{{ cca.classification_name }}</a></td>
                     <th class="text-center">
-                      <a href="/cca/edit/{{ cca.id }}" class="btn btn-sm btn-default">
-                        <i class="fa fa-edit"></i> {{ this.editable ? 'Edit' : 'View' }}
-                      </a>
-                      {% if this.editable %}
-                        <a href="/cca/delete/{{ cca.id }}" class="js-confirm-delete btn btn-sm btn-default">
-                          <i class="fa fa-trash"></i> Delete
+                      <form role="form" action="/cca/delete" method="post">
+                        <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
+                        <input type="hidden" name="id" value="{{ cca.id }}">
+                        <a href="/cca/edit/{{ cca.id }}" class="btn btn-sm btn-default">
+                          <i class="fa fa-edit"></i> {{ this.editable ? 'Edit' : 'View' }}
                         </a>
-                      {% endif %}
+                        {% if this.editable %}
+                          <button class="js-confirm-delete btn btn-sm btn-default" type="submit">
+                            <i class="fa fa-trash"></i> Delete
+                          </button>
+                        {% endif %}
+                      </form>
                     </th>
                   </tr>
                 {% endfor %}

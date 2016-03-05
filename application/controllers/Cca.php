@@ -79,6 +79,11 @@ class Cca extends MY_Controller {
 
         $data = [];
 
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
+
         // committee type_id = 2
         $data['ccas'] = $this->ccas_model->getByTypeIdAcadYear(2, ACAD_YEAR);
         $data['preference'] = $this->preferences_model->getByAccountId($this->account->id)[0];
@@ -103,6 +108,11 @@ class Cca extends MY_Controller {
             $search = $this->input->get('search');
         }
         $data['search'] = urldecode($search);
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
@@ -132,6 +142,11 @@ class Cca extends MY_Controller {
 
         $data['types'] = $this->ccatypes_model->getAll();
         $data['classifications'] = $this->ccaclassifications_model->getAll();
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';
@@ -187,11 +202,13 @@ class Cca extends MY_Controller {
         }
     }
 
-    public function delete($id = null)
+    public function delete()
     {
-        if (!$this->account->is_admin || !$this->editable || !$id) {
+        if (!$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
+
+        $id = $this->input->post('id');
 
         $result = $this->ccas_model->deleteById($id);
         $result2 = $this->memberships_model->deleteByCcaId($id);
@@ -302,6 +319,11 @@ class Cca extends MY_Controller {
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'cca';

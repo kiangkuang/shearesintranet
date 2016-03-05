@@ -31,7 +31,8 @@
               <h3 class="box-title">Added Memberships</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
-              <table class="table table-bordered table-striped data-table">
+              <div class="loader loader-table">Loading...</div>
+              <table class="table table-bordered table-striped data-table hidden">
                 <thead>
                   <tr>
                     <th>Cca</th>
@@ -69,7 +70,8 @@
               <h3 class="box-title">Updated Memberships</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
-              <table class="table table-bordered table-striped data-table">
+              <div class="loader loader-table">Loading...</div>
+              <table class="table table-bordered table-striped data-table hidden">
                 <thead>
                   <tr>
                     <th>Cca</th>
@@ -108,6 +110,7 @@
             </h3>
           </div><!-- /.box-header -->
           <form role="form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="{{ csrf['name'] }}" value="{{ csrf['hash'] }}">
             <input type="hidden" name="submit">
             <div class="box-body">
               <div class="row">

@@ -18,6 +18,23 @@ class Account extends MY_Controller {
         } elseif ($this->account->is_admin) {
             redirect('/account/view');
         } else {
+            $data = [];
+            $data['features'] = [
+                [
+                    'name' => 'Committee<br>Preference',
+                    'description' => 'Indicate and rank your preferred committees',
+                    'url' => '/cca/preference',
+                    'enabled' => $this->settings->allow_preference,
+                ],
+                [
+                    'name' => 'CCA<br>Points',
+                    'description' => 'View your CCA points for the year',
+                    'url' => '/cca/points',
+                    'enabled' => $this->settings->allow_points,
+                ]
+            ];
+            usort($data['features'], "featuresCmp");
+
             $data['this'] = $this;
             $this->twig->display('account/home', $data);
         }
@@ -30,6 +47,11 @@ class Account extends MY_Controller {
         }
 
         $data = [];
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['this'] = $this;
         $this->twig->display('account/login', $data);
@@ -132,6 +154,11 @@ class Account extends MY_Controller {
         }
         $data['accounts'] = $accounts;
 
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
+
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
         $data['subSubMenu'] = 'viewAccount';
@@ -151,6 +178,11 @@ class Account extends MY_Controller {
         $data['accounts'] = $accounts;
 
         $data['admin'] = 1;
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
@@ -176,6 +208,11 @@ class Account extends MY_Controller {
             $data['ccas'] = $this->account_library->getUnjoinedCcas($data['memberships']);
         }
 
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
+
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
         $data['this'] = $this;
@@ -198,6 +235,11 @@ class Account extends MY_Controller {
         }
 
         $data['admin'] = 1;
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';
@@ -329,44 +371,24 @@ class Account extends MY_Controller {
 
         $data = [];
 
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
+
         $data['mainMenu'] = 'account';
         $data['subMenu'] = 'changePassword';
         $data['this'] = $this;
         $this->twig->display('account/changePassword', $data);
     }
 
-    public function removePassword($id = null)
+    public function delete()
     {
-        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->editable || !$id) {
+        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->input->post() || !$this->editable) {
             redirect('/');
         }
 
-        $account = $this->accounts_model->getById($id);
-        if ($account) {
-            if ($account->is_admin) {
-                $this->session->set_flashdata('error', 'Don\'t remove password on admin acount!');
-                redirect('/account/edit/'.$id);
-            }
-
-            $input['id'] = $id;
-            $input['has_password'] = 0;
-
-            $result = $this->accounts_model->update($input);
-            if ($result) {
-                $this->session->set_flashdata('success', 'Password successfully removed!');
-                redirect('/account/edit/'.$id);
-            } else {
-                $this->session->set_flashdata('error', 'An error has occurred!');
-                redirect('/account/edit/'.$id);
-            }
-        }
-    }
-
-    public function delete($id = null)
-    {
-        if (!$this->isLoggedIn || !$this->account->is_admin || !$this->editable || !$id) {
-            redirect('/');
-        }
+        $id = $this->input->post('id');
 
         $result = $this->accounts_model->deleteById($id);
         $result2 = $this->memberships_model->deleteByAccountId($id);
@@ -465,6 +487,11 @@ class Account extends MY_Controller {
 
         $data['lastAcadYear'] = substr(ACAD_YEAR, 0, 2)-1 . '/' . substr(ACAD_YEAR, 0, 2);
         $data['lastAcadYearCcas'] = $this->ccas_model->getByAcadYear($data['lastAcadYear']);
+
+        $data['csrf'] = [
+            'name' => $this->security->get_csrf_token_name(),
+            'hash' => $this->security->get_csrf_hash()
+        ];
 
         $data['mainMenu'] = 'admin';
         $data['subMenu'] = 'account';

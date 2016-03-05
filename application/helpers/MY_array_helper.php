@@ -12,3 +12,10 @@ function pluck($array, $key)
         }
     , $array);
 }
+
+function featuresCmp($a, $b) {
+    if ($a == $b) {
+        return 0;
+    }
+    return ($a['enabled'] > $b['enabled']) ? -1 : 1;
+}
