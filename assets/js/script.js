@@ -22,3 +22,4 @@ var dataTable = $(".data-table").DataTable({
     "stateSave": true,
 });
 $(".data-table").removeClass("hidden");
+$(".loader-table").addClass("hidden");
