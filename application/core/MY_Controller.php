@@ -68,7 +68,9 @@ class MY_Controller extends CI_Controller {
     {
         $defaultSettings = [
             'acad_year' => ACAD_YEAR,
-            'allow_login' => 0,
+            'allow_login' => 1,
+            'allow_preference' => 0,
+            'allow_points' => 0,
         ];
         return $this->settings_model->insert($defaultSettings);
     }

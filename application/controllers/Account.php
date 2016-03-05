@@ -230,7 +230,7 @@ class Account extends MY_Controller {
         $data = [];
         if ($id) {
             $data['account'] = $this->accounts_model->getById($id);
-            if ($data['account'] === false) {
+            if ($data['account'] === false || !$data['account']->is_admin) {
                 $this->session->set_flashdata('error', 'Account not found!');
                 redirect('/account/view');
             }
@@ -290,7 +290,11 @@ class Account extends MY_Controller {
                 redirect('/account/edit'.$admin);
             }
 
-            $input['acad_year'] = !isset($input['is_admin']) ? ACAD_YEAR : '';
+            $input['key'] = time();
+            $input['password'] = sha1(''.$input['key']);
+            $input['has_password'] = 0;
+            $input['is_admin'] = isset($input['is_admin']) ? 1 : 0;
+            $input['acad_year'] = $input['is_admin'] ? '' : ACAD_YEAR;
 
             $result = $this->accounts_model->insert($input);
             if ($result) {
